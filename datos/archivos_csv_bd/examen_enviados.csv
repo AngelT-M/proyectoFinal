@@ -1,0 +1,4 @@
+examen_id,asignacion_curso_maestro_id,titulo,mensaje,archivo_url,estado,fecha_envio,fecha_autorizacion,personal_id
+1,1,Examen Parcial I - Matemáticas,Envío examen para revisión y aprobación.,/uploads/examenes/mat_p1_2026.pdf,APROBADO,2026-03-01 09:00:00,2026-03-01 14:00:00,1
+2,3,Examen Parcial I - Español,Examen correspondiente al primer bimestre.,/uploads/examenes/esp_p1_2026.pdf,APROBADO,2026-03-02 11:30:00,2026-03-03 08:45:00,2
+3,5,Examen Final - Programación I,Proyecto final y temario de evaluación.,/uploads/examenes/prog_f1_2026.pdf,PENDIENTE,2026-10-15 16:20:00,1

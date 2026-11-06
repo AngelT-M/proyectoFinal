@@ -1,0 +1,4 @@
+maestro_id,carne_maestro,nombre,apellido,fecha_nacimiento,email,tel_personal,tel_casa,usuario_id
+1,M202601,Carlos,Ramírez,1985-05-12,c.ramirez@colegio.edu.gt,4222-0001,2222-0001,4
+2,M202602,María,Fernández,1990-09-25,m.fernandez@colegio.edu.gt,4222-0002,2222-0002,5
+3,M202603,Juan,Orellana,1988-12-03,j.orellana@colegio.edu.gt,4222-0003,2222-0003,6

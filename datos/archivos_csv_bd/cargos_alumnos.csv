@@ -1,0 +1,7 @@
+cargo_id,asignacion_grado_id,pago_id,monto_cobrar,fecha_vencimiento,estado
+1,1,1,850.0,2026-01-15,PAGO_TOTAL
+2,1,2,450.0,2026-02-05,PAGO_TOTAL
+3,4,1,850.0,2026-01-15,PAGO_TOTAL
+4,4,2,450.0,2026-02-05,PENDIENTE
+5,8,1,850.0,2026-01-15,PAGO_TOTAL
+6,8,4,550.0,2026-02-05,PAGO_PARCIAL

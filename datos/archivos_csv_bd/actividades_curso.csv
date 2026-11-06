@@ -1,0 +1,6 @@
+actividad_curso_id,asignacion_curso_maestro_id,bimestre,nom_actividad,punteo_maximo,descripcion
+1,1,1er Bimestre,Hoja de Trabajo 1,15.0,Ejercicios de álgebra lineal
+2,1,1er Bimestre,Examen Parcial 1,35.0,Evaluación escrita primer parcial
+3,3,1er Bimestre,Laboratorio de Lectura,20.0,Análisis de texto narrativo
+4,3,2do Bimestre,Ensayo Literario,25.0,Redacción de ensayo académico
+5,5,1er Bimestre,Proyecto Algoritmos,40.0,Desarrollo de aplicación web

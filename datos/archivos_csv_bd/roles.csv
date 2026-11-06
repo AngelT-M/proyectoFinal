@@ -1,0 +1,6 @@
+rol_id,nom_rol,descripcion
+1,ADMIN,Administrador del sistema
+2,DIRECTOR,Director institucional
+3,SECRETARIA,Secretaria academica
+4,MAESTRO,Docente de asignatura
+5,ALUMNO,Estudiante matriculado

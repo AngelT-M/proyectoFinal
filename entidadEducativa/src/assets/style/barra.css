@@ -1,0 +1,81 @@
+.barra{
+    display: grid;
+    grid-template-columns: 1fr;    
+}
+.logotipo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-blanco);
+    color: var(--color-primario);
+
+    padding: 0.5rem;
+}
+
+
+.nav{
+    display: grid ;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.5rem;
+    background-color: var(--color-blanco);  
+    border-bottom: 1px solid var(--color-secundario) ; 
+    
+    position: -webkit-sticky; 
+    position: sticky;
+    top: 0; 
+    z-index: 9999;
+}
+
+.linone{
+    text-decoration: none;
+}
+
+
+.logo{
+    display: flex;
+    flex-direction: column;
+    margin: 0.5rem;
+}
+.cont{
+    color: var(--color-primario);
+    text-decoration: none;
+}
+.logo p{
+    font-size: 0.8rem;
+}
+
+.links{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.lin{
+    color: var(--color-primario);
+    text-decoration: none;
+}
+.lin:hover{
+    text-decoration: underline;
+}
+
+
+.iniciar{
+    margin: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: center;
+}
+
+
+.sesion{
+    background-color: var(--color-primario);
+    color: var(--gris-secod);
+    padding: 0.5rem;
+    border-radius: var(--radio);
+}
+
+.sesion:hover{
+    
+    color: var(--color-blanco);
+}

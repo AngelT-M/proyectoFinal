@@ -1,0 +1,80 @@
+
+.fondoImg{
+    background:  url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBO3uOTe2ioUHFSR2VazniSgt8xJloXX9KUbeVPEjUfrUVOoNZGssANwY&s=10);
+    background-position: center;
+}
+
+
+.iniciarS{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+}
+.contF{
+    margin: 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 25%;
+    background-color: var(--color-blanco);
+    border-radius: var(--radio);
+    box-shadow: var(--shadow);
+    
+    transition: transform 0.5s ease;
+}
+.contF:hover{
+    transform: translate(2px, -2px);
+}
+.tituloF{
+    width: 100%;
+    border-radius: 8px 8px 0px 0px;
+    color: var(--color-gris);
+    background-color: var(--color-primario);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.formu{
+    width: 90%;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    
+}
+.formulario{
+    margin: 0.5rem;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.formulario label{
+    font-size: 1.5rem;
+}
+.formulario input{
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--color-gris);
+    border-radius: var(--radio);
+    margin-bottom: 1rem;
+}
+.formulario input:focus{
+    outline: none;
+}
+
+.formulario button{
+    margin-top: 1rem;
+    width: 105%;
+    border-radius: var(--radio);
+    background-color: var(--color-ad-ap);
+    border: none;
+    padding: 0.6rem;
+    margin-bottom: 0.5rem;
+}
+.formulario button:hover{
+    background-color: var(--color-ad);
+}

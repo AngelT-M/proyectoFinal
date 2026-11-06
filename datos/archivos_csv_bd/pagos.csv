@@ -1,0 +1,5 @@
+pago_id,descripcion,cantidad_pagos,monto_base,grado_id
+1,Inscripción Anual 2026,1,850.0,2
+2,Colegiatura Mensual Primero Básico,10,450.0,2
+3,Colegiatura Mensual Segundo Básico,10,480.0,3
+4,Colegiatura Mensual Bachillerato,10,550.0,5

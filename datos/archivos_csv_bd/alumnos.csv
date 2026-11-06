@@ -1,0 +1,10 @@
+alumno_id,carne,nombre,apellido,fecha_nacimiento,email,nom_encargado,tel_personal,tel_encargado,usuario_id
+1,2026001,Ana,López,2010-03-15,ana.lopez@estudiante.edu.gt,Carlos López,4111-0001,5111-0001,7
+2,2026002,Luis,Martínez,2010-07-22,luis.martinez@estudiante.edu.gt,Marta Martínez,4111-0002,5111-0002,8
+3,2026003,Pedro,Gómez,2011-01-10,pedro.gomez@estudiante.edu.gt,José Gómez,4111-0003,5111-0003,9
+4,2026004,Sofía,Hernández,2011-05-18,sofia.hernandez@estudiante.edu.gt,Claudia Hernández,4111-0004,5111-0004,10
+5,2026005,Diego,Castillo,2009-11-30,diego.castillo@estudiante.edu.gt,Roberto Castillo,4111-0005,5111-0005,11
+6,2026006,Carla,Vásquez,2009-08-14,carla.vasquez@estudiante.edu.gt,Sonia Vásquez,4111-0006,5111-0006,12
+7,2026007,Mario,Pérez,2010-04-05,mario.perez@estudiante.edu.gt,Fernando Pérez,4111-0007,5111-0007,13
+8,2026008,Elena,Ríos,2011-09-12,elena.rios@estudiante.edu.gt,Olga Ríos,4111-0008,5111-0008,14
+9,2026009,Jorge,Navarro,2009-02-28,jorge.navarro@estudiante.edu.gt,Héctor Navarro,4111-0009,5111-0009,15

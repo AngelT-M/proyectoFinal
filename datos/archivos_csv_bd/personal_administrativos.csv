@@ -1,0 +1,4 @@
+personal_id,usuario_id,nombre,apellido,cargo,email,telefono
+1,1,Ramiro,González,ADMIN,r.gonzalez@colegio.edu.gt,5555-1111
+2,2,Esteban,Mendoza,DIRECTOR,e.mendoza@colegio.edu.gt,5555-2222
+3,3,Lucía,Morales,SECRETARIA,l.morales@colegio.edu.gt,5555-3333

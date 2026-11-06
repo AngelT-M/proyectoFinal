@@ -1,0 +1,5 @@
+actividad_id,titulo,descripcion,fecha_inicio,fecha_final,tipo_evento,usuario_id,nivel_id
+1,Inauguración del Ciclo Escolar 2026,Acto cívico y bienvenida a todos los estudiantes,2026-01-12 08:00:00,2026-01-12 12:00:00,INSTITUCIONAL,1,1
+2,Evaluaciones Primer Bimestre,Período de evaluaciones escritas y prácticas,2026-03-16 07:30:00,2026-03-20 13:00:00,ACADEMICO,2,1
+3,Feria de Ciencias y Tecnología,Exposición de proyectos de física y programación,2026-07-20 09:00:00,2026-07-21 15:00:00,ACADEMICO,4,2
+4,Torneo Deportivo Interescolar,"Competencias de fútbol, básquetbol y atletismo",2026-09-10 08:00:00,2026-09-11 16:00:00,DEPORTIVO,1,1
