@@ -1,6 +1,6 @@
-
 .fondoImg{
-    background:  url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBO3uOTe2ioUHFSR2VazniSgt8xJloXX9KUbeVPEjUfrUVOoNZGssANwY&s=10);
+    min-height: 100vh;
+    background: var(--color-fondo);
     background-position: center;
 }
 
@@ -17,12 +17,21 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 25%;
+    width: min(25rem, calc(100% - 2rem));
     background-color: var(--color-blanco);
     border-radius: var(--radio);
     box-shadow: var(--shadow);
     
     transition: transform 0.5s ease;
+}
+.errorSesion{
+    width: 100%;
+    color: #b42318;
+    margin-bottom: 0.75rem;
+}
+.formulario button:disabled{
+    cursor: wait;
+    opacity: 0.7;
 }
 .contF:hover{
     transform: translate(2px, -2px);
@@ -78,3 +87,4 @@
 .formulario button:hover{
     background-color: var(--color-ad);
 }
+
