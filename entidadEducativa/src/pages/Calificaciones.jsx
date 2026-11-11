@@ -408,7 +408,7 @@ function Calificaciones() {
                 </div>
               )}
 
-              {/* LISTADO DE ALUMNOS ASIGNADOS A ESTA CLASE PARA CALIFICAR */}
+              
               {actividadSeleccionada && (
                 <div className='lisUsuarios' >
                   <h3>

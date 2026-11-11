@@ -7,9 +7,13 @@ function Usuarios() {
   const [usuarios, setUsuarios] = useState([]);
   const [cargando, setCargando] = useState(false);
   const [mensaje, setMensaje] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState(''); 
+
+
 
   // Formulario nuevo usuario
+  const [mostrarFormUsuario, setMostrarFormUsuario] = useState(false);
+  
   const [nuevoUsuario, setNuevoUsuario] = useState({
     nom_usuario: '',
     password: '',
@@ -51,7 +55,12 @@ function Usuarios() {
         estado: nuevoUsuario.estado
       });
       setMensaje('Usuario creado exitosamente.');
-      setNuevoUsuario({ nom_usuario: '', password: '', rol_id: 4, estado: 'ACTIVO' });
+      setMostrarFormUsuario(false);
+      setNuevoUsuario({ 
+        nom_usuario: '', 
+        password: '', 
+        rol_id: 4, 
+        estado: 'ACTIVO' });
       cargarUsuarios();
     } catch (err) {
       setError(err.message || 'Error al crear usuario.');
@@ -127,7 +136,18 @@ function Usuarios() {
       {mensaje && <p role="status" style={{ color: 'green' }}>{mensaje}</p>}
       {error && <p role="alert" style={{ color: 'red' }}>{error}</p>}
 
-      <section className='CrearUsuario'>
+      <div className='btn-sec' >
+        <button
+          className='sesion'
+          type='button'
+          onClick={()=> setMostrarFormUsuario(!mostrarFormUsuario)}
+        >
+          {mostrarFormUsuario ? `Cancelar`: `+ Crear usuario`}
+        </button>
+      </div>
+
+      {mostrarFormUsuario && (
+        <section className='CrearUsuario'>
         <h2>Crear Nuevo Usuario</h2>
         <form onSubmit={handleCrearUsuario}>
           <label>
@@ -179,6 +199,8 @@ function Usuarios() {
           <button type="submit">Guardar Usuario</button>
         </form>
       </section>
+      )}
+      
       
       <section className='lisUsuarios' >
         <h2>Listado de Cuentas de Usuario</h2>

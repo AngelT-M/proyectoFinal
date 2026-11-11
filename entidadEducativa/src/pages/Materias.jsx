@@ -14,6 +14,7 @@ function Materias() {
   const [mensaje, setMensaje] = useState('');
   const [error, setError] = useState('');
 
+  const [mostrarFormCursos, setMostrarFormCursos] = useState(false);
   const [nuevo, setNuevo] = useState({ nom_curso: '', descripcion: '' });
   const [editandoId, setEditandoId] = useState(null);
   const [editandoData, setEditandoData] = useState({ nom_curso: '', descripcion: '' });
@@ -42,6 +43,7 @@ function Materias() {
     try {
       await academicoApi.crearCurso(nuevo);
       setMensaje('Curso creado exitosamente.');
+      setMostrarFormCursos(false);
       setNuevo({ nom_curso: '', descripcion: '' });
       cargarCursos();
     } catch (err) {
@@ -84,28 +86,42 @@ function Materias() {
 
       {esAdmin && (
         <section>
-          <h2>Crear Nuevo Curso</h2>
-          <form onSubmit={handleCrear}>
-            <label>
-              Nombre del Curso:
-              <input
-                type="text"
-                required
-                value={nuevo.nom_curso}
-                onChange={(e) => setNuevo({ ...nuevo, nom_curso: e.target.value })}
-              />
-            </label>
-            <br />
-            <label>
-              Descripción:
-              <textarea
-                value={nuevo.descripcion}
-                onChange={(e) => setNuevo({ ...nuevo, descripcion: e.target.value })}
-              />
-            </label>
-            <br />
-            <button type="submit">Guardar Curso</button>
-          </form>
+          <div>
+            <button
+            className='sesion'
+            type='button'
+            onClick={()=> setMostrarFormCursos(!mostrarFormCursos)}
+            >
+              {mostrarFormCursos ? 'cancelar':'+ nuevo curso'}
+            </button>
+          </div>
+
+          {mostrarFormCursos && (
+            <div> 
+              <h2>Crear Nuevo Curso</h2>
+              <form onSubmit={handleCrear}>
+                <label>
+                  Nombre del Curso:
+                  <input
+                    type="text"
+                    required
+                    value={nuevo.nom_curso}
+                    onChange={(e) => setNuevo({ ...nuevo, nom_curso: e.target.value })}
+                  />
+                </label>
+                <br />
+                <label>
+                  Descripción:
+                  <textarea
+                    value={nuevo.descripcion}
+                    onChange={(e) => setNuevo({ ...nuevo, descripcion: e.target.value })}
+                  />
+                </label>
+                <br />
+                <button type="submit">Guardar Curso</button>
+              </form>
+            </div>
+          )} 
         </section>
       )}
 
