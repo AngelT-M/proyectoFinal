@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { academicoApi, alumnoApi, maestroApi } from '../services/api';
+import '../style/inscripcion.css';
 
 function Inscripciones() {
   const [alumnos, setAlumnos] = useState([]);
@@ -105,7 +106,7 @@ function Inscripciones() {
   ));
 
   return (
-    <main style={{ padding: '2rem' }}>
+    <main >
       <h1>Asignaciones Académicas</h1>
       <p>Inscripción de estudiantes a aulas y asignación de cátedras a docentes.</p>
 
@@ -115,11 +116,11 @@ function Inscripciones() {
       {cargando ? (
         <p>Cargando información...</p>
       ) : (
-        <>
-          <section style={{ marginBottom: '2.5rem' }}>
-            <h2>1. Asignar Estudiante a un Aula (Matriculación)</h2>
-            <form onSubmit={handleAsignarAlumno}>
-              <label>
+        <div className='cont-asig' >
+          <section className='seccion'>
+            <h2>Asignar Estudiante a un Aula (Matriculación)</h2>
+            <form className='form'  onSubmit={handleAsignarAlumno}>
+              <label className='entrada' >
                 Seleccionar Estudiante:{' '}
                 <select
                   value={asigAlumno.alumno_id}
@@ -132,8 +133,8 @@ function Inscripciones() {
                   ))}
                 </select>
               </label>
-              <br /><br />
-              <label>
+             
+              <label className='entrada' >
                 Seleccionar Grado y Sección:{' '}
                 <select
                   value={asigAlumno.grado_seccion_id}
@@ -142,15 +143,15 @@ function Inscripciones() {
                   {opcionesAulas}
                 </select>
               </label>
-              <br /><br />
+              
               <button className="sesion" type="submit">Asignar Estudiante al Aula</button>
             </form>
           </section>
 
-          <section>
-            <h2>2. Asignar Docente a un Aula y Curso (Cátedra)</h2>
-            <form onSubmit={handleAsignarMaestro}>
-              <label>
+          <section className='seccion' >
+            <h2> Asignar Docente a un Aula y Curso (Cátedra)</h2>
+            <form className='form' onSubmit={handleAsignarMaestro}>
+              <label className='entrada' >
                 Seleccionar Docente:{' '}
                 <select
                   value={asigMaestro.maestro_id}
@@ -163,8 +164,7 @@ function Inscripciones() {
                   ))}
                 </select>
               </label>
-              <br /><br />
-              <label>
+              <label  className='entrada'>
                 Seleccionar Grado y Sección:{' '}
                 <select
                   value={asigMaestro.grado_seccion_id}
@@ -173,8 +173,7 @@ function Inscripciones() {
                   {opcionesAulas}
                 </select>
               </label>
-              <br /><br />
-              <label>
+              <label  className='entrada'>
                 Seleccionar Curso a Impartir:{' '}
                 <select
                   value={asigMaestro.curso_id}
@@ -187,11 +186,10 @@ function Inscripciones() {
                   ))}
                 </select>
               </label>
-              <br /><br />
               <button className="sesion" type="submit">Asignar Cátedra al Maestro</button>
             </form>
           </section>
-        </>
+        </div>
       )}
     </main>
   );

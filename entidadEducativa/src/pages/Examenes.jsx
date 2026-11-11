@@ -265,10 +265,10 @@ function Examenes() {
             ) : examenesFiltrados.length === 0 ? (
               <p>No hay exámenes para el ciclo y bimestre seleccionados.</p>
             ) : (
-              <div style={{ overflowX: 'auto' }}>
-                <table border="1" cellPadding="8" style={{ width: '100%', borderCollapse: 'collapse' }}>
-                  <thead>
-                    <tr style={{ backgroundColor: 'var(--gris-secod)' }}>
+              <div className='lisUsuarios'>
+                <table className='tablaUsuarios'>
+                  <thead className='encabezado' >
+                    <tr >
                       <th>Examen</th>
                       <th>Curso y aula</th>
                       <th>Bimestre</th>
@@ -279,7 +279,7 @@ function Examenes() {
                       <th>Estado y resolución</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className='tablacontenido' >
                     {examenesFiltrados.map((examen) => (
                       <tr key={examen.examen_id}>
                         <td><strong>{examen.titulo}</strong></td>
@@ -303,7 +303,7 @@ function Examenes() {
                         <td>
                           <strong>{examen.estado}</strong>
                           {examen.estado === 'PENDIENTE' && (
-                            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '0.5rem' }}>
+                            <div >
                               <button
                                 className="sesion"
                                 type="button"
@@ -312,6 +312,7 @@ function Examenes() {
                                 Aprobar
                               </button>
                               <button
+                                className='btn-us apagado'
                                 type="button"
                                 onClick={() => handleAutorizarExamen(examen, 'RECHAZADO')}
                               >

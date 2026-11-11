@@ -209,7 +209,7 @@ function Estudiantes() {
         </section>
       )}
 
-      <section>
+      <section className='lisUsuarios' >
         <h2>{rol === 5 ? 'Tus Datos Registrados' : 'Listado de Estudiantes'}</h2>
         {cargando ? (
           <p>Cargando información...</p>
@@ -219,9 +219,9 @@ function Estudiantes() {
           ) : (
             alumnos.map((alumno) => (
               <article
+                
                 key={alumno.alumno_id}
-                style={{ border: '1px solid #ccc', borderRadius: '6px', padding: '1rem', marginBottom: '1rem', maxWidth: '36rem' }}
-              >
+               >
                 <h3>{alumno.nombre} {alumno.apellido}</h3>
                 <p><strong>Carné:</strong> {alumno.carne}</p>
                 <p><strong>Fecha de nacimiento:</strong> {alumno.fecha_nacimiento || 'No registrada'}</p>
@@ -232,8 +232,8 @@ function Estudiantes() {
             ))
           )
         ) : (
-          <table border="1" cellPadding="5">
-            <thead>
+          <table className='tablaUsuarios'>
+            <thead className='encabezado'>
               <tr>
                 <th>ID</th>
                 <th>Carné</th>
@@ -246,7 +246,7 @@ function Estudiantes() {
                 {esGestionador && <th>Acciones</th>}
               </tr>
             </thead>
-            <tbody>
+            <tbody className='tablacontenido' >
               {alumnos.map((a) => (
                 <tr key={a.alumno_id}>
                   <td>{a.alumno_id}</td>
@@ -258,8 +258,8 @@ function Estudiantes() {
                   <td>{a.nom_encargado}</td>
                   <td>{a.tel_encargado}</td>
                   {esGestionador && (
-                    <td>
-                      <button type="button" onClick={() => handleEliminar(a.alumno_id)}>
+                    <td className='cont-act' > 
+                      <button className='btn-us apagado' type="button" onClick={() => handleEliminar(a.alumno_id)}>
                         Eliminar
                       </button>
                     </td>

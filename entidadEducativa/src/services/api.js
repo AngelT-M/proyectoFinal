@@ -108,6 +108,12 @@ export const academicoApi = {
 };
 
 export const evaluacionesApi = {
+    alumnosParaBoleta: (asignacionCursoMaestroId) => {
+        const query = asignacionCursoMaestroId
+            ? `?asignacion_curso_maestro_id=${encodeURIComponent(asignacionCursoMaestroId)}`
+            : '';
+        return peticion(`evaluaciones/alumnos${query}`);
+    },
     actividadesPorCurso: (idAcm) => peticion(`evaluaciones/cursos/${idAcm}/actividades`),
     crearActividad: (idAcm, datos) => peticion(`evaluaciones/cursos/${idAcm}/actividades`, { metodo: 'POST', datos }),
     calificar: (datos) => peticion('evaluaciones/calificaciones', { metodo: 'POST', datos }),
@@ -129,8 +135,14 @@ export const asistenciaApi = {
         const paramFecha = fecha ? `?fecha=${encodeURIComponent(fecha)}` : '';
         return peticion(`asistencia/grado-seccion/${idAula}${paramFecha}`);
     },
-    consulHistorialAlumno: (idAlumno) => peticion(`alumnos/${idAlumno}/asistencia`),
-    consultarHistorialAlumno: (idAlumno) => peticion(`alumnos/${idAlumno}/asistencia`),
+    consulHistorialAlumno: (idAlumno, mes) => {
+        const query = mes ? `?mes=${encodeURIComponent(mes)}` : '';
+        return peticion(`alumnos/${idAlumno}/asistencia${query}`);
+    },
+    consultarHistorialAlumno: (idAlumno, mes) => {
+        const query = mes ? `?mes=${encodeURIComponent(mes)}` : '';
+        return peticion(`alumnos/${idAlumno}/asistencia${query}`);
+    },
     crear: (datos) => peticion('asistencia', { metodo: 'POST', datos })
 };
 
@@ -142,6 +154,8 @@ export const examenesApi = {
 
 export const finanzasApi = {
     cargosAlumnos: (idAlumno) => peticion(`alumnos/${idAlumno}/cargos`),
+    pagosPorGrado: (gradoId) => peticion(`grados/${gradoId}/pagos`),
+    crearPago: (datos) => peticion('pagos', { metodo: 'POST', datos }),
     generarAcargo: (datos) => peticion('cargos-alumnos/generar', { metodo: 'POST', datos }),
     generarCargo: (datos) => peticion('cargos-alumnos/generar', { metodo: 'POST', datos }),
     realizarPago: (datos) => peticion('pagos/realizar', { metodo: 'POST', datos }),

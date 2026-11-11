@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { asistenciaApi, academicoApi, alumnoApi } from '../services/api';
+import { useEffect, useRef, useState } from 'react';
+import { asistenciaApi, academicoApi } from '../services/api';
 import { useAuth } from '../auth/useAuth';
 
 function Asistencias() {
@@ -16,7 +16,12 @@ function Asistencias() {
   const [historial, setHistorial] = useState([]);
   const [resumenHistorial, setResumenHistorial] = useState(null);
   const [cargandoHistorial, setCargandoHistorial] = useState(false);
-  const [listaAlumnos, setListaAlumnos] = useState([]);
+  const [mesHistorial, setMesHistorial] = useState(() => new Date().toISOString().slice(0, 7));
+  const [alumnosPorAula, setAlumnosPorAula] = useState({});
+  const [alumnosHistorialAula, setAlumnosHistorialAula] = useState([]);
+  const [cargandoAlumnosHistorial, setCargandoAlumnosHistorial] = useState(false);
+  const [idAulaHistorial, setIdAulaHistorial] = useState('');
+  const solicitudAlumnosHistorial = useRef(0);
 
   // Estados Consulta por Aula y Fecha
   const [aulas, setAulas] = useState([]);
@@ -37,29 +42,89 @@ function Asistencias() {
     if (esAlumno) {
       const alumnoId = usuario?.perfil?.alumno_id || usuario?.id_usuario;
       cargarHistorial(alumnoId);
+    } else if (rol === 4) {
+      academicoApi.asignacionesMaestros()
+        .then(async (data) => {
+          const asignaciones = Array.isArray(data) ? data : [];
+          const aulasAsignadas = Array.from(
+            new Map(
+              asignaciones.map((asignacion) => [
+                String(asignacion.grado_seccion_id),
+                {
+                  grado_seccion_id: asignacion.grado_seccion_id,
+                  nom_grado: asignacion.nom_grado,
+                  nom_seccion: asignacion.nom_seccion,
+                  ciclo: asignacion.ciclo
+                }
+              ])
+            ).values()
+          );
+          setAulas(aulasAsignadas);
+          const fechaInicial = new Date().toISOString().split('T')[0];
+          const listasPorAula = await Promise.all(
+            aulasAsignadas.map((aula) =>
+              asistenciaApi.conuslAulaFecha(aula.grado_seccion_id, fechaInicial)
+            )
+          );
+          const estudiantesPorAula = Object.fromEntries(
+            aulasAsignadas.map((aula, index) => [
+              String(aula.grado_seccion_id),
+              Array.isArray(listasPorAula[index]) ? listasPorAula[index] : []
+            ])
+          );
+          setAlumnosPorAula(estudiantesPorAula);
+          if (aulasAsignadas[0]) {
+            setIdAula(String(aulasAsignadas[0].grado_seccion_id));
+            const listaInicial = Array.isArray(listasPorAula[0]) ? listasPorAula[0] : [];
+            setAsistenciasAula(listaInicial);
+            if (listaInicial[0]) {
+              setNuevaAsistencia((actual) => ({
+                ...actual,
+                alumno_id: listaInicial[0].alumno_id,
+                asignacion_grado_id: listaInicial[0].asignacion_grado_id
+              }));
+            }
+          }
+        })
+        .catch((err) => setError(err.message || 'Error al cargar las aulas y estudiantes asignados.'));
     } else {
       academicoApi.gradosSecciones().then((data) => {
         if (Array.isArray(data)) {
           setAulas(data);
-          if (data[0]) setIdAula(data[0].grado_seccion_id);
+          if (data[0]) {
+            const aulaInicial = data[0];
+            const fechaInicial = new Date().toISOString().split('T')[0];
+            setIdAula(String(aulaInicial.grado_seccion_id));
+            setCargandoAula(true);
+            asistenciaApi.conuslAulaFecha(aulaInicial.grado_seccion_id, fechaInicial)
+              .then((asistencias) => {
+                const lista = Array.isArray(asistencias) ? asistencias : [];
+                setAsistenciasAula(lista);
+                setNuevaAsistencia((actual) => {
+                  const alumnoInicial = lista[0];
+                  return {
+                    ...actual,
+                    alumno_id: alumnoInicial?.alumno_id || '',
+                    asignacion_grado_id: alumnoInicial?.asignacion_grado_id || '',
+                    fecha: fechaInicial
+                  };
+                });
+              })
+              .catch((err) => setError(err.message || 'Error al cargar estudiantes del aula.'))
+              .finally(() => setCargandoAula(false));
+          }
         }
       }).catch((err) => setError(err.message || 'Error al cargar las aulas.'));
 
-      alumnoApi.mostrar().then((data) => {
-        if (Array.isArray(data)) {
-          setListaAlumnos(data);
-          if (data[0]) setNuevaAsistencia((p) => ({ ...p, alumno_id: data[0].alumno_id }));
-        }
-      }).catch((err) => setError(err.message || 'Error al cargar estudiantes.'));
     }
-  }, [esAlumno, usuario]);
+  }, [esAlumno, rol, usuario]);
 
-  const cargarHistorial = async (id) => {
+  const cargarHistorial = async (id, mes = mesHistorial) => {
     if (!id) return;
     setCargandoHistorial(true);
     setError('');
     try {
-      const data = await asistenciaApi.consulHistorialAlumno(id);
+      const data = await asistenciaApi.consulHistorialAlumno(id, mes);
       const lista = data?.historial ?? (Array.isArray(data) ? data : []);
       setHistorial(lista);
       setResumenHistorial(data?.resumen ?? null);
@@ -111,8 +176,9 @@ function Asistencias() {
         estado: nuevaAsistencia.estado
       });
       setMensaje('Asistencia registrada correctamente.');
-      if (idAula && fechaConsulta) {
-        const data = await asistenciaApi.conuslAulaFecha(idAula, fechaConsulta);
+      if (idAula && nuevaAsistencia.fecha) {
+        setFechaConsulta(nuevaAsistencia.fecha);
+        const data = await asistenciaApi.conuslAulaFecha(idAula, nuevaAsistencia.fecha);
         setAsistenciasAula(Array.isArray(data) ? data : []);
       }
     } catch (err) {
@@ -123,6 +189,44 @@ function Asistencias() {
   const aulaSeleccionada = aulas.find(
     (aula) => String(aula.grado_seccion_id) === String(idAula)
   );
+  const aulaHistorial = aulas.find(
+    (aula) => String(aula.grado_seccion_id) === idAulaHistorial
+  );
+  const alumnosHistorial = rol === 4
+    ? alumnosPorAula[String(aulaHistorial?.grado_seccion_id)] || []
+    : alumnosHistorialAula;
+
+  const handleSeleccionarAulaHistorial = async (gradoSeccionId) => {
+    const solicitudActual = ++solicitudAlumnosHistorial.current;
+    setIdAulaHistorial(gradoSeccionId);
+    setIdAlumnoHistorial('');
+    setAlumnosHistorialAula([]);
+    setHistorial([]);
+    setResumenHistorial(null);
+    setError('');
+
+    if (!gradoSeccionId || rol === 4) {
+      setCargandoAlumnosHistorial(false);
+      return;
+    }
+
+    setCargandoAlumnosHistorial(true);
+    try {
+      const fechaActual = new Date().toISOString().split('T')[0];
+      const data = await asistenciaApi.conuslAulaFecha(gradoSeccionId, fechaActual);
+      if (solicitudActual === solicitudAlumnosHistorial.current) {
+        setAlumnosHistorialAula(Array.isArray(data) ? data : []);
+      }
+    } catch (err) {
+      if (solicitudActual === solicitudAlumnosHistorial.current) {
+        setError(err.message || 'Error al cargar estudiantes del aula.');
+      }
+    } finally {
+      if (solicitudActual === solicitudAlumnosHistorial.current) {
+        setCargandoAlumnosHistorial(false);
+      }
+    }
+  };
 
   return (
     <main style={{ padding: '2rem' }}>
@@ -135,36 +239,94 @@ function Asistencias() {
       {/* Historial de Asistencia de Alumno */}
       <section style={{ marginBottom: '2.5rem' }}>
         <h2>{esAlumno ? 'Mi Historial de Asistencia' : 'Historial de Asistencia por Estudiante'}</h2>
-        {!esAlumno && (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              cargarHistorial(idAlumnoHistorial);
-            }}
-          >
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const alumnoId = esAlumno
+              ? usuario?.perfil?.alumno_id || usuario?.id_usuario
+              : idAlumnoHistorial;
+            cargarHistorial(alumnoId);
+          }}
+        >
+            {[1, 2, 3, 4].includes(rol) && (
+              <label>
+                Filtrar por aula:{' '}
+                <select
+                  value={idAulaHistorial}
+                  disabled={aulas.length === 0 || cargandoAlumnosHistorial}
+                  onChange={(e) => handleSeleccionarAulaHistorial(e.target.value)}
+                >
+                  <option value="">-- Selecciona un aula --</option>
+                  {aulas.map((aula) => (
+                    <option
+                      key={aula.grado_seccion_id}
+                      value={aula.grado_seccion_id}
+                    >
+                      {aula.nom_grado}, Sección {aula.nom_seccion} ({aula.ciclo})
+                    </option>
+                  ))}
+                </select>
+                {' '}
+              </label>
+            )}
+            {!esAlumno && (
+              <label>
+                Seleccionar Estudiante:{' '}
+                <select
+                  value={idAlumnoHistorial}
+                  disabled={!idAulaHistorial || cargandoAlumnosHistorial}
+                  onChange={(e) => {
+                    setIdAlumnoHistorial(e.target.value);
+                    setHistorial([]);
+                    setResumenHistorial(null);
+                    setError('');
+                  }}
+                >
+                  <option value="">-- Selecciona un estudiante --</option>
+                  {alumnosHistorial.map((a) => (
+                    <option key={a.alumno_id} value={a.alumno_id}>
+                      {a.nombre} {a.apellido} (Carné: {a.carne})
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+            {' '}
             <label>
-              Seleccionar Estudiante:{' '}
-              <select
-                value={idAlumnoHistorial}
+              Mes a consultar:{' '}
+              <input
+                type="month"
+                required
+                value={mesHistorial}
                 onChange={(e) => {
-                  setIdAlumnoHistorial(e.target.value);
-                  cargarHistorial(e.target.value);
+                  setMesHistorial(e.target.value);
+                  setHistorial([]);
+                  setResumenHistorial(null);
+                  setError('');
                 }}
-              >
-                <option value="">-- Selecciona un estudiante --</option>
-                {listaAlumnos.map((a) => (
-                  <option key={a.alumno_id} value={a.alumno_id}>
-                    {a.nombre} {a.apellido} (Carné: {a.carne})
-                  </option>
-                ))}
-              </select>
+              />
             </label>
             {' '}
-            <button className="sesion" type="submit">Consultar Historial</button>
-          </form>
-        )}
+            <button
+              className="sesion"
+              type="submit"
+              disabled={cargandoHistorial || (!esAlumno && !idAlumnoHistorial)}
+            >
+              {cargandoHistorial ? 'Consultando…' : 'Consultar mes'}
+            </button>
+        </form>
 
         {cargandoHistorial && <p>Cargando historial...</p>}
+        {!esAlumno && [1, 2, 3, 4].includes(rol) && aulas.length === 0 && !error && (
+          <p>{rol === 4 ? 'No tienes aulas asignadas para consultar.' : 'No hay aulas disponibles para consultar.'}</p>
+        )}
+        {cargandoAlumnosHistorial && <p role="status">Cargando estudiantes del aula…</p>}
+        {!esAlumno && idAulaHistorial && !cargandoAlumnosHistorial && alumnosHistorial.length === 0 && !error && (
+          <p>No hay estudiantes asignados a esta aula.</p>
+        )}
+        {!cargandoHistorial && resumenHistorial?.total === 0 && (
+          <p>No hay asistencias registradas para el mes seleccionado.</p>
+        )}
 
         {resumenHistorial && (
           <p style={{ marginTop: '1rem' }}>
@@ -176,16 +338,16 @@ function Asistencias() {
         )}
 
         {historial.length > 0 && (
-          <table border="1" cellPadding="8" style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem' }}>
-            <thead>
-              <tr style={{ backgroundColor: 'var(--gris-secod)' }}>
+          <table className='tablaUsuarios'>
+            <thead className='encabezado' >
+              <tr >
                 <th>Fecha</th>
                 <th>Estado de Asistencia</th>
                 <th>Grado y Sección</th>
                 <th>Ciclo</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className='tablacontenido' >
               {historial.map((item, idx) => (
                 <tr key={idx}>
                   <td>{item.fecha}</td>
@@ -256,11 +418,11 @@ function Asistencias() {
             {cargandoAula && <p>Consultando lista del aula...</p>}
 
             {asistenciasAula.length > 0 && (
-              <div style={{ marginTop: '1.5rem' }}>
+              <div className='listaUsuarios'>
                 <h3>Lista de Estudiantes ({fechaConsulta})</h3>
-                <table border="1" cellPadding="8" style={{ width: '100%', borderCollapse: 'collapse' }}>
-                  <thead>
-                    <tr style={{ backgroundColor: 'var(--gris-secod)' }}>
+                <table className='tablaUsuarios'>
+                  <thead  className='encabezado'>
+                    <tr >
                       <th>Carné</th>
                       <th>Nombre del Estudiante</th>
                       <th>Fecha</th>
@@ -268,7 +430,7 @@ function Asistencias() {
                       <th>Acción</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className='tablacontenido' >
                     {asistenciasAula.map((asig, idx) => (
                       <tr key={idx}>
                         <td>{asig.carne || '-'}</td>
@@ -279,7 +441,7 @@ function Asistencias() {
                         </td>
                         <td>
                           <button
-                            className="sesion"
+                            className="btn-us sesion"
                             type="button"
                             onClick={() =>
                               setNuevaAsistencia({
@@ -311,7 +473,7 @@ function Asistencias() {
                   : 'Selecciona un aula y consulta su lista.'}
               </strong>
             </p>
-            <p>Elige un estudiante inscrito en esa aula; no necesitas ingresar IDs.</p>
+            <p>Elige un estudiante inscrito en esa aula</p>
             <form onSubmit={handleRegistrar}>
               <label>
                 Estudiante:{' '}

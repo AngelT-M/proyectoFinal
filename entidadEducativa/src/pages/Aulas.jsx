@@ -183,11 +183,11 @@ function Aulas() {
             <p>No hay aulas registradas para este ciclo.</p>
           ) : (
             ciclosOrdenados.map((ciclo) => (
-              <section key={ciclo}>
+              <section className='lisUsuarios'  key={ciclo}>
                 <h3>Ciclo escolar {ciclo}</h3>
-                <table border="1" cellPadding="8" style={{ width: '100%', borderCollapse: 'collapse' }}>
-                  <thead>
-                    <tr style={{ backgroundColor: 'var(--gris-secod)' }}>
+                <table className='tablaUsuarios' >
+                  <thead className='encabezado' >
+                    <tr >
                       <th>Nivel Educativo</th>
                       <th>Grado</th>
                       <th>Sección</th>
@@ -195,7 +195,7 @@ function Aulas() {
                       {puedeAbrir && <th>Acciones</th>}
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className='tablacontenido' >
                     {aulasPorCiclo[ciclo].map((a) => (
                       <tr key={a.grado_seccion_id}>
                         <td>{a.nom_nivel || 'Nivel General'}</td>
@@ -203,8 +203,8 @@ function Aulas() {
                         <td>Sección {a.nom_seccion || a.seccion_id}</td>
                         <td>{a.cantidad_estudiantes} alumnos máx.</td>
                         {puedeAbrir && (
-                          <td>
-                            <button type="button" onClick={() => handleEliminarAula(a)}>
+                          <td className='cont-act' >
+                            <button className='btn-us apagado'  type="button" onClick={() => handleEliminarAula(a)}>
                               Eliminar aula
                             </button>
                           </td>

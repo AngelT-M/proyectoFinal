@@ -184,13 +184,13 @@ function Personal() {
         </section>
       )}
 
-      <section>
+      <section className='lisUsuarios'>
         <h2>Listado de Personal</h2>
         {cargando ? (
           <p>Cargando lista...</p>
         ) : (
-          <table border="1" cellPadding="5">
-            <thead>
+          <table className='tablaUsuarios'>
+            <thead className='encabezado' >
               <tr>
                 <th>ID</th>
                 <th>Nombre</th>
@@ -201,7 +201,7 @@ function Personal() {
                 {puedeEditar && <th>Acciones</th>}
               </tr>
             </thead>
-            <tbody>
+            <tbody className='tablacontenido' >
               {personal.map((p) => (
                 <tr key={p.personal_id}>
                   <td>{p.personal_id}</td>
@@ -211,8 +211,8 @@ function Personal() {
                   <td>{p.email}</td>
                   <td>{p.telefono || '-'}</td>
                   {puedeEditar && (
-                    <td>
-                      <button type="button" onClick={() => handleEliminar(p.personal_id)}>
+                    <td className='cont-act' >
+                      <button className='btn-us apagado'  type="button" onClick={() => handleEliminar(p.personal_id)}>
                         Eliminar
                       </button>
                     </td>

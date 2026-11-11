@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { evaluacionesApi, alumnoApi, academicoApi } from '../services/api';
+import { useEffect, useRef, useState } from 'react';
+import { evaluacionesApi, academicoApi } from '../services/api';
 import { useAuth } from '../auth/useAuth';
 
 function Calificaciones() {
@@ -10,12 +10,16 @@ function Calificaciones() {
 
   const [mensaje, setMensaje] = useState('');
   const [error, setError] = useState('');
+  const [errorBoleta, setErrorBoleta] = useState('');
 
-  // Estados para Boleta (Estudiante o Consulta por Administrador)
+  // Estados para boleta personal o consulta por personal docente y administrativo.
   const [idAlumnoConsulta, setIdAlumnoConsulta] = useState('');
   const [boleta, setBoleta] = useState(null);
   const [cargandoBoleta, setCargandoBoleta] = useState(false);
   const [listaAlumnos, setListaAlumnos] = useState([]);
+  const [cargandoListaAlumnos, setCargandoListaAlumnos] = useState(!esAlumno);
+  const [idAsignacionBoleta, setIdAsignacionBoleta] = useState('');
+  const solicitudAlumnosBoleta = useRef(0);
 
   // Estados para Selección de Clases Cátedras (Docente/Admin)
   const [clases, setClases] = useState([]);
@@ -41,21 +45,6 @@ function Calificaciones() {
     punteo_maximo: 20,
     descripcion: ''
   });
-
-  useEffect(() => {
-    if (esAlumno) {
-      const alumnoId = usuario?.perfil?.alumno_id || usuario?.id_usuario;
-      cargarBoleta(alumnoId);
-    } else {
-      // Cargar lista de alumnos para consulta administrativa de boletas
-      alumnoApi.mostrar().then((data) => {
-        if (Array.isArray(data)) setListaAlumnos(data);
-      }).catch(() => {});
-
-      // Cargar las clases asignadas al maestro o al colegio
-      cargarClasesDocente();
-    }
-  }, [esAlumno, usuario]);
 
   const cargarClasesDocente = async () => {
     setCargandoClases(true);
@@ -126,23 +115,81 @@ function Calificaciones() {
   const cargarBoleta = async (idAlumno) => {
     if (!idAlumno) return;
     setCargandoBoleta(true);
-    setError('');
+    setErrorBoleta('');
     try {
       const data = await evaluacionesApi.boletaAlumno(idAlumno);
       setBoleta(data);
     } catch (err) {
-      setError(err.message || 'Error al consultar la boleta de calificaciones.');
+      setErrorBoleta(err.message || 'Error al consultar la boleta de calificaciones.');
       setBoleta(null);
     } finally {
       setCargandoBoleta(false);
     }
   };
 
+  const filtrarAlumnosBoleta = async (asignacionId) => {
+    const solicitudActual = ++solicitudAlumnosBoleta.current;
+    setIdAsignacionBoleta(asignacionId);
+    setIdAlumnoConsulta('');
+    setListaAlumnos([]);
+    setBoleta(null);
+    setErrorBoleta('');
+    setMensaje('');
+
+    if (!asignacionId) {
+      setCargandoListaAlumnos(false);
+      return;
+    }
+
+    setCargandoListaAlumnos(true);
+    try {
+      const data = await evaluacionesApi.alumnosParaBoleta(asignacionId);
+      if (solicitudActual === solicitudAlumnosBoleta.current) {
+        setListaAlumnos(Array.isArray(data) ? data : []);
+      }
+    } catch (err) {
+      if (solicitudActual === solicitudAlumnosBoleta.current) {
+        setErrorBoleta(err.message || 'Error al cargar estudiantes de la asignatura.');
+      }
+    } finally {
+      if (solicitudActual === solicitudAlumnosBoleta.current) {
+        setCargandoListaAlumnos(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (esAlumno) {
+      const alumnoId = usuario?.perfil?.alumno_id || usuario?.id_usuario;
+      cargarBoleta(alumnoId);
+    } else if (puedeCalificar) {
+      if (rol !== 4) {
+        evaluacionesApi.alumnosParaBoleta()
+          .then((data) => setListaAlumnos(Array.isArray(data) ? data : []))
+          .catch((err) => {
+            setErrorBoleta(err.message || 'Error al cargar estudiantes para consultar sus boletas.');
+          })
+          .finally(() => setCargandoListaAlumnos(false));
+      } else {
+        setCargandoListaAlumnos(false);
+      }
+
+      cargarClasesDocente();
+    }
+  }, [esAlumno, puedeCalificar, rol, usuario]);
+
   const cursosBoleta = Array.isArray(boleta)
     ? Object.entries(boleta.reduce((grupos, item) => {
       const curso = item.nom_curso || item.curso || 'Curso sin nombre';
-      if (!grupos[curso]) grupos[curso] = [];
-      grupos[curso].push(item);
+      if (!grupos[curso]) grupos[curso] = {};
+      const bimestreId = item.bimestre_id ?? item.bimestre ?? 'sin-bimestre';
+      if (!grupos[curso][bimestreId]) {
+        grupos[curso][bimestreId] = {
+          nombre: item.bimestre || 'Bimestre sin nombre',
+          calificaciones: []
+        };
+      }
+      grupos[curso][bimestreId].calificaciones.push(item);
       return grupos;
     }, {}))
     : [];
@@ -212,7 +259,7 @@ function Calificaciones() {
   };
 
   return (
-    <main style={{ padding: '2rem' }}>
+    <main >
       <h1>{esAlumno ? 'Mi Boleta de Calificaciones' : 'Gestión de Calificaciones y Evaluaciones'}</h1>
       <p>
         {esAlumno
@@ -225,7 +272,7 @@ function Calificaciones() {
 
       {/* Módulo para Docentes y Personal Administrativo */}
       {puedeCalificar && (
-        <section style={{ marginBottom: '3rem' }}>
+        <section >
           <h2>1. Seleccionar Clase Asignada</h2>
           {cargandoClases ? (
             <p>Cargando tus clases...</p>
@@ -295,9 +342,8 @@ function Calificaciones() {
                     </label>
                     {bimestres.length === 0 && (
                       <p>No hay periodos configurados para el ciclo de esta clase. Contacta a administración.</p>
-                    )}
-                    <br /><br />
-                    <label>
+                      )}
+                      <label>
                       Nombre de la Actividad:{' '}
                       <input
                         type="text"
@@ -308,7 +354,6 @@ function Calificaciones() {
                         style={{ width: '300px', padding: '0.3rem' }}
                       />
                     </label>
-                    <br /><br />
                     <label>
                       Punteo Máximo:{' '}
                       <input
@@ -322,7 +367,6 @@ function Calificaciones() {
                         style={{ width: '100px', padding: '0.3rem' }}
                       /> pts
                     </label>
-                    <br /><br />
                     <label>
                       Descripción o Instrucciones:{' '}
                       <input
@@ -333,7 +377,6 @@ function Calificaciones() {
                         style={{ width: '350px', padding: '0.3rem' }}
                       />
                     </label>
-                    <br /><br />
                     <button className="sesion" type="submit">Guardar Actividad</button>
                   </form>
                 </fieldset>
@@ -367,7 +410,7 @@ function Calificaciones() {
 
               {/* LISTADO DE ALUMNOS ASIGNADOS A ESTA CLASE PARA CALIFICAR */}
               {actividadSeleccionada && (
-                <div style={{ marginTop: '2rem' }}>
+                <div className='lisUsuarios' >
                   <h3>
                     3. Listado de Alumnos Asignados para Calificar: "{actividadSeleccionada.nom_actividad}"
                     {' '}<span style={{ fontWeight: 'normal', fontSize: '0.9rem' }}>({actividadSeleccionada.bimestre} — Máximo {actividadSeleccionada.punteo_maximo} pts)</span>
@@ -378,9 +421,9 @@ function Calificaciones() {
                   ) : alumnosClase.length === 0 ? (
                     <p><em>No hay alumnos asignados a esta aula/sección actualmente.</em></p>
                   ) : (
-                    <table border="1" cellPadding="8" style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem' }}>
-                      <thead>
-                        <tr style={{ backgroundColor: 'var(--gris-secod)' }}>
+                    <table className='tablaUsuarios'>
+                      <thead className='encabezado'>
+                        <tr >
                           <th>Carné</th>
                           <th>Nombre del Estudiante</th>
                           <th>Nota Registrada</th>
@@ -388,7 +431,7 @@ function Calificaciones() {
                           <th>Acción</th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody className='tablacontenido' >
                         {alumnosClase.map((alumno) => {
                           const nombreCompleto = `${alumno.nombre} ${alumno.apellido}`;
                           const notaActual = notasTemp[alumno.asignacion_grado_id] ?? '';
@@ -426,7 +469,7 @@ function Calificaciones() {
                               </td>
                               <td>
                                 <button
-                                  className="sesion"
+                                  className="btn-us "
                                   type="button"
                                   onClick={() => handleGuardarNotaIndividual(alumno.asignacion_grado_id, nombreCompleto)}
                                 >
@@ -458,13 +501,39 @@ function Calificaciones() {
             }}
             style={{ marginBottom: '1.5rem' }}
           >
+            {rol === 4 && (
+              <label>
+                Filtrar por asignatura y aula:{' '}
+                <select
+                  value={idAsignacionBoleta}
+                  disabled={cargandoClases}
+                  onChange={(e) => filtrarAlumnosBoleta(e.target.value)}
+                >
+                  <option value="">
+                    {cargandoClases ? 'Cargando tus asignaturas…' : '-- Selecciona una asignatura --'}
+                  </option>
+                  {clases.map((clase) => (
+                    <option
+                      key={clase.asignacion_curso_maestro_id}
+                      value={clase.asignacion_curso_maestro_id}
+                    >
+                      {clase.nom_curso} — {clase.nom_grado}, Sección {clase.nom_seccion} ({clase.ciclo})
+                    </option>
+                  ))}
+                </select>
+                {' '}
+              </label>
+            )}
             <label>
               Seleccionar Estudiante:{' '}
               <select
                 value={idAlumnoConsulta}
+                disabled={cargandoListaAlumnos || (rol === 4 && !idAsignacionBoleta)}
                 onChange={(e) => {
                   setIdAlumnoConsulta(e.target.value);
-                  cargarBoleta(e.target.value);
+                  setBoleta(null);
+                  setErrorBoleta('');
+                  setMensaje('');
                 }}
               >
                 <option value="">-- Selecciona un estudiante --</option>
@@ -476,10 +545,27 @@ function Calificaciones() {
               </select>
             </label>
             {' '}
-            <button className="sesion" type="submit">Ver Boleta de Notas</button>
+            <button
+              className="sesion"
+              type="submit"
+              disabled={!idAlumnoConsulta || cargandoBoleta || cargandoListaAlumnos}
+            >
+              {cargandoBoleta ? 'Consultando…' : 'Ver Boleta de Notas'}
+            </button>
           </form>
         )}
 
+        {errorBoleta && <p role="alert" style={{ color: 'red' }}>{errorBoleta}</p>}
+        {!esAlumno && cargandoListaAlumnos && <p role="status">Cargando estudiantes…</p>}
+        {!esAlumno && !cargandoListaAlumnos && listaAlumnos.length === 0 && !errorBoleta && (
+          <p>
+            {rol === 4
+              ? idAsignacionBoleta
+                ? 'No hay estudiantes asignados a esta asignatura y aula.'
+                : 'Selecciona una asignatura para buscar entre sus estudiantes.'
+              : 'No hay estudiantes disponibles para consultar.'}
+          </p>
+        )}
         {cargandoBoleta && <p>Consultando calificaciones...</p>}
 
         {boleta && (
@@ -489,29 +575,32 @@ function Calificaciones() {
               boleta.length === 0 ? (
                 <p>No se registran calificaciones asentadas aún.</p>
               ) : (
-                cursosBoleta.map(([curso, calificaciones]) => (
-                  <section key={curso} style={{ marginTop: '1.5rem' }}>
+                cursosBoleta.map(([curso, bimestresCurso]) => (
+                  <section key={curso} className='lisUsuarios'>
                     <h4>{curso}</h4>
-                    <table border="1" cellPadding="8" style={{ width: '100%', borderCollapse: 'collapse' }}>
-                      <thead>
-                        <tr style={{ backgroundColor: 'var(--gris-secod)' }}>
-                          <th>Bimestre</th>
-                          <th>Actividad de Evaluación</th>
-                          <th>Punteo Obtenido</th>
-                          <th>Punteo Máximo</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {calificaciones.map((item, idx) => (
-                          <tr key={item.calificacion_id || `${item.bimestre_id}-${item.nom_actividad}-${idx}`}>
-                            <td>{item.bimestre || '-'}</td>
-                            <td>{item.nom_actividad || '-'}</td>
-                            <td style={{ fontWeight: 'bold', color: 'green' }}>{item.punteo_obtenido ?? '-'} pts</td>
-                            <td>{item.punteo_maximo ?? '-'} pts</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                    {Object.entries(bimestresCurso).map(([bimestreId, grupo]) => (
+                      <div key={`${curso}-${bimestreId}`}>
+                        <h5>{grupo.nombre}</h5>
+                        <table className='tablaUsuarios'>
+                          <thead className='encabezado'>
+                            <tr>
+                              <th>Actividad de Evaluación</th>
+                              <th>Punteo Obtenido</th>
+                              <th>Punteo Máximo</th>
+                            </tr>
+                          </thead>
+                          <tbody className='tablacontenido'>
+                            {grupo.calificaciones.map((item, idx) => (
+                              <tr key={item.calificacion_id || `${item.bimestre_id}-${item.nom_actividad}-${idx}`}>
+                                <td>{item.nom_actividad || '-'}</td>
+                                <td style={{ fontWeight: 'bold', color: 'green' }}>{item.punteo_obtenido ?? '-'} pts</td>
+                                <td>{item.punteo_maximo ?? '-'} pts</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    ))}
                   </section>
                 ))
               )

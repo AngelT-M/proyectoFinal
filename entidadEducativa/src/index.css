@@ -11,6 +11,9 @@
   --color-terciario: #88B8EE;
   --color-ad: #FBC83C;
 
+  --color-dan: #e30532;
+  --color-dan-apagado: rgba(227, 5, 50,0.5);
+
   --color-ad-ap: rgba(251, 200, 60, 0.5);
 
   --color-cel-apagado: #5C8CC3;
@@ -19,12 +22,14 @@
   --color-amarillo: #C39822;
   --gris-secod: #D6DEEE; 
 
+
+
   --color-fondo: #f2f2f2;
   --color-blanco: #ffffff;
   --color-negro: #000000;
 
   --radio : 8px; 
-  --shadow: 8px 8px 16px var(--color-secundario);
+  --shadow: 8px 8px 10px var(--gris-secod);
 
 }
 

@@ -21,9 +21,21 @@ function Finanzas() {
 
   // Estados Generar Cargos por Grado (Roles 1, 2, 3)
   const [grados, setGrados] = useState([]);
+  const [gradoConfigId, setGradoConfigId] = useState('');
+  const [tiposPago, setTiposPago] = useState([]);
+  const [cargandoTiposPago, setCargandoTiposPago] = useState(false);
+  const [errorTiposPago, setErrorTiposPago] = useState('');
+  const [guardandoTipoPago, setGuardandoTipoPago] = useState(false);
+  const [tipoPagoMensaje, setTipoPagoMensaje] = useState('');
+  const [tipoPagoError, setTipoPagoError] = useState('');
+  const [nuevoTipoPago, setNuevoTipoPago] = useState({
+    descripcion: '',
+    cantidad_pagos: '1',
+    monto_base: ''
+  });
   const [nuevoCargoMasivo, setNuevoCargoMasivo] = useState({
-    pago_id: 1,
-    grado_id: 1,
+    pago_id: '',
+    grado_id: '',
     fecha_vencimiento: ''
   });
 
@@ -58,11 +70,40 @@ function Finanzas() {
       academicoApi.grados().then((data) => {
         if (Array.isArray(data)) {
           setGrados(data);
-          if (data[0]) setNuevoCargoMasivo((prev) => ({ ...prev, grado_id: data[0].grado_id }));
+          if (data[0]) {
+            const primerGradoId = String(data[0].grado_id);
+            setGradoConfigId(primerGradoId);
+            setNuevoCargoMasivo((prev) => ({ ...prev, grado_id: primerGradoId }));
+          }
         }
-      }).catch(() => {});
+      }).catch((err) => setError(err.message || 'Error al cargar los grados.'));
     }
   }, [esAlumno, esGestionador, usuario]);
+
+  useEffect(() => {
+    if (!esGestionador || !nuevoCargoMasivo.grado_id) return undefined;
+
+    let solicitudVigente = true;
+    setCargandoTiposPago(true);
+    setErrorTiposPago('');
+    finanzasApi.pagosPorGrado(nuevoCargoMasivo.grado_id)
+      .then((data) => {
+        if (solicitudVigente) setTiposPago(Array.isArray(data) ? data : []);
+      })
+      .catch((err) => {
+        if (solicitudVigente) {
+          setTiposPago([]);
+          setErrorTiposPago(err.message || 'Error al cargar las cuotas del grado.');
+        }
+      })
+      .finally(() => {
+        if (solicitudVigente) setCargandoTiposPago(false);
+      });
+
+    return () => {
+      solicitudVigente = false;
+    };
+  }, [esGestionador, nuevoCargoMasivo.grado_id]);
 
   const cargarCargos = async (idAlumno) => {
     if (!idAlumno) return;
@@ -92,6 +133,33 @@ function Finanzas() {
       setMensaje('Cargos generados exitosamente para los alumnos del grado.');
     } catch (err) {
       setError(err.message || 'Error al generar cargos por grado.');
+    }
+  };
+
+  const handleCrearTipoPago = async (e) => {
+    e.preventDefault();
+    setTipoPagoMensaje('');
+    setTipoPagoError('');
+    setGuardandoTipoPago(true);
+    try {
+      const creado = await finanzasApi.crearPago({
+        ...nuevoTipoPago,
+        cantidad_pagos: Number(nuevoTipoPago.cantidad_pagos),
+        monto_base: Number(nuevoTipoPago.monto_base),
+        grado_id: Number(gradoConfigId)
+      });
+      setNuevoTipoPago({ descripcion: '', cantidad_pagos: '1', monto_base: '' });
+      if (String(gradoConfigId) === String(nuevoCargoMasivo.grado_id)) {
+        setTiposPago((actuales) => [...actuales, creado]);
+        setNuevoCargoMasivo((actual) => ({ ...actual, pago_id: String(creado.pago_id) }));
+        setTipoPagoMensaje('Cuota creada y seleccionada para generar cargos en este grado.');
+      } else {
+        setTipoPagoMensaje('Cuota creada. Selecciona ese mismo grado en la sección de generación para usarla.');
+      }
+    } catch (err) {
+      setTipoPagoError(err.message || 'Error al crear la cuota.');
+    } finally {
+      setGuardandoTipoPago(false);
     }
   };
 
@@ -141,8 +209,8 @@ function Finanzas() {
       {mensaje && <p role="status" style={{ color: 'green' }}>{mensaje}</p>}
       {error && <p role="alert" style={{ color: 'red' }}>{error}</p>}
 
-      {/* Sección 1: Estado de Cuenta y Cargos del Estudiante */}
-      <section style={{ marginBottom: '2rem' }}>
+
+      <section >
         <h2>{esAlumno ? 'Mi Estado de Cuenta y Pagos' : 'Consultar Cargos por Estudiante'}</h2>
         {!esAlumno && (
           <form
@@ -177,9 +245,9 @@ function Finanzas() {
         {cargandoCargos && <p>Cargando información de cobros...</p>}
 
         {cargos.length > 0 && (
-          <table border="1" cellPadding="8" style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem' }}>
-            <thead>
-              <tr style={{ backgroundColor: 'var(--gris-secod)' }}>
+          <table className='tablaUsuarios'>
+            <thead className='encabezado' >
+              <tr >
                 <th>Concepto de Cobro</th>
                 <th>Estudiante</th>
                 <th>Grado y Sección</th>
@@ -190,7 +258,7 @@ function Finanzas() {
                 {esSecretaria && <th>Acción</th>}
               </tr>
             </thead>
-            <tbody>
+            <tbody className='tablacontenido' >
               {cargos.map((c) => (
                 <tr key={c.cargo_id}>
                   <td><strong>{c.descripcion || `Cuota #${c.cargo_id}`}</strong></td>
@@ -235,10 +303,10 @@ function Finanzas() {
         )}
       </section>
 
-      {/* Sección 2: Cobrar Pago (Solo Secretaría - Rol 3) */}
+
       {esSecretaria && (
         <section style={{ marginBottom: '2rem' }}>
-          <h2>Caja: Registrar Cobro de Pago (Exclusivo Secretaría)</h2>
+          <h2>Caja: Registrar Cobro de Pago </h2>
           <form onSubmit={handleRealizarPago}>
             <p>
               {pago.concepto ? (
@@ -297,26 +365,116 @@ function Finanzas() {
       {esGestionador && (
         <>
           <section style={{ marginBottom: '2rem' }}>
+            <h2>Configurar cuota para un grado</h2>
+            <p>
+              Define un concepto y su monto. La cuota quedará asociada al grado seleccionado
+              y estará disponible para generar cargos masivos.
+            </p>
+            <form onSubmit={handleCrearTipoPago}>
+              <label>
+                Grado Escolar:{' '}
+                <select
+                  required
+                  value={gradoConfigId}
+                  onChange={(e) => setGradoConfigId(e.target.value)}
+                >
+                  {grados.map((g) => (
+                    <option key={g.grado_id} value={g.grado_id}>
+                      {g.nom_grado} {g.nom_nivel ? `(${g.nom_nivel})` : ''}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <br /><br />
+              <label>
+                Concepto de la cuota:{' '}
+                <input
+                  type="text"
+                  required
+                  maxLength={150}
+                  placeholder="Ej. Colegiatura mensual"
+                  value={nuevoTipoPago.descripcion}
+                  onChange={(e) => setNuevoTipoPago({ ...nuevoTipoPago, descripcion: e.target.value })}
+                />
+              </label>
+              <br /><br />
+              <label>
+                Cantidad de pagos:{' '}
+                <input
+                  type="number"
+                  required
+                  min={1}
+                  step={1}
+                  value={nuevoTipoPago.cantidad_pagos}
+                  onChange={(e) => setNuevoTipoPago({ ...nuevoTipoPago, cantidad_pagos: e.target.value })}
+                />
+              </label>
+              <br /><br />
+              <label>
+                Monto por pago (Q):{' '}
+                <input
+                  type="number"
+                  required
+                  min="0.01"
+                  step="0.01"
+                  value={nuevoTipoPago.monto_base}
+                  onChange={(e) => setNuevoTipoPago({ ...nuevoTipoPago, monto_base: e.target.value })}
+                />
+              </label>
+              <br /><br />
+              {tipoPagoMensaje && <p role="status" style={{ color: 'green' }}>{tipoPagoMensaje}</p>}
+              {tipoPagoError && <p role="alert" style={{ color: 'red' }}>{tipoPagoError}</p>}
+              <button
+                className="sesion"
+                type="submit"
+                disabled={guardandoTipoPago || !nuevoCargoMasivo.grado_id}
+              >
+                {guardandoTipoPago ? 'Guardando cuota...' : 'Crear cuota'}
+              </button>
+            </form>
+          </section>
+
+          <section style={{ marginBottom: '2rem' }}>
             <h2>Generar Cargos Masivos a Alumnos por Grado</h2>
             <form onSubmit={handleGenerarCargos}>
               <label>
                 Tipo de Cuota / Pago:{' '}
                 <select
+                  required
                   value={nuevoCargoMasivo.pago_id}
                   onChange={(e) => setNuevoCargoMasivo({ ...nuevoCargoMasivo, pago_id: e.target.value })}
+                  disabled={cargandoTiposPago || tiposPago.length === 0}
                 >
-                  <option value={1}>Inscripción Anual</option>
-                  <option value={2}>Colegiatura Mensual</option>
-                  <option value={3}>Cuota de Laboratorio</option>
-                  <option value={4}>Graduación / Examen</option>
+                  <option value="">
+                    {cargandoTiposPago
+                      ? 'Cargando cuotas del grado...'
+                      : tiposPago.length
+                        ? '-- Selecciona una cuota --'
+                        : 'No hay cuotas configuradas para este grado'}
+                  </option>
+                  {tiposPago.map((tipo) => (
+                    <option key={tipo.pago_id} value={tipo.pago_id}>
+                      {tipo.descripcion} — Q {Number(tipo.monto_base).toFixed(2)}
+                    </option>
+                  ))}
                 </select>
               </label>
               <br /><br />
               <label>
                 Grado Escolar:{' '}
                 <select
+                  required
                   value={nuevoCargoMasivo.grado_id}
-                  onChange={(e) => setNuevoCargoMasivo({ ...nuevoCargoMasivo, grado_id: e.target.value })}
+                  onChange={(e) => {
+                    setTiposPago([]);
+                    setErrorTiposPago('');
+                    setCargandoTiposPago(true);
+                    setNuevoCargoMasivo({
+                      ...nuevoCargoMasivo,
+                      grado_id: e.target.value,
+                      pago_id: ''
+                    });
+                  }}
                 >
                   {grados.map((g) => (
                     <option key={g.grado_id} value={g.grado_id}>
@@ -335,8 +493,18 @@ function Finanzas() {
                   onChange={(e) => setNuevoCargoMasivo({ ...nuevoCargoMasivo, fecha_vencimiento: e.target.value })}
                 />
               </label>
+              {errorTiposPago && <p role="alert">{errorTiposPago}</p>}
+              {!cargandoTiposPago && !errorTiposPago && grados.length > 0 && tiposPago.length === 0 && (
+                <p>No hay cuotas registradas para este grado. Selecciona otro grado o configura una cuota para este grado.</p>
+              )}
               <br /><br />
-              <button className="sesion" type="submit">Generar Cargos para los Alumnos de este Grado</button>
+              <button
+                className="sesion"
+                type="submit"
+                disabled={cargandoTiposPago || tiposPago.length === 0 || !nuevoCargoMasivo.pago_id}
+              >
+                Generar Cargos para los Alumnos de este Grado
+              </button>
             </form>
           </section>
 

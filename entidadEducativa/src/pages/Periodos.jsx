@@ -97,9 +97,9 @@ function Periodos() {
           </button>
         </section>
       ) : (
-        <div style={{ overflowX: 'auto', marginTop: '1rem' }}>
-          <table border="1" cellPadding="8" style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
+        <div className='lisUsuarios'  >
+          <table className='tablaUsuarios' >
+            <thead className='encabezado'>
               <tr>
                 <th>Periodo</th>
                 <th>Fecha de inicio</th>
@@ -107,11 +107,11 @@ function Periodos() {
                 <th>Acción</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className='tablacontenido' >
               {bimestresCiclo.map((bimestre) => (
                 <tr key={bimestre.bimestre_id}>
                   <td>{bimestre.nombre}</td>
-                  <td>
+                  <td  >
                     <input
                       type="date"
                       value={bimestre.fecha_inicio || ''}
@@ -119,7 +119,7 @@ function Periodos() {
                       aria-label={`Inicio de ${bimestre.nombre}`}
                     />
                   </td>
-                  <td>
+                  <td  >
                     <input
                       type="date"
                       value={bimestre.fecha_fin || ''}
@@ -127,8 +127,9 @@ function Periodos() {
                       aria-label={`Fin de ${bimestre.nombre}`}
                     />
                   </td>
-                  <td>
+                  <td className='cont-act' >
                     <button
+                      className='btn-us'
                       type="button"
                       onClick={() => guardarFechas(bimestre)}
                       disabled={guardandoId !== null}

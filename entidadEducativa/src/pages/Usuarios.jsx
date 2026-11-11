@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { usuarioApi } from '../services/api';
+import '../style/usuarios.css';
+
 
 function Usuarios() {
   const [usuarios, setUsuarios] = useState([]);
@@ -18,6 +20,7 @@ function Usuarios() {
   // Formulario cambiar contraseña
   const [idCambioPassword, setIdCambioPassword] = useState(null);
   const [nuevoPassword, setNuevoPassword] = useState('');
+
 
   const cargarUsuarios = async () => {
     setCargando(true);
@@ -85,6 +88,18 @@ function Usuarios() {
     }
   };
 
+  const handleActivar = async (id) => {
+    setMensaje('');
+    setError('');
+    try {
+      await usuarioApi.actualizar(id, { estado: 'ACTIVO' });
+      setMensaje(`Usuario #${id} reactivado.`);
+      cargarUsuarios();
+    } catch (err) {
+      setError(err.message || 'Error al reactivar usuario.');
+    }
+  };
+
   const getRolNombre = (id) => {
     const roles = {
       1: 'ADMIN',
@@ -96,15 +111,23 @@ function Usuarios() {
     return roles[Number(id)] || `Rol ${id}`;
   };
 
+  const usuariosPorRol = usuarios.reduce((grupos, usuario) => {
+    const rolId = Number(usuario.rol_id);
+    grupos[rolId] ??= [];
+    grupos[rolId].push(usuario);
+    return grupos;
+  }, {});
+  const rolesOrdenados = Object.keys(usuariosPorRol).sort((a, b) => Number(a) - Number(b));
+
   return (
     <main>
       <h1>Gestión de Usuarios</h1>
-      <p>Módulo exclusivo para Administradores del Sistema.</p>
+
 
       {mensaje && <p role="status" style={{ color: 'green' }}>{mensaje}</p>}
       {error && <p role="alert" style={{ color: 'red' }}>{error}</p>}
 
-      <section>
+      <section className='CrearUsuario'>
         <h2>Crear Nuevo Usuario</h2>
         <form onSubmit={handleCrearUsuario}>
           <label>
@@ -156,8 +179,56 @@ function Usuarios() {
           <button type="submit">Guardar Usuario</button>
         </form>
       </section>
+      
+      <section className='lisUsuarios' >
+        <h2>Listado de Cuentas de Usuario</h2>
+        {cargando ? (
+          <p>Cargando lista...</p>
+        ) : rolesOrdenados.length === 0 ? (
+          <p>No hay usuarios registrados.</p>
+        ) : rolesOrdenados.map((rolId) => (
+          <section className='cienpor'  key={rolId} aria-labelledby={`usuarios-rol-${rolId}`}>
+            <h3 id={`usuarios-rol-${rolId}`}>{getRolNombre(rolId)}</h3>
+            <table className='tablaUsuarios'>
+              <thead className='encabezado'>
+                <tr>
+                  <th>ID</th>
+                  <th>Usuario</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody className='tablacontenido'>
+                {usuariosPorRol[rolId].map((u) => (
+                  <tr key={u.usuario_id}>
+                    <td>{u.usuario_id}</td>
+                    <td>{u.nom_usuario}</td>
+                    <td>{u.estado}</td>
+                    <td className='cont-act'>
+                      {u.estado === 'ACTIVO' ? (
+                        <>
+                          <button className='btn-us' type="button" onClick={() => setIdCambioPassword(u.usuario_id)}>
+                            Cambiar Contraseña
+                          </button>
+                          <button className='btn-us apagado' type="button" onClick={() => handleDesactivar(u.usuario_id)}>
+                            Desactivar
+                          </button>
+                        </>
+                      ) : (
+                        <button className='btn-us' type="button" onClick={() => handleActivar(u.usuario_id)}>
+                          Reactivar
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+        ))}
+      </section>
 
-      {idCambioPassword && (
+       {idCambioPassword && (
         <section>
           <h3>Cambiar Contraseña para Usuario #{idCambioPassword}</h3>
           <form onSubmit={handleCambiarPassword}>
@@ -175,54 +246,12 @@ function Usuarios() {
             <button type="button" onClick={() => setIdCambioPassword(null)}>Cancelar</button>
           </form>
         </section>
-      )}
+       )}
 
-      <section>
-        <h2>Listado de Cuentas de Usuario</h2>
-        {cargando ? (
-          <p>Cargando lista...</p>
-        ) : (
-          <table border="1" cellPadding="5">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Usuario</th>
-                <th>Rol</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {usuarios.map((u) => (
-                <tr key={u.usuario_id}>
-                  <td>{u.usuario_id}</td>
-                  <td>{u.nom_usuario}</td>
-                  <td>{getRolNombre(u.rol_id)}</td>
-                  <td>{u.estado}</td>
-                  <td>
-                    <button type="button" onClick={() => setIdCambioPassword(u.usuario_id)}>
-                      Cambiar Contraseña
-                    </button>
-                    {u.estado === 'ACTIVO' && (
-                      <button type="button" onClick={() => handleDesactivar(u.usuario_id)}>
-                        Desactivar
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-              {usuarios.length === 0 && (
-                <tr>
-                  <td colSpan="5">No hay usuarios registrados.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        )}
-      </section>
+
+
     </main>
   );
 }
 
 export default Usuarios;
-

@@ -6,6 +6,8 @@ function Materias() {
   const { usuario } = useAuth();
   const rol = Number(usuario?.rol_id || 0);
   const esAdmin = rol === 1;
+  const esDocente = rol === 4;
+  const consultaAsignaciones = esDocente || rol === 5;
 
   const [cursos, setCursos] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -18,7 +20,7 @@ function Materias() {
 
   const cargarCursos = useCallback(async () => {
     try {
-      const data = rol === 5
+      const data = consultaAsignaciones
         ? await academicoApi.asignacionesMaestros()
         : await academicoApi.cursos();
       setCursos(Array.isArray(data) ? data : []);
@@ -27,7 +29,7 @@ function Materias() {
     } finally {
       setCargando(false);
     }
-  }, [rol]);
+  }, [consultaAsignaciones]);
 
   useEffect(() => {
     cargarCursos();
@@ -70,9 +72,11 @@ function Materias() {
     <main>
       <h1>Cursos y Asignaturas</h1>
       <p>
-        {rol === 5
-          ? 'Consulta los cursos asignados a tu aula y ciclo escolar.'
-          : 'Catálogo institucional de asignaturas académicas.'}
+        {esDocente
+          ? 'Consulta las materias que impartes en cada aula y ciclo escolar.'
+          : rol === 5
+            ? 'Consulta los cursos asignados a tu aula y ciclo escolar.'
+            : 'Catálogo institucional de asignaturas académicas.'}
       </p>
 
       {mensaje && <p role="status" style={{ color: 'green' }}>{mensaje}</p>}
@@ -133,19 +137,21 @@ function Materias() {
         </section>
       )}
 
-      <section>
-        <h2>{rol === 5 ? 'Mis cursos asignados' : 'Catálogo de Cursos'}</h2>
+      <section className='lisUsuarios'>
+        <h2>
+          {consultaAsignaciones ? 'Mis cursos asignados' : 'Catálogo de Cursos'}
+        </h2>
         {cargando ? (
           <p>Cargando cursos...</p>
         ) : (
-          <table border="1" cellPadding="5">
-            <thead>
+          <table className='tablaUsuarios'>
+            <thead className='encabezado' >
               <tr>
-                {rol !== 5 && <th>ID</th>}
+                {!consultaAsignaciones && <th>ID</th>}
                 <th>Nombre del Curso</th>
-                {rol === 5 ? (
+                {consultaAsignaciones ? (
                   <>
-                    <th>Docente</th>
+                    {rol === 5 && <th>Docente</th>}
                     <th>Aula</th>
                     <th>Ciclo escolar</th>
                   </>
@@ -155,14 +161,16 @@ function Materias() {
                 {esAdmin && <th>Acciones</th>}
               </tr>
             </thead>
-            <tbody>
+            <tbody className='tablacontenido' >
               {cursos.map((c) => (
-                <tr key={c.curso_id}>
-                  {rol !== 5 && <td>{c.curso_id}</td>}
+                <tr key={consultaAsignaciones ? c.asignacion_curso_maestro_id : c.curso_id}>
+                  {!consultaAsignaciones && <td>{c.curso_id}</td>}
                   <td>{c.nom_curso}</td>
-                  {rol === 5 ? (
+                  {consultaAsignaciones ? (
                     <>
-                      <td>{`${c.maestro_nombre || ''} ${c.maestro_apellido || ''}`.trim() || 'No indicado'}</td>
+                      {rol === 5 && (
+                        <td>{`${c.maestro_nombre || ''} ${c.maestro_apellido || ''}`.trim() || 'No indicado'}</td>
+                      )}
                       <td>{c.nom_grado} — Sección {c.nom_seccion}</td>
                       <td>{c.ciclo}</td>
                     </>
@@ -170,8 +178,8 @@ function Materias() {
                     <td>{c.descripcion || '-'}</td>
                   )}
                   {esAdmin && (
-                    <td>
-                      <button type="button" onClick={() => iniciarEdicion(c)}>
+                    <td className='cont-act' >
+                      <button className='btn-us apagado'  type="button" onClick={() => iniciarEdicion(c)}>
                         Editar
                       </button>
                     </td>
@@ -180,8 +188,10 @@ function Materias() {
               ))}
               {cursos.length === 0 && (
                 <tr>
-                  <td colSpan={rol === 5 ? 5 : esAdmin ? 4 : 3}>
-                    {rol === 5 ? 'No tienes cursos asignados en este momento.' : 'No hay cursos registrados.'}
+                  <td colSpan={consultaAsignaciones ? (rol === 5 ? 4 : 3) : esAdmin ? 4 : 3}>
+                    {consultaAsignaciones
+                      ? 'No tienes cursos asignados en este momento.'
+                      : 'No hay cursos registrados.'}
                   </td>
                 </tr>
               )}
