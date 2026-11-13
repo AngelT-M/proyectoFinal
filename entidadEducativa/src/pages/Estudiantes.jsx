@@ -110,7 +110,7 @@ function Estudiantes() {
             type="button"
             onClick={() => setMostrarFormEstudiante(!mostarFormEstudiante)}
           >
-            {mostarFormEstudiante ? 'cancelar' : '+ nuevo estudiante'}
+            + nuevo estudiante
           </button>
 
           {mostarFormEstudiante && (

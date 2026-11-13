@@ -95,7 +95,7 @@ function Personal() {
   return (
     <main>
       <h1>Personal Administrativo</h1>
-      
+
       {mensaje && <p role="status" style={{ color: 'green' }}>{mensaje}</p>}
       {error && <p role="alert" style={{ color: 'red' }}>{error}</p>}
 
@@ -107,7 +107,7 @@ function Personal() {
             type='button'
             onClick={()=>setMostrarFormPersonal(!mostrarFormPersonal)}
             >
-              {mostrarFormPersonal ? 'cancelar': '+ crear personal'}
+              + crear personal
             </button>
           </div>
         

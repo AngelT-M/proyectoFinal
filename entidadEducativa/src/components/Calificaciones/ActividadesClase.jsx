@@ -30,7 +30,7 @@ export default function ActividadesClase({
           type="button"
           onClick={() => setMostrarFormActividad(!mostrarFormActividad)}
         >
-          {mostrarFormActividad ? 'Cancelar Nueva Actividad' : '+ Crear Nueva Actividad'}
+          + Crear Nueva Actividad
         </button>
       </div>
 

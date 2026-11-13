@@ -95,7 +95,7 @@ function Materias() {
             type='button'
             onClick={()=> setMostrarFormCursos(!mostrarFormCursos)}
             >
-              {mostrarFormCursos ? 'cancelar':'+ nuevo curso'}
+              + nuevo curso
             </button>
           </div>
 

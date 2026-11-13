@@ -302,7 +302,6 @@ export default function Calificaciones() {
               onGuardarNota={handleGuardarNotaIndividual}
             />
           )}
-          <hr  />
         </section>
       )}
       <BoletaCalificaciones

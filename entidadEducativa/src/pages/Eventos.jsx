@@ -93,7 +93,7 @@ function Eventos() {
             type='button'
             onClick={()=> setMostrarFormEventos(!mostrarFormEventos)}
             >
-              {mostrarFormEventos ? 'cancelar': '+ nuevo evento'}
+              + nuevo evento
             </button>
           </div>
 

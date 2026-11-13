@@ -119,7 +119,7 @@ function Aulas() {
           type='button'
           onClick={()=>setMostrarFormAulas(!mostrarFormAulas)}
           >
-             {mostrarFormAulas ? 'cancelar': '+ crear nueva Aula'}
+            + crear nueva Aula
           </button>
           {mostrarFormAulas && (
             <FormularioAula

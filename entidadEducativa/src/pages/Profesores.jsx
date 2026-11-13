@@ -106,7 +106,7 @@ function Profesores() {
             type='button'
             onClick={()=> setMostrarForProfesores(!mostrarForProfesores)}
           >
-            {mostrarForProfesores ? 'cancelar': '+ crear Profesro'}
+            + crear Profesro
           </button>
           {mostrarForProfesores && (
             <FormularioProfesor
