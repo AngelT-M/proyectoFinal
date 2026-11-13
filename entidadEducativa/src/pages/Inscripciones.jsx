@@ -110,7 +110,6 @@ function Inscripciones() {
   return (
     <main >
       <h1>Asignaciones Académicas</h1>
-      <p>Inscripción de estudiantes a aulas y asignación de cátedras a docentes.</p>
 
       {mensaje && <p role="status" style={{ color: 'green' }}>{mensaje}</p>}
       {error && <p role="alert" style={{ color: 'red' }}>{error}</p>}

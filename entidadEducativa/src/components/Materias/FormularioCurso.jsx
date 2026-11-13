@@ -13,7 +13,6 @@ export default function FormularioCurso({ nuevo, setNuevo, onSubmit, onCancelar 
             onChange={(e) => setNuevo({ ...nuevo, nom_curso: e.target.value })}
           />
         </label>
-        <br />
         <label>
           Descripción:
           <textarea
@@ -21,7 +20,6 @@ export default function FormularioCurso({ nuevo, setNuevo, onSubmit, onCancelar 
             onChange={(e) => setNuevo({ ...nuevo, descripcion: e.target.value })}
           />
         </label>
-        <br />
         <div>
           <button type="submit">Guardar Curso</button>
           <button className="sesion apagado" type="button" onClick={onCancelar}>Cancelar</button>

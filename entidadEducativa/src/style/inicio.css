@@ -130,12 +130,14 @@
 
 .eslogan-img{
     position: relative;
-    width: 95%;
+    width: 98%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     transition: transform 0.3s ease-in-out;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
 }
 .eslogan-img:hover{
     transform: scale(1.02);
@@ -188,6 +190,26 @@
     object-fit: cover;
     object-position: center;
 }
+
+.ubi{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-blanco);
+}
+.mapa{
+    margin: 3rem;
+    width: 80%;
+    border-radius: var(--radio);
+    box-shadow: -10px 10px  var(--color-primario); 
+    transition: transform 0.4s ease-in-out;  
+}
+.mapa:hover{
+    transform: scale(1.02); 
+}
+
 
 @media (width < 950px) {
     .cont-info-card{

@@ -6,7 +6,7 @@ export default function FormularioAsignarAlumno({
   onSubmit
 }) {
   return (
-    <section className="seccion form-nuevo">
+    <section className=" form-nuevo">
       <h2>Asignar Estudiante a un Aula (Matriculación)</h2>
       <form className="form form-cont" onSubmit={onSubmit}>
         <label className="entrada">

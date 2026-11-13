@@ -95,8 +95,7 @@ function Personal() {
   return (
     <main>
       <h1>Personal Administrativo</h1>
-      <p>Directores, subdirectores, secretarias y contadores de la institución.</p>
-
+      
       {mensaje && <p role="status" style={{ color: 'green' }}>{mensaje}</p>}
       {error && <p role="alert" style={{ color: 'red' }}>{error}</p>}
 

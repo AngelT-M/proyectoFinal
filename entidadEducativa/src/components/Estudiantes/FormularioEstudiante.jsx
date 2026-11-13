@@ -21,7 +21,6 @@ export default function FormularioEstudiante({
             onChange={(e) => setNuevo({ ...nuevo, carne: e.target.value })}
           />
         </label>
-        <br />
         <label>
           Nombre:
           <input
@@ -31,7 +30,6 @@ export default function FormularioEstudiante({
             onChange={(e) => setNuevo({ ...nuevo, nombre: e.target.value })}
           />
         </label>
-        <br />
         <label>
           Apellido:
           <input
@@ -41,7 +39,6 @@ export default function FormularioEstudiante({
             onChange={(e) => setNuevo({ ...nuevo, apellido: e.target.value })}
           />
         </label>
-        <br />
         <label>
           Fecha de Nacimiento:
           <input
@@ -51,7 +48,6 @@ export default function FormularioEstudiante({
             onChange={(e) => setNuevo({ ...nuevo, fecha_nacimiento: e.target.value })}
           />
         </label>
-        <br />
         <label>
           Email:
           <input
@@ -60,7 +56,6 @@ export default function FormularioEstudiante({
             onChange={(e) => setNuevo({ ...nuevo, email: e.target.value })}
           />
         </label>
-        <br />
         <label>
           Nombre del Encargado / Tutor:
           <input
@@ -70,7 +65,6 @@ export default function FormularioEstudiante({
             onChange={(e) => setNuevo({ ...nuevo, nom_encargado: e.target.value })}
           />
         </label>
-        <br />
         <label>
           Teléfono Personal:
           <input
@@ -79,7 +73,6 @@ export default function FormularioEstudiante({
             onChange={(e) => setNuevo({ ...nuevo, tel_personal: e.target.value })}
           />
         </label>
-        <br />
         <label>
           Teléfono del Encargado:
           <input
@@ -89,7 +82,6 @@ export default function FormularioEstudiante({
             onChange={(e) => setNuevo({ ...nuevo, tel_encargado: e.target.value })}
           />
         </label>
-        <br />
         <label>
           Cuenta de usuario:
           <select
@@ -109,7 +101,6 @@ export default function FormularioEstudiante({
             ))}
           </select>
         </label>
-        <br />
         <div>
           <button type="submit" disabled={cargando || usuariosDisponibles.length === 0}>
             Guardar Estudiante

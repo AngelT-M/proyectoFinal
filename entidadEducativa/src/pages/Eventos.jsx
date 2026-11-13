@@ -81,7 +81,6 @@ function Eventos() {
   return (
     <main>
       <h1>Calendario de Actividades y Eventos</h1>
-      <p>Agenda escolar institucional, académica y deportiva.</p>
 
       {mensaje && <p role="status" style={{ color: 'green' }}>{mensaje}</p>}
       {error && <p role="alert" style={{ color: 'red' }}>{error}</p>}

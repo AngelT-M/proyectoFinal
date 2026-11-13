@@ -8,7 +8,7 @@ export default function FormularioAsignarMaestro({
 }) {
   return (
     <section className="seccion form-nuevo">
-      <h2>Asignar Docente a un Aula y Curso (Cátedra)</h2>
+      <h2>Asignar Docente a un Aula y Curso</h2>
       <form className="form form-cont" onSubmit={onSubmit}>
         <label className="entrada">
           Seleccionar Docente:{' '}

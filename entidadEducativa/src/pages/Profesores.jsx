@@ -93,9 +93,7 @@ function Profesores() {
   return (
     <main>
       <header>
-        <p>Gestión académica</p>
         <h1>Catedráticos y docentes</h1>
-        <p>Consulta el directorio docente o registra a un nuevo integrante de la institución.</p>
       </header>
 
       {mensaje && <p role="status" style={{ color: 'green' }}>{mensaje}</p>}

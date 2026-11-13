@@ -220,7 +220,6 @@ function Finanzas() {
   return (
     <main style={{ padding: '2rem' }}>
       <h1>Control de Finanzas y Pagos</h1>
-      <p>Gestión de colegiaturas, cargos, pagos de matrícula y emisión de recibos.</p>
 
       {mensaje && <p role="status" style={{ color: 'green' }}>{mensaje}</p>}
       {error && <p role="alert" style={{ color: 'red' }}>{error}</p>}

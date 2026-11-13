@@ -2,14 +2,10 @@ export default function ListadoProfesores({ maestros, cargando, puedeEditar, onE
   return (
     <section className="lisUsuarios" aria-labelledby="listado-docentes">
       <div>
-        <div>
-          <h2 id="listado-docentes">Directorio de docentes</h2>
-          <p>Información de contacto y datos de cada docente registrado.</p>
-        </div>
         <span>
           {cargando
             ? 'Actualizando…'
-            : `${maestros.length} ${maestros.length === 1 ? 'docente' : 'docentes'}`}
+            : ``}
         </span>
       </div>
       {cargando ? (

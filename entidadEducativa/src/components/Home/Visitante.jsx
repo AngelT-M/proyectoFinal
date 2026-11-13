@@ -9,7 +9,7 @@ export default function Visitante(){
                 <div className='eslogan' >
                     <div className='tm' >
                         <h1>Un lugar para Crecer y <h1 className='progre' >Progresar</h1> </h1>
-                        <h1>Un mundo pordescubrir.</h1>
+                        <h1>Un mundo por descubrir.</h1>
                     </div>
                     <div className='frace' >
                         <p>Acompañamos a cada estudiante a descubrir su potencial,con una educación cercana, curiosa y conectada con la vida.</p>
@@ -24,7 +24,6 @@ export default function Visitante(){
                     <img className='img-eslogan' src="https://imagenes.elpais.com/resizer/v2/PO3W3FHL7FBZLDZLLPQY4VBMWU.jpg?auth=145bb445e9f80f6eb8da23cf4a19f985f3b865e7d51186dfbfeac19eb51db5d2&width=414" alt="" />
                     <button className='sesion est' >informacion</button>
                 </div>
-            
             </div>
 
             <div className='cont-info-card' >

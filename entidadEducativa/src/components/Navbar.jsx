@@ -43,9 +43,9 @@ function Navbar() {
           <Link className="lin" to="/">Inicio</Link>
           {!usuario&& (
             <>
-              <Link className='lin' >Contactos</Link>
-              <Link className='lin' >Ubicacion</Link>
-              <Link className='lin' >Nosotros</Link>
+              <Link className='lin' to='/contactos' >Contactos</Link>
+              <Link className='lin' to='/ubicacion' >Ubicacion</Link>
+              <Link className='lin' to='/nosotros' >Nosotros</Link>
             </>
           )}
           {usuario && (

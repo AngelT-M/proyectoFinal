@@ -234,7 +234,6 @@ function Asistencias() {
   return (
     <main style={{ padding: '2rem' }}>
       <h1>Control y Registro de Asistencias</h1>
-      <p>Seguimiento diario de puntualidad y asistencia por grado y sección.</p>
 
       {mensaje && <p role="status" style={{ color: 'green' }}>{mensaje}</p>}
       {error && <p role="alert" style={{ color: 'red' }}>{error}</p>}

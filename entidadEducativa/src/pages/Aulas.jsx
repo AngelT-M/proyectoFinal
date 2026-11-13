@@ -108,8 +108,7 @@ function Aulas() {
   return (
     <main style={{ padding: '2rem' }}>
       <h1>Aulas Aperturadas (Grados y Secciones)</h1>
-      <p>Consulta de grados, secciones asignadas y cupos disponibles.</p>
-
+     
       {mensaje && <p role="status" style={{ color: 'green' }}>{mensaje}</p>}
       {error && <p role="alert" style={{ color: 'red' }}>{error}</p>}
 

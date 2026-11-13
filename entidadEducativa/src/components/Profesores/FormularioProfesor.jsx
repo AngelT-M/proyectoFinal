@@ -19,7 +19,7 @@ export default function FormularioProfesor({
       <form className="form-cont" onSubmit={onSubmit}>
         <div>
           <label>
-            Carné de maestro <span>Obligatorio</span>
+            Carné de maestro 
             <input
               type="text"
               required
@@ -29,7 +29,7 @@ export default function FormularioProfesor({
             />
           </label>
           <label>
-            Nombre <span>Obligatorio</span>
+            Nombre 
             <input
               type="text"
               required
@@ -38,7 +38,7 @@ export default function FormularioProfesor({
             />
           </label>
           <label>
-            Apellido <span>Obligatorio</span>
+            Apellido 
             <input
               type="text"
               required
@@ -47,7 +47,7 @@ export default function FormularioProfesor({
             />
           </label>
           <label>
-            Fecha de nacimiento <span>Obligatorio</span>
+            Fecha de nacimiento 
             <input
               type="date"
               required
@@ -56,7 +56,7 @@ export default function FormularioProfesor({
             />
           </label>
           <label>
-            Correo electrónico <span>Opcional</span>
+            Correo electrónico 
             <input
               type="email"
               value={nuevo.email}
@@ -64,7 +64,7 @@ export default function FormularioProfesor({
             />
           </label>
           <label>
-            Teléfono personal <span>Opcional</span>
+            Teléfono personal 
             <input
               type="tel"
               value={nuevo.tel_personal}
@@ -72,7 +72,7 @@ export default function FormularioProfesor({
             />
           </label>
           <label>
-            Teléfono de casa <span>Opcional</span>
+            Teléfono de casa 
             <input
               type="tel"
               value={nuevo.tel_casa}
@@ -80,7 +80,7 @@ export default function FormularioProfesor({
             />
           </label>
           <label>
-            Cuenta de usuario <span>Obligatorio</span>
+            Cuenta de usuario 
             <select
               required
               value={nuevo.usuario_id}
@@ -99,7 +99,6 @@ export default function FormularioProfesor({
                 </option>
               ))}
             </select>
-            <span>La cuenta debe existir previamente y todavía no estar vinculada a otro docente.</span>
           </label>
         </div>
 
@@ -107,7 +106,6 @@ export default function FormularioProfesor({
           <p>Para registrar un docente, primero crea o libera una cuenta con rol de maestro.</p>
         )}
         <div>
-          <p>Los campos marcados como obligatorios deben completarse para guardar el registro.</p>
           <button
             className="btn-us"
             type="submit"

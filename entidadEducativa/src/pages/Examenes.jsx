@@ -146,8 +146,6 @@ function Examenes() {
   return (
     <main>
       <h1>Gestión y Autorización de Exámenes</h1>
-      <p>Los docentes envían sus exámenes y el personal autorizado revisa y resuelve las solicitudes.</p>
-
       {mensaje && <p role="status" style={{ color: 'green' }}>{mensaje}</p>}
       {error && <p role="alert" style={{ color: 'red' }}>{error}</p>}
 

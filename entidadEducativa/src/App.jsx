@@ -18,6 +18,9 @@ import Examenes from './pages/Examenes';
 import Finanzas from './pages/Finanzas';
 import Eventos from './pages/Eventos';
 import Periodos from './pages/Periodos';
+import Contactos from './components/Home/Contactos';
+import Ubicacion from './components/Home/Ubicacion';
+import Nosotros from './components/Home/Nosotros';
 
 function PaginaNoEncontrada() {
   return (
@@ -39,7 +42,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/sesion" element={<Sesion />} />
         <Route path="/login" element={<Sesion />} />
-
+        <Route path='/contactos' element={<Contactos/>} />
+        <Route path='/ubicacion' element={<Ubicacion/>}/>
+        <Route path='/nosotros' element={<Nosotros/>}/>
         
         <Route
 
