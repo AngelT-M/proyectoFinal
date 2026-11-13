@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { academicoApi } from '../services/api';
 import { useAuth } from '../auth/useAuth';
+import FormularioCurso from '../components/Materias/FormularioCurso';
+import FormularioEdicionCurso from '../components/Materias/FormularioEdicionCurso';
+import ListadoCursos from '../components/Materias/ListadoCursos';
 
 function Materias() {
   const { usuario } = useAuth();
@@ -97,124 +100,29 @@ function Materias() {
           </div>
 
           {mostrarFormCursos && (
-            <div> 
-              <h2>Crear Nuevo Curso</h2>
-              <form onSubmit={handleCrear}>
-                <label>
-                  Nombre del Curso:
-                  <input
-                    type="text"
-                    required
-                    value={nuevo.nom_curso}
-                    onChange={(e) => setNuevo({ ...nuevo, nom_curso: e.target.value })}
-                  />
-                </label>
-                <br />
-                <label>
-                  Descripción:
-                  <textarea
-                    value={nuevo.descripcion}
-                    onChange={(e) => setNuevo({ ...nuevo, descripcion: e.target.value })}
-                  />
-                </label>
-                <br />
-                <button type="submit">Guardar Curso</button>
-              </form>
-            </div>
+            <FormularioCurso nuevo={nuevo} setNuevo={setNuevo} onSubmit={handleCrear} />
           )} 
         </section>
       )}
 
       {esAdmin && editandoId && (
-        <section>
-          <h3>Editar Curso #{editandoId}</h3>
-          <form onSubmit={handleActualizar}>
-            <label>
-              Nombre del Curso:
-              <input
-                type="text"
-                required
-                value={editandoData.nom_curso}
-                onChange={(e) => setEditandoData({ ...editandoData, nom_curso: e.target.value })}
-              />
-            </label>
-            <br />
-            <label>
-              Descripción:
-              <textarea
-                value={editandoData.descripcion}
-                onChange={(e) => setEditandoData({ ...editandoData, descripcion: e.target.value })}
-              />
-            </label>
-            <br />
-            <button type="submit">Actualizar Curso</button>
-            <button type="button" onClick={() => setEditandoId(null)}>Cancelar</button>
-          </form>
-        </section>
+        <FormularioEdicionCurso
+          editandoId={editandoId}
+          editandoData={editandoData}
+          setEditandoData={setEditandoData}
+          onSubmit={handleActualizar}
+          onCancelar={() => setEditandoId(null)}
+        />
       )}
 
-      <section className='lisUsuarios'>
-        <h2>
-          {consultaAsignaciones ? 'Mis cursos asignados' : 'Catálogo de Cursos'}
-        </h2>
-        {cargando ? (
-          <p>Cargando cursos...</p>
-        ) : (
-          <table className='tablaUsuarios'>
-            <thead className='encabezado' >
-              <tr>
-                {!consultaAsignaciones && <th>ID</th>}
-                <th>Nombre del Curso</th>
-                {consultaAsignaciones ? (
-                  <>
-                    {rol === 5 && <th>Docente</th>}
-                    <th>Aula</th>
-                    <th>Ciclo escolar</th>
-                  </>
-                ) : (
-                  <th>Descripción</th>
-                )}
-                {esAdmin && <th>Acciones</th>}
-              </tr>
-            </thead>
-            <tbody className='tablacontenido' >
-              {cursos.map((c) => (
-                <tr key={consultaAsignaciones ? c.asignacion_curso_maestro_id : c.curso_id}>
-                  {!consultaAsignaciones && <td>{c.curso_id}</td>}
-                  <td>{c.nom_curso}</td>
-                  {consultaAsignaciones ? (
-                    <>
-                      {rol === 5 && (
-                        <td>{`${c.maestro_nombre || ''} ${c.maestro_apellido || ''}`.trim() || 'No indicado'}</td>
-                      )}
-                      <td>{c.nom_grado} — Sección {c.nom_seccion}</td>
-                      <td>{c.ciclo}</td>
-                    </>
-                  ) : (
-                    <td>{c.descripcion || '-'}</td>
-                  )}
-                  {esAdmin && (
-                    <td className='cont-act' >
-                      <button className='btn-us apagado'  type="button" onClick={() => iniciarEdicion(c)}>
-                        Editar
-                      </button>
-                    </td>
-                  )}
-                </tr>
-              ))}
-              {cursos.length === 0 && (
-                <tr>
-                  <td colSpan={consultaAsignaciones ? (rol === 5 ? 4 : 3) : esAdmin ? 4 : 3}>
-                    {consultaAsignaciones
-                      ? 'No tienes cursos asignados en este momento.'
-                      : 'No hay cursos registrados.'}
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        )}
-      </section>
+      <ListadoCursos
+        cursos={cursos}
+        cargando={cargando}
+        consultaAsignaciones={consultaAsignaciones}
+        rol={rol}
+        esAdmin={esAdmin}
+        onEditar={iniciarEdicion}
+      />
     </main>
   );
 }

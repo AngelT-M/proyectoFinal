@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { usuarioApi } from '../services/api';
 import '../style/usuarios.css';
-
+import FormularioUsuario from '../components/Usuarios/FormularioUsuario';
+import ListadoUsuarios from '../components/Usuarios/ListadoUsuarios';
+import FormularioCambioPassword from '../components/Usuarios/FormularioCambioPassword';
 
 function Usuarios() {
   const [usuarios, setUsuarios] = useState([]);
@@ -13,7 +15,6 @@ function Usuarios() {
 
   // Formulario nuevo usuario
   const [mostrarFormUsuario, setMostrarFormUsuario] = useState(false);
-  
   const [nuevoUsuario, setNuevoUsuario] = useState({
     nom_usuario: '',
     password: '',
@@ -147,130 +148,32 @@ function Usuarios() {
       </div>
 
       {mostrarFormUsuario && (
-        <section className='CrearUsuario'>
-        <h2>Crear Nuevo Usuario</h2>
-        <form onSubmit={handleCrearUsuario}>
-          <label>
-            Nombre de Usuario:
-            <input
-              type="text"
-              required
-              value={nuevoUsuario.nom_usuario}
-              onChange={(e) => setNuevoUsuario({ ...nuevoUsuario, nom_usuario: e.target.value })}
-            />
-          </label>
-          <br />
-          <label>
-            Contraseña inicial (mín. 8 caracteres):
-            <input
-              type="password"
-              required
-              minLength={8}
-              value={nuevoUsuario.password}
-              onChange={(e) => setNuevoUsuario({ ...nuevoUsuario, password: e.target.value })}
-            />
-          </label>
-          <br />
-          <label>
-            Rol:
-            <select
-              value={nuevoUsuario.rol_id}
-              onChange={(e) => setNuevoUsuario({ ...nuevoUsuario, rol_id: e.target.value })}
-            >
-              <option value={1}>1 - Administrador</option>
-              <option value={2}>2 - Director</option>
-              <option value={3}>3 - Secretaria</option>
-              <option value={4}>4 - Maestro</option>
-              <option value={5}>5 - Alumno</option>
-            </select>
-          </label>
-          <br />
-          <label>
-            Estado:
-            <select
-              value={nuevoUsuario.estado}
-              onChange={(e) => setNuevoUsuario({ ...nuevoUsuario, estado: e.target.value })}
-            >
-              <option value="ACTIVO">ACTIVO</option>
-              <option value="INACTIVO">INACTIVO</option>
-            </select>
-          </label>
-          <br />
-          <button type="submit">Guardar Usuario</button>
-        </form>
-      </section>
+        <FormularioUsuario
+          usuario={nuevoUsuario}
+          setUsuario={setNuevoUsuario}
+          onSubmit={handleCrearUsuario}
+        />
       )}
       
-      
-      <section className='lisUsuarios' >
-        <h2>Listado de Cuentas de Usuario</h2>
-        {cargando ? (
-          <p>Cargando lista...</p>
-        ) : rolesOrdenados.length === 0 ? (
-          <p>No hay usuarios registrados.</p>
-        ) : rolesOrdenados.map((rolId) => (
-          <section className='cienpor'  key={rolId} aria-labelledby={`usuarios-rol-${rolId}`}>
-            <h3 id={`usuarios-rol-${rolId}`}>{getRolNombre(rolId)}</h3>
-            <table className='tablaUsuarios'>
-              <thead className='encabezado'>
-                <tr>
-                  <th>ID</th>
-                  <th>Usuario</th>
-                  <th>Estado</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody className='tablacontenido'>
-                {usuariosPorRol[rolId].map((u) => (
-                  <tr key={u.usuario_id}>
-                    <td>{u.usuario_id}</td>
-                    <td>{u.nom_usuario}</td>
-                    <td>{u.estado}</td>
-                    <td className='cont-act'>
-                      {u.estado === 'ACTIVO' ? (
-                        <>
-                          <button className='btn-us' type="button" onClick={() => setIdCambioPassword(u.usuario_id)}>
-                            Cambiar Contraseña
-                          </button>
-                          <button className='btn-us apagado' type="button" onClick={() => handleDesactivar(u.usuario_id)}>
-                            Desactivar
-                          </button>
-                        </>
-                      ) : (
-                        <button className='btn-us' type="button" onClick={() => handleActivar(u.usuario_id)}>
-                          Reactivar
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </section>
-        ))}
-      </section>
+      <ListadoUsuarios
+        cargando={cargando}
+        rolesOrdenados={rolesOrdenados}
+        usuariosPorRol={usuariosPorRol}
+        getRolNombre={getRolNombre}
+        onCambiarPassword={setIdCambioPassword}
+        onDesactivar={handleDesactivar}
+        onActivar={handleActivar}
+      />
 
-       {idCambioPassword && (
-        <section>
-          <h3>Cambiar Contraseña para Usuario #{idCambioPassword}</h3>
-          <form onSubmit={handleCambiarPassword}>
-            <label>
-              Nueva Contraseña:
-              <input
-                type="password"
-                required
-                minLength={8}
-                value={nuevoPassword}
-                onChange={(e) => setNuevoPassword(e.target.value)}
-              />
-            </label>
-            <button type="submit">Guardar Nueva Contraseña</button>
-            <button type="button" onClick={() => setIdCambioPassword(null)}>Cancelar</button>
-          </form>
-        </section>
-       )}
-
-
+      {idCambioPassword && (
+        <FormularioCambioPassword
+          usuarioId={idCambioPassword}
+          password={nuevoPassword}
+          setPassword={setNuevoPassword}
+          onSubmit={handleCambiarPassword}
+          onCancelar={() => setIdCambioPassword(null)}
+        />
+      )}
 
     </main>
   );

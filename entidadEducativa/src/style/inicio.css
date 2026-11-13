@@ -2,3 +2,132 @@
     height: 100vh;
 }
 
+.home-visitante{
+    background-color: var(--color-fondo);
+}
+
+.panel-prin{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    justify-content: center;
+
+    
+}
+
+.eslogan{
+    margin: 5rem;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+}
+.tm{
+    width: 65%;
+}
+
+.eslogan h1{
+    font-size: 3rem;  
+    color: var(--color-primario);
+}
+.progre{
+    display: inline-block;          
+    border-bottom: 5px solid #3498db;
+    border-radius: 1px; 
+    line-height: 1;               
+    padding-bottom: 1;
+}
+
+.frace{
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.5rem;
+}
+
+.sec-btn{
+    display: grid;
+    grid-template-columns: 1fr 1fr ;
+}
+.sec-btn button{
+    margin-top: 1rem;
+    margin-right: 1rem;
+}
+
+.eslogan-img{
+    position: relative;
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease-in-out;
+}
+.eslogan-img:hover{
+    transform: scale(1.02);
+}
+
+.est{
+    
+    position: absolute;
+    bottom: 95%;      
+    left: 85%;       
+    z-index: 10;
+}
+
+.img-eslogan{
+    width: 90%;
+    border-radius: var(--radio);
+    box-shadow: -15px 15px  var(--color-ad);   
+}
+
+.cont-info-card{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    background-color: var(--color-blanco);
+}
+
+.info-card{
+    margin: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    border-radius: var(--radio);
+}
+.infro-img{
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    border-radius: var(--radio);
+    transition: transform 0.3s ease-in-out;
+}
+.infro-img:hover{
+    transform: scale(1.02);
+    box-shadow: -5px 5px var(--color-terciario) ;
+}
+
+.infro-img img{
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+@media (width < 950px) {
+    .cont-info-card{
+    grid-template-columns: 1fr ;
+    }
+
+    .infro-img img{
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    }
+}

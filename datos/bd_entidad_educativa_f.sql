@@ -80,7 +80,8 @@ CREATE TABLE grados_secciones (
     grado_id TINYINT NOT NULL,
     seccion_id SMALLINT NOT NULL,
     cantidad_estudiantes TINYINT UNSIGNED DEFAULT 0,
-    ciclo YEAR NOT NULL
+    ciclo YEAR NOT NULL,
+    CONSTRAINT uq_grados_secciones_ciclo_grado_seccion UNIQUE (grado_id, seccion_id, ciclo)
 );
 
 CREATE TABLE asignacion_grados (
@@ -102,6 +103,23 @@ CREATE TABLE asignacion_curso_maestro (
     curso_id SMALLINT NOT NULL
 );
 
+CREATE TABLE bimestres (
+    bimestre_id INT AUTO_INCREMENT PRIMARY KEY,
+    ciclo YEAR NOT NULL,
+    nombre VARCHAR(30) NOT NULL,
+    orden TINYINT UNSIGNED NOT NULL,
+    fecha_inicio DATE NULL,
+    fecha_fin DATE NULL,
+    UNIQUE KEY uq_bimestres_ciclo_nombre (ciclo, nombre)
+);
+
+INSERT INTO bimestres (ciclo, nombre, orden) VALUES
+(2026, '1er Bimestre', 1),
+(2026, '2do Bimestre', 2),
+(2026, '3er Bimestre', 3),
+(2026, '4to Bimestre', 4),
+(2026, 'Recuperacion', 5);
+
 CREATE TABLE asistencia (
     asistencia_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT NOT NULL,
@@ -113,7 +131,7 @@ CREATE TABLE asistencia (
 CREATE TABLE actividades_curso (
     actividad_curso_id INT AUTO_INCREMENT PRIMARY KEY,
     asignacion_curso_maestro_id INT NOT NULL,
-    bimestre ENUM('1er Bimestre','2do Bimestre','3er Bimestre','4to Bimestre','Recuperacion') NOT NULL,
+    bimestre_id INT UNSIGNED NOT NULL,
     nom_actividad VARCHAR(100) NOT NULL,
     punteo_maximo DECIMAL(5,2) NOT NULL,
     descripcion TEXT
@@ -130,6 +148,7 @@ CREATE TABLE calificaciones (
 CREATE TABLE examen_enviados (
     examen_id INT AUTO_INCREMENT PRIMARY KEY,
     asignacion_curso_maestro_id INT NOT NULL,
+    bimestre_id INT UNSIGNED NULL,
     titulo VARCHAR(150) NOT NULL,
     mensaje TEXT,
     archivo_url VARCHAR(255) NOT NULL,
@@ -248,7 +267,10 @@ ALTER TABLE asistencia
 ALTER TABLE actividades_curso 
     ADD CONSTRAINT fk_actcurso_acm FOREIGN KEY (asignacion_curso_maestro_id) 
     REFERENCES asignacion_curso_maestro(asignacion_curso_maestro_id) 
-    ON UPDATE CASCADE ON DELETE CASCADE;
+    ON UPDATE CASCADE ON DELETE CASCADE,
+    ADD CONSTRAINT fk_actividades_bimestre FOREIGN KEY (bimestre_id)
+    REFERENCES bimestres(bimestre_id)
+    ON UPDATE CASCADE ON DELETE RESTRICT;
 
 ALTER TABLE calificaciones 
     ADD CONSTRAINT fk_calif_ag FOREIGN KEY (asignacion_grado_id) 
@@ -264,7 +286,10 @@ ALTER TABLE examen_enviados
     ON UPDATE CASCADE ON DELETE CASCADE,
     ADD CONSTRAINT fk_examen_personal FOREIGN KEY (personal_id) 
     REFERENCES personal_administrativos(personal_id) 
-    ON UPDATE CASCADE ON DELETE CASCADE;
+    ON UPDATE CASCADE ON DELETE CASCADE,
+    ADD CONSTRAINT fk_examenes_bimestre FOREIGN KEY (bimestre_id)
+    REFERENCES bimestres(bimestre_id)
+    ON UPDATE CASCADE ON DELETE RESTRICT;
 
 ALTER TABLE pagos 
     ADD CONSTRAINT fk_pagos_grado FOREIGN KEY (grado_id) 

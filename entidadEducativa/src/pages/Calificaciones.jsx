@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { evaluacionesApi, academicoApi } from '../services/api';
 import { useAuth } from '../auth/useAuth';
+import SelectorClase from '../components/Calificaciones/SelectorClase';
+import ActividadesClase from '../components/Calificaciones/ActividadesClase';
+import BoletaCalificaciones from '../components/Calificaciones/BoletaCalificaciones';
 
-function Calificaciones() {
+export default function Calificaciones() {
   const { usuario } = useAuth();
   const rol = Number(usuario?.rol_id || 0);
   const esAlumno = rol === 5;
@@ -270,348 +273,60 @@ function Calificaciones() {
       {mensaje && <p role="status" style={{ color: 'green' }}>{mensaje}</p>}
       {error && <p role="alert" style={{ color: 'red' }}>{error}</p>}
 
-      {/* Módulo para Docentes y Personal Administrativo */}
       {puedeCalificar && (
-        <section >
-          <h2>1. Seleccionar Clase Asignada</h2>
-          {cargandoClases ? (
-            <p>Cargando tus clases...</p>
-          ) : clases.length === 0 ? (
-            <p><em>No tienes clases asignadas actualmente en el sistema.</em></p>
-          ) : (
-            <div>
-              <label>
-                <strong>Clase / Asignatura: </strong>
-                <select
-                  value={claseSeleccionada?.asignacion_curso_maestro_id || ''}
-                  onChange={(e) => {
-                    const c = clases.find((x) => String(x.asignacion_curso_maestro_id) === e.target.value);
-                    if (c) seleccionarClase(c);
-                  }}
-                  style={{ padding: '0.4rem', fontSize: '1rem', minWidth: '320px' }}
-                >
-                  {clases.map((c) => (
-                    <option key={c.asignacion_curso_maestro_id} value={c.asignacion_curso_maestro_id}>
-                      {c.nom_curso} — {c.nom_grado} Sección {c.nom_seccion} ({c.ciclo})
-                      {rol !== 4 ? ` [Prof. ${c.maestro_nombre} ${c.maestro_apellido}]` : ''}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
-          )}
-
+        <section>
+          <SelectorClase
+            clases={clases}
+            claseSeleccionada={claseSeleccionada}
+            cargando={cargandoClases}
+            rol={rol}
+            onSeleccionarClase={seleccionarClase}
+          />
           {claseSeleccionada && (
-            <div style={{ marginTop: '2rem' }}>
-              <h2>
-                2. Actividades de Evaluación ({claseSeleccionada.nom_curso} — {claseSeleccionada.nom_grado} {claseSeleccionada.nom_seccion})
-              </h2>
-
-              <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'center', flexWrap: 'wrap', marginBottom: '1rem' }}>
-                <button
-                  className="sesion"
-                  type="button"
-                  onClick={() => setMostrarFormActividad(!mostrarFormActividad)}
-                >
-                  {mostrarFormActividad ? 'Cancelar Nueva Actividad' : '+ Crear Nueva Actividad'}
-                </button>
-              </div>
-
-              {mostrarFormActividad && (
-                <fieldset style={{ padding: '1rem', marginBottom: '1.5rem', backgroundColor: 'var(--color-blanco)', borderRadius: 'var(--radio)' }}>
-                  <legend><strong>Crear Actividad para {claseSeleccionada.nom_curso}</strong></legend>
-                  <form onSubmit={handleCrearActividad}>
-                    <label>
-                      Bimestre:{' '}
-                      <select
-                        required
-                        value={nuevaAct.bimestre_id}
-                        onChange={(e) => setNuevaAct({ ...nuevaAct, bimestre_id: e.target.value })}
-                        disabled={bimestres.length === 0}
-                      >
-                        <option value="">-- Selecciona un periodo --</option>
-                        {bimestres.map((bimestre) => (
-                          <option key={bimestre.bimestre_id} value={bimestre.bimestre_id}>
-                            {bimestre.nombre}
-                            {bimestre.fecha_inicio && bimestre.fecha_fin
-                              ? ` (${bimestre.fecha_inicio} al ${bimestre.fecha_fin})`
-                              : ''}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-                    {bimestres.length === 0 && (
-                      <p>No hay periodos configurados para el ciclo de esta clase. Contacta a administración.</p>
-                      )}
-                      <label>
-                      Nombre de la Actividad:{' '}
-                      <input
-                        type="text"
-                        required
-                        placeholder="Ej. Tarea 1: Álgebra, Ensayo Literario"
-                        value={nuevaAct.nom_actividad}
-                        onChange={(e) => setNuevaAct({ ...nuevaAct, nom_actividad: e.target.value })}
-                        style={{ width: '300px', padding: '0.3rem' }}
-                      />
-                    </label>
-                    <label>
-                      Punteo Máximo:{' '}
-                      <input
-                        type="number"
-                        step="0.01"
-                        required
-                        min={1}
-                        max={100}
-                        value={nuevaAct.punteo_maximo}
-                        onChange={(e) => setNuevaAct({ ...nuevaAct, punteo_maximo: e.target.value })}
-                        style={{ width: '100px', padding: '0.3rem' }}
-                      /> pts
-                    </label>
-                    <label>
-                      Descripción o Instrucciones:{' '}
-                      <input
-                        type="text"
-                        placeholder="Breve descripción opcional"
-                        value={nuevaAct.descripcion}
-                        onChange={(e) => setNuevaAct({ ...nuevaAct, descripcion: e.target.value })}
-                        style={{ width: '350px', padding: '0.3rem' }}
-                      />
-                    </label>
-                    <button className="sesion" type="submit">Guardar Actividad</button>
-                  </form>
-                </fieldset>
-              )}
-
-              {cargandoActividades ? (
-                <p>Cargando actividades de la clase...</p>
-              ) : actividades.length === 0 ? (
-                <p><em>No hay actividades registradas en esta clase. Crea la primera con el botón superior.</em></p>
-              ) : (
-                <div style={{ marginBottom: '1.5rem' }}>
-                  <label>
-                    <strong>Seleccionar Actividad a Calificar: </strong>
-                    <select
-                      value={actividadSeleccionada?.actividad_curso_id || ''}
-                      onChange={(e) => {
-                        const act = actividades.find((x) => String(x.actividad_curso_id) === e.target.value);
-                        if (act) cargarAlumnosDeActividad(act);
-                      }}
-                      style={{ padding: '0.4rem', fontSize: '1rem', minWidth: '320px' }}
-                    >
-                      {actividades.map((a) => (
-                        <option key={a.actividad_curso_id} value={a.actividad_curso_id}>
-                          [{a.bimestre}] {a.nom_actividad} — Punteo máx: {a.punteo_maximo} pts
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
-              )}
-
-              
-              {actividadSeleccionada && (
-                <div className='lisUsuarios' >
-                  <h3>
-                    3. Listado de Alumnos Asignados para Calificar: "{actividadSeleccionada.nom_actividad}"
-                    {' '}<span style={{ fontWeight: 'normal', fontSize: '0.9rem' }}>({actividadSeleccionada.bimestre} — Máximo {actividadSeleccionada.punteo_maximo} pts)</span>
-                  </h3>
-
-                  {cargandoAlumnos ? (
-                    <p>Cargando lista de estudiantes asignados...</p>
-                  ) : alumnosClase.length === 0 ? (
-                    <p><em>No hay alumnos asignados a esta aula/sección actualmente.</em></p>
-                  ) : (
-                    <table className='tablaUsuarios'>
-                      <thead className='encabezado'>
-                        <tr >
-                          <th>Carné</th>
-                          <th>Nombre del Estudiante</th>
-                          <th>Nota Registrada</th>
-                          <th>Calificar / Modificar Nota (Máx: {actividadSeleccionada.punteo_maximo})</th>
-                          <th>Acción</th>
-                        </tr>
-                      </thead>
-                      <tbody className='tablacontenido' >
-                        {alumnosClase.map((alumno) => {
-                          const nombreCompleto = `${alumno.nombre} ${alumno.apellido}`;
-                          const notaActual = notasTemp[alumno.asignacion_grado_id] ?? '';
-
-                          return (
-                            <tr key={alumno.alumno_id}>
-                              <td>{alumno.carne}</td>
-                              <td><strong>{nombreCompleto}</strong></td>
-                              <td>
-                                {alumno.punteo_obtenido !== null && alumno.punteo_obtenido !== undefined ? (
-                                  <span style={{ color: 'green', fontWeight: 'bold' }}>
-                                    {alumno.punteo_obtenido} / {actividadSeleccionada.punteo_maximo} pts
-                                  </span>
-                                ) : (
-                                  <span style={{ color: '#888' }}>Sin Calificar</span>
-                                )}
-                              </td>
-                              <td>
-                                <input
-                                  type="number"
-                                  step="0.01"
-                                  min={0}
-                                  max={Number(actividadSeleccionada.punteo_maximo)}
-                                  placeholder={`0 - ${actividadSeleccionada.punteo_maximo}`}
-                                  value={notaActual}
-                                  onChange={(e) => {
-                                    setNotasTemp({
-                                      ...notasTemp,
-                                      [alumno.asignacion_grado_id]: e.target.value
-                                    });
-                                  }}
-                                  style={{ width: '90px', padding: '0.3rem', fontSize: '0.95rem' }}
-                                />
-                                {' '}pts
-                              </td>
-                              <td>
-                                <button
-                                  className="btn-us "
-                                  type="button"
-                                  onClick={() => handleGuardarNotaIndividual(alumno.asignacion_grado_id, nombreCompleto)}
-                                >
-                                  Guardar Nota
-                                </button>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  )}
-                </div>
-              )}
-            </div>
+            <ActividadesClase
+              clase={claseSeleccionada}
+              bimestres={bimestres}
+              nuevaAct={nuevaAct}
+              setNuevaAct={setNuevaAct}
+              mostrarFormActividad={mostrarFormActividad}
+              setMostrarFormActividad={setMostrarFormActividad}
+              onCrearActividad={handleCrearActividad}
+              cargandoActividades={cargandoActividades}
+              actividades={actividades}
+              actividadSeleccionada={actividadSeleccionada}
+              onSeleccionarActividad={cargarAlumnosDeActividad}
+              alumnosClase={alumnosClase}
+              cargandoAlumnos={cargandoAlumnos}
+              notasTemp={notasTemp}
+              setNotasTemp={setNotasTemp}
+              onGuardarNota={handleGuardarNotaIndividual}
+            />
           )}
-          <hr style={{ margin: '3rem 0' }} />
+          <hr  />
         </section>
       )}
-
-      {/* Sección: Boleta Oficial de Calificaciones */}
-      <section>
-        <h2>Boleta de Calificaciones del Estudiante</h2>
-        {!esAlumno && (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              cargarBoleta(idAlumnoConsulta);
-            }}
-            style={{ marginBottom: '1.5rem' }}
-          >
-            {rol === 4 && (
-              <label>
-                Filtrar por asignatura y aula:{' '}
-                <select
-                  value={idAsignacionBoleta}
-                  disabled={cargandoClases}
-                  onChange={(e) => filtrarAlumnosBoleta(e.target.value)}
-                >
-                  <option value="">
-                    {cargandoClases ? 'Cargando tus asignaturas…' : '-- Selecciona una asignatura --'}
-                  </option>
-                  {clases.map((clase) => (
-                    <option
-                      key={clase.asignacion_curso_maestro_id}
-                      value={clase.asignacion_curso_maestro_id}
-                    >
-                      {clase.nom_curso} — {clase.nom_grado}, Sección {clase.nom_seccion} ({clase.ciclo})
-                    </option>
-                  ))}
-                </select>
-                {' '}
-              </label>
-            )}
-            <label>
-              Seleccionar Estudiante:{' '}
-              <select
-                value={idAlumnoConsulta}
-                disabled={cargandoListaAlumnos || (rol === 4 && !idAsignacionBoleta)}
-                onChange={(e) => {
-                  setIdAlumnoConsulta(e.target.value);
-                  setBoleta(null);
-                  setErrorBoleta('');
-                  setMensaje('');
-                }}
-              >
-                <option value="">-- Selecciona un estudiante --</option>
-                {listaAlumnos.map((a) => (
-                  <option key={a.alumno_id} value={a.alumno_id}>
-                    {a.nombre} {a.apellido} (Carné: {a.carne})
-                  </option>
-                ))}
-              </select>
-            </label>
-            {' '}
-            <button
-              className="sesion"
-              type="submit"
-              disabled={!idAlumnoConsulta || cargandoBoleta || cargandoListaAlumnos}
-            >
-              {cargandoBoleta ? 'Consultando…' : 'Ver Boleta de Notas'}
-            </button>
-          </form>
-        )}
-
-        {errorBoleta && <p role="alert" style={{ color: 'red' }}>{errorBoleta}</p>}
-        {!esAlumno && cargandoListaAlumnos && <p role="status">Cargando estudiantes…</p>}
-        {!esAlumno && !cargandoListaAlumnos && listaAlumnos.length === 0 && !errorBoleta && (
-          <p>
-            {rol === 4
-              ? idAsignacionBoleta
-                ? 'No hay estudiantes asignados a esta asignatura y aula.'
-                : 'Selecciona una asignatura para buscar entre sus estudiantes.'
-              : 'No hay estudiantes disponibles para consultar.'}
-          </p>
-        )}
-        {cargandoBoleta && <p>Consultando calificaciones...</p>}
-
-        {boleta && (
-          <div>
-            <h3>Boleta Oficial de Notas</h3>
-            {Array.isArray(boleta) ? (
-              boleta.length === 0 ? (
-                <p>No se registran calificaciones asentadas aún.</p>
-              ) : (
-                cursosBoleta.map(([curso, bimestresCurso]) => (
-                  <section key={curso} className='lisUsuarios'>
-                    <h4>{curso}</h4>
-                    {Object.entries(bimestresCurso).map(([bimestreId, grupo]) => (
-                      <div key={`${curso}-${bimestreId}`}>
-                        <h5>{grupo.nombre}</h5>
-                        <table className='tablaUsuarios'>
-                          <thead className='encabezado'>
-                            <tr>
-                              <th>Actividad de Evaluación</th>
-                              <th>Punteo Obtenido</th>
-                              <th>Punteo Máximo</th>
-                            </tr>
-                          </thead>
-                          <tbody className='tablacontenido'>
-                            {grupo.calificaciones.map((item, idx) => (
-                              <tr key={item.calificacion_id || `${item.bimestre_id}-${item.nom_actividad}-${idx}`}>
-                                <td>{item.nom_actividad || '-'}</td>
-                                <td style={{ fontWeight: 'bold', color: 'green' }}>{item.punteo_obtenido ?? '-'} pts</td>
-                                <td>{item.punteo_maximo ?? '-'} pts</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    ))}
-                  </section>
-                ))
-              )
-            ) : (
-              <pre>{JSON.stringify(boleta, null, 2)}</pre>
-            )}
-          </div>
-        )}
-      </section>
+      <BoletaCalificaciones
+        esAlumno={esAlumno}
+        rol={rol}
+        clases={clases}
+        cargandoClases={cargandoClases}
+        idAsignacionBoleta={idAsignacionBoleta}
+        filtrarAlumnosBoleta={filtrarAlumnosBoleta}
+        idAlumnoConsulta={idAlumnoConsulta}
+        setIdAlumnoConsulta={setIdAlumnoConsulta}
+        setBoleta={setBoleta}
+        setErrorBoleta={setErrorBoleta}
+        setMensaje={setMensaje}
+        cargandoListaAlumnos={cargandoListaAlumnos}
+        listaAlumnos={listaAlumnos}
+        cargarBoleta={cargarBoleta}
+        errorBoleta={errorBoleta}
+        cargandoBoleta={cargandoBoleta}
+        boleta={boleta}
+        cursosBoleta={cursosBoleta}
+      />
     </main>
   );
 }
 
-export default Calificaciones;
+

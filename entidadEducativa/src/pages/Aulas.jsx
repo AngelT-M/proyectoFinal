@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { academicoApi } from '../services/api';
 import { useAuth } from '../auth/useAuth';
+import FormularioAula from '../components/Aulas/FormularioAula';
+import ListadoAulas from '../components/Aulas/ListadoAulas';
 
 function Aulas() {
   const { usuario } = useAuth();
@@ -121,116 +123,25 @@ function Aulas() {
              {mostrarFormAulas ? 'cancelar': '+ crear nueva Aula'}
           </button>
           {mostrarFormAulas && (
-            <div>
-              <h2>Abrir Nueva Aula</h2>
-              <form onSubmit={handleAbrirAula}>
-                <label>
-                  Grado:{' '}
-                  <select
-                    value={nueva.grado_id}
-                    onChange={(e) => setNueva({ ...nueva, grado_id: e.target.value })}
-                  >
-                    {Object.entries(gradosPorNivel).map(([nivel, gradosNivel]) => (
-                      <optgroup key={nivel} label={nivel}>
-                        {gradosNivel.map((g) => (
-                          <option key={g.grado_id} value={g.grado_id}>
-                            {g.nom_grado}
-                          </option>
-                        ))}
-                      </optgroup>
-                    ))}
-                  </select>
-                </label>
-             
-                <label>
-                  Sección:{' '}
-                  <select
-                    value={nueva.seccion_id}
-                    onChange={(e) => setNueva({ ...nueva, seccion_id: e.target.value })}
-                  >
-                    {secciones.map((s) => (
-                      <option key={s.seccion_id} value={s.seccion_id}>
-                        Sección {s.nom_seccion}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-             
-                <label>
-                  Cupo de Estudiantes:{' '}
-                  <input
-                    type="number"
-                    min={1}
-                    max={255}
-                    required
-                    value={nueva.cantidad_estudiantes}
-                    onChange={(e) => setNueva({ ...nueva, cantidad_estudiantes: e.target.value })}
-                  />
-                </label>
-              
-                <label>
-                  Ciclo Lectivo:{' '}
-                  <input
-                    type="number"
-                    min={2000}
-                    max={2100}
-                    required
-                    value={nueva.ciclo}
-                    onChange={(e) => setNueva({ ...nueva, ciclo: e.target.value })}
-                  />
-                </label>
-                
-                <button className="sesion" type="submit">Abrir Aula</button>
-              </form>
-            </div>
+            <FormularioAula
+              nueva={nueva}
+              setNueva={setNueva}
+              gradosPorNivel={gradosPorNivel}
+              secciones={secciones}
+              onSubmit={handleAbrirAula}
+            />
           )}
         </section>
       )}
 
-      <section>
-        <h2>Listado de Aulas</h2>
-        {cargando ? (
-          <p>Cargando aulas...</p>
-        ) : (
-          aulas.length === 0 ? (
-            <p>No hay aulas registradas para este ciclo.</p>
-          ) : (
-            ciclosOrdenados.map((ciclo) => (
-              <section className='lisUsuarios'  key={ciclo}>
-                <h3>Ciclo escolar {ciclo}</h3>
-                <table className='tablaUsuarios' >
-                  <thead className='encabezado' >
-                    <tr >
-                      <th>Nivel Educativo</th>
-                      <th>Grado</th>
-                      <th>Sección</th>
-                      <th>Capacidad</th>
-                      {puedeAbrir && <th>Acciones</th>}
-                    </tr>
-                  </thead>
-                  <tbody className='tablacontenido' >
-                    {aulasPorCiclo[ciclo].map((a) => (
-                      <tr key={a.grado_seccion_id}>
-                        <td>{a.nom_nivel || 'Nivel General'}</td>
-                        <td><strong>{a.nom_grado || `Grado #${a.grado_id}`}</strong></td>
-                        <td>Sección {a.nom_seccion || a.seccion_id}</td>
-                        <td>{a.cantidad_estudiantes} alumnos máx.</td>
-                        {puedeAbrir && (
-                          <td className='cont-act' >
-                            <button className='btn-us apagado'  type="button" onClick={() => handleEliminarAula(a)}>
-                              Eliminar aula
-                            </button>
-                          </td>
-                        )}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </section>
-            ))
-          )
-        )}
-      </section>
+      <ListadoAulas
+        aulas={aulas}
+        cargando={cargando}
+        ciclosOrdenados={ciclosOrdenados}
+        aulasPorCiclo={aulasPorCiclo}
+        puedeAbrir={puedeAbrir}
+        onEliminar={handleEliminarAula}
+      />
     </main>
   );
 }

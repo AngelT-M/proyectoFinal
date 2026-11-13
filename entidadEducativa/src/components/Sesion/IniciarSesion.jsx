@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import '../style/sesion.css';
+import '../../style/sesion.css';
 
 export default function IniciarSesion({ onLogin, errorInicial = '' }) {
   const [nomUsuario, setNomUsuario] = useState('');
@@ -34,7 +34,7 @@ export default function IniciarSesion({ onLogin, errorInicial = '' }) {
               id="nom_usuario"
               name="nom_usuario"
               type="text"
-              placeholder="Usuario"
+              placeholder="Nombre de usuario"
               autoComplete="username"
               value={nomUsuario}
               onChange={(evento) => setNomUsuario(evento.target.value)}

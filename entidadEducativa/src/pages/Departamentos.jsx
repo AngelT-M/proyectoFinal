@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getDepartamentos, deleteDepartamento } from '../services/api';
-import DepartamentoCard from '../components/DepartamentoCard';
+import DepartamentoCard from '../components/Departamentos/DepartamentoCard';
 
 function Departamentos() {
   const [departamentos, setDepartamentos] = useState([]);

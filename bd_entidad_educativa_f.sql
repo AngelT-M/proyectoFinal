@@ -27,10 +27,26 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `actividades_curso`
 --
 
+CREATE TABLE `bimestres` (
+  `bimestre_id` int(10) unsigned NOT NULL,
+  `ciclo` year(4) NOT NULL,
+  `nombre` varchar(30) NOT NULL,
+  `orden` tinyint(3) unsigned NOT NULL,
+  `fecha_inicio` date DEFAULT NULL,
+  `fecha_fin` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `bimestres` (`bimestre_id`, `ciclo`, `nombre`, `orden`) VALUES
+(1, 2026, '1er Bimestre', 1),
+(2, 2026, '2do Bimestre', 2),
+(3, 2026, '3er Bimestre', 3),
+(4, 2026, '4to Bimestre', 4),
+(5, 2026, 'Recuperacion', 5);
+
 CREATE TABLE `actividades_curso` (
   `actividad_curso_id` int(11) NOT NULL,
   `asignacion_curso_maestro_id` int(11) NOT NULL,
-  `bimestre` enum('1er Bimestre','2do Bimestre','3er Bimestre','4to Bimestre','Recuperacion') NOT NULL,
+  `bimestre_id` int(10) unsigned NOT NULL,
   `nom_actividad` varchar(100) NOT NULL,
   `punteo_maximo` decimal(5,2) NOT NULL,
   `descripcion` text DEFAULT NULL
@@ -40,12 +56,12 @@ CREATE TABLE `actividades_curso` (
 -- Volcado de datos para la tabla `actividades_curso`
 --
 
-INSERT INTO `actividades_curso` (`actividad_curso_id`, `asignacion_curso_maestro_id`, `bimestre`, `nom_actividad`, `punteo_maximo`, `descripcion`) VALUES
-(1, 1, '1er Bimestre', 'Hoja de Trabajo 1', 15.00, 'Ejercicios de álgebra lineal'),
-(2, 1, '1er Bimestre', 'Examen Parcial 1', 35.00, 'Evaluación escrita primer parcial'),
-(3, 3, '1er Bimestre', 'Laboratorio de Lectura', 20.00, 'Análisis de texto narrativo'),
-(4, 3, '2do Bimestre', 'Ensayo Literario', 25.00, 'Redacción de ensayo académico'),
-(5, 5, '1er Bimestre', 'Proyecto Algoritmos', 40.00, 'Desarrollo de aplicación web');
+INSERT INTO `actividades_curso` (`actividad_curso_id`, `asignacion_curso_maestro_id`, `bimestre_id`, `nom_actividad`, `punteo_maximo`, `descripcion`) VALUES
+(1, 1, 1, 'Hoja de Trabajo 1', 15.00, 'Ejercicios de álgebra lineal'),
+(2, 1, 1, 'Examen Parcial 1', 35.00, 'Evaluación escrita primer parcial'),
+(3, 3, 1, 'Laboratorio de Lectura', 20.00, 'Análisis de texto narrativo'),
+(4, 3, 2, 'Ensayo Literario', 25.00, 'Redacción de ensayo académico'),
+(5, 5, 1, 'Proyecto Algoritmos', 40.00, 'Desarrollo de aplicación web');
 
 -- --------------------------------------------------------
 
@@ -276,6 +292,7 @@ INSERT INTO `cursos` (`curso_id`, `nom_curso`, `descripcion`) VALUES
 CREATE TABLE `examen_enviados` (
   `examen_id` int(11) NOT NULL,
   `asignacion_curso_maestro_id` int(11) NOT NULL,
+  `bimestre_id` int(10) unsigned DEFAULT NULL,
   `titulo` varchar(150) NOT NULL,
   `mensaje` text DEFAULT NULL,
   `archivo_url` varchar(255) NOT NULL,
@@ -289,9 +306,9 @@ CREATE TABLE `examen_enviados` (
 -- Volcado de datos para la tabla `examen_enviados`
 --
 
-INSERT INTO `examen_enviados` (`examen_id`, `asignacion_curso_maestro_id`, `titulo`, `mensaje`, `archivo_url`, `estado`, `fecha_envio`, `fecha_autorizacion`, `personal_id`) VALUES
-(1, 1, 'Examen Parcial I - Matemáticas', 'Envío examen para revisión y aprobación.', '/uploads/examenes/mat_p1_2026.pdf', 'APROBADO', '2026-03-01 15:00:00', '2026-03-01 14:00:00', 1),
-(2, 3, 'Examen Parcial I - Español', 'Examen correspondiente al primer bimestre.', '/uploads/examenes/esp_p1_2026.pdf', 'APROBADO', '2026-03-02 17:30:00', '2026-03-03 08:45:00', 2);
+INSERT INTO `examen_enviados` (`examen_id`, `asignacion_curso_maestro_id`, `bimestre_id`, `titulo`, `mensaje`, `archivo_url`, `estado`, `fecha_envio`, `fecha_autorizacion`, `personal_id`) VALUES
+(1, 1, 1, 'Examen Parcial I - Matemáticas', 'Envío examen para revisión y aprobación.', '/uploads/examenes/mat_p1_2026.pdf', 'APROBADO', '2026-03-01 15:00:00', '2026-03-01 14:00:00', 1),
+(2, 3, 1, 'Examen Parcial I - Español', 'Examen correspondiente al primer bimestre.', '/uploads/examenes/esp_p1_2026.pdf', 'APROBADO', '2026-03-02 17:30:00', '2026-03-03 08:45:00', 2);
 
 -- --------------------------------------------------------
 
@@ -314,7 +331,14 @@ INSERT INTO `grados` (`grado_id`, `nom_grado`, `nivel_id`) VALUES
 (2, 'Primero Básico', 2),
 (3, 'Segundo Básico', 2),
 (4, 'Tercero Básico', 2),
-(5, 'Cuarto Bachillerato', 3);
+(5, 'Cuarto Diversificado', 3),
+(6, 'Primero Primaria', 1),
+(7, 'Segundo Primaria', 1),
+(8, 'Tercero Primaria', 1),
+(9, 'Cuarto Primaria', 1),
+(10, 'Quinto Primaria', 1),
+(11, 'Quinto Diversificado', 3),
+(12, 'Sexto Diversificado', 3);
 
 -- --------------------------------------------------------
 
@@ -585,11 +609,19 @@ INSERT INTO `usuarios` (`usuario_id`, `nom_usuario`, `password`, `rol_id`, `esta
 --
 
 --
+-- Indices de la tabla `bimestres`
+--
+ALTER TABLE `bimestres`
+  ADD PRIMARY KEY (`bimestre_id`),
+  ADD UNIQUE KEY `uq_bimestres_ciclo_nombre` (`ciclo`, `nombre`);
+
+--
 -- Indices de la tabla `actividades_curso`
 --
 ALTER TABLE `actividades_curso`
   ADD PRIMARY KEY (`actividad_curso_id`),
-  ADD KEY `fk_actcurso_acm` (`asignacion_curso_maestro_id`);
+  ADD KEY `fk_actcurso_acm` (`asignacion_curso_maestro_id`),
+  ADD KEY `fk_actividades_bimestre` (`bimestre_id`);
 
 --
 -- Indices de la tabla `alumnos`
@@ -660,7 +692,8 @@ ALTER TABLE `cursos`
 ALTER TABLE `examen_enviados`
   ADD PRIMARY KEY (`examen_id`),
   ADD KEY `fk_examen_acm` (`asignacion_curso_maestro_id`),
-  ADD KEY `fk_examen_personal` (`personal_id`);
+  ADD KEY `fk_examen_personal` (`personal_id`),
+  ADD KEY `fk_examenes_bimestre` (`bimestre_id`);
 
 --
 -- Indices de la tabla `grados`
@@ -674,6 +707,7 @@ ALTER TABLE `grados`
 --
 ALTER TABLE `grados_secciones`
   ADD PRIMARY KEY (`grado_seccion_id`),
+  ADD UNIQUE KEY `uq_grados_secciones_ciclo_grado_seccion` (`grado_id`,`seccion_id`,`ciclo`),
   ADD KEY `fk_gs_grado` (`grado_id`),
   ADD KEY `fk_gs_seccion` (`seccion_id`);
 
@@ -744,6 +778,12 @@ ALTER TABLE `usuarios`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `bimestres`
+--
+ALTER TABLE `bimestres`
+  MODIFY `bimestre_id` int(10) unsigned NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT de la tabla `actividades_curso`
 --
 ALTER TABLE `actividades_curso`
@@ -807,7 +847,7 @@ ALTER TABLE `examen_enviados`
 -- AUTO_INCREMENT de la tabla `grados`
 --
 ALTER TABLE `grados`
-  MODIFY `grado_id` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `grado_id` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `grados_secciones`
@@ -877,7 +917,8 @@ ALTER TABLE `usuarios`
 -- Filtros para la tabla `actividades_curso`
 --
 ALTER TABLE `actividades_curso`
-  ADD CONSTRAINT `fk_actcurso_acm` FOREIGN KEY (`asignacion_curso_maestro_id`) REFERENCES `asignacion_curso_maestro` (`asignacion_curso_maestro_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_actcurso_acm` FOREIGN KEY (`asignacion_curso_maestro_id`) REFERENCES `asignacion_curso_maestro` (`asignacion_curso_maestro_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_actividades_bimestre` FOREIGN KEY (`bimestre_id`) REFERENCES `bimestres` (`bimestre_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `alumnos`
@@ -933,7 +974,8 @@ ALTER TABLE `cargos_alumnos`
 --
 ALTER TABLE `examen_enviados`
   ADD CONSTRAINT `fk_examen_acm` FOREIGN KEY (`asignacion_curso_maestro_id`) REFERENCES `asignacion_curso_maestro` (`asignacion_curso_maestro_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_examen_personal` FOREIGN KEY (`personal_id`) REFERENCES `personal_administrativos` (`personal_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_examen_personal` FOREIGN KEY (`personal_id`) REFERENCES `personal_administrativos` (`personal_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_examenes_bimestre` FOREIGN KEY (`bimestre_id`) REFERENCES `bimestres` (`bimestre_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `grados`

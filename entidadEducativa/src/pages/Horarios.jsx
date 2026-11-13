@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getHorarios, deleteHorario } from '../services/api';
-import HorarioCard from '../components/HorarioCard';
+import HorarioCard from '../components/Horarios/HorarioCard';
 
 function Horarios() {
   const [horarios, setHorarios] = useState([]);

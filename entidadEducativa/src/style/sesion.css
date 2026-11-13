@@ -1,6 +1,8 @@
 .fondoImg{
-    min-height: 100vh;
-    background: var(--color-fondo);
+    height: 100vh;
+    background-image: url(https://img.magnific.com/vector-premium/elementos-diseno-presentacion-plantillas-negocios-facil-ilustracion-vectorial-editable-diseno-eps-10-folleto-monohrome-triangulo-3d-efecto-enrejado-cristal-sobre-fondo-gris-degradado-blanco_299644-10080.jpg?semt=ais_hybrid&w=740&q=80) ;
+    background-repeat: no-repeat;
+    background-size: cover;
     background-position: center;
 }
 
@@ -9,7 +11,7 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: start;
+    align-items: center;
     justify-content: center;
 }
 .contF{
@@ -20,22 +22,24 @@
     width: min(25rem, calc(100% - 2rem));
     background-color: var(--color-blanco);
     border-radius: var(--radio);
-    box-shadow: var(--shadow);
-    
-    transition: transform 0.5s ease;
+    box-shadow: var(--shadow-sec);
 }
+
+
 .errorSesion{
     width: 100%;
-    color: #b42318;
-    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    background-color: rgba(180, 35, 24, 0.2);
+    color: #8b1a12;
+    border-radius: var(--radio);
+    margin-bottom: 0.50rem;
 }
+
 .formulario button:disabled{
     cursor: wait;
     opacity: 0.7;
 }
-.contF:hover{
-    transform: translate(2px, -2px);
-}
+
 .tituloF{
     width: 100%;
     border-radius: 8px 8px 0px 0px;
@@ -72,7 +76,8 @@
     margin-bottom: 1rem;
 }
 .formulario input:focus{
-    outline: none;
+    border: 3px solid var(--color-primario);
+    outline: none ;
 }
 
 .formulario button{

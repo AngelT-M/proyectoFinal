@@ -32,15 +32,17 @@ function PaginaNoEncontrada() {
 function App() {
   return (
     <div>
-      <Navbar />
+      <Navbar/>
       <Routes>
-        {/* Rutas Públicas */}
+        
+
         <Route path="/" element={<Home />} />
         <Route path="/sesion" element={<Sesion />} />
         <Route path="/login" element={<Sesion />} />
 
-        {/* Rol 1: Administrador */}
+        
         <Route
+
           path="/dashboard"
           element={
             <RutaProtegida rolesPermitidos={[1]}>
@@ -48,6 +50,7 @@ function App() {
             </RutaProtegida>
           }
         />
+        
         <Route
           path="/usuarios"
           element={
@@ -57,7 +60,6 @@ function App() {
           }
         />
 
-        {/* Roles 1, 2, 3: Administrador, Director, Secretaria */}
         <Route
           path="/personal"
           element={
@@ -99,7 +101,6 @@ function App() {
           }
         />
 
-        {/* Roles 1, 2, 3, 5: Estudiantes / Alumnos */}
         <Route
           path="/estudiantes"
           element={
@@ -117,7 +118,6 @@ function App() {
           }
         />
 
-        {/* Cursos / Materias: Para todos los autenticados */}
         <Route
           path="/materias"
           element={
@@ -135,7 +135,6 @@ function App() {
           }
         />
 
-        {/* Aulas: Exclusivo personal administrativo (Roles 1, 2, 3) */}
         <Route
           path="/aulas"
           element={
@@ -153,7 +152,7 @@ function App() {
           }
         />
 
-        {/* Calificaciones: Todos los autenticados */}
+       
         <Route
           path="/calificaciones"
           element={
@@ -171,7 +170,6 @@ function App() {
           }
         />
 
-        {/* Asistencias: Personal administrativo y docentes */}
         <Route
           path="/asistencias"
           element={
@@ -181,7 +179,7 @@ function App() {
           }
         />
 
-        {/* Exámenes: Roles 1, 2, 3, 4 */}
+        
         <Route
           path="/examenes"
           element={
@@ -191,7 +189,6 @@ function App() {
           }
         />
 
-        {/* Finanzas / Pagos: Roles 1, 2, 3, 5 */}
         <Route
           path="/finanzas"
           element={
@@ -209,7 +206,6 @@ function App() {
           }
         />
 
-        {/* Eventos / Calendario: Todos los autenticados */}
         <Route
           path="/eventos"
           element={
@@ -227,7 +223,7 @@ function App() {
           }
         />
 
-        {/* Ruta comodín */}
+      
         <Route path="*" element={<PaginaNoEncontrada />} />
       </Routes>
     </div>

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { academicoApi, alumnoApi, maestroApi } from '../services/api';
 import '../style/inscripcion.css';
+import FormularioAsignarAlumno from '../components/Inscripciones/FormularioAsignarAlumno';
+import FormularioAsignarMaestro from '../components/Inscripciones/FormularioAsignarMaestro';
 
 function Inscripciones() {
   const [alumnos, setAlumnos] = useState([]);
@@ -117,78 +119,21 @@ function Inscripciones() {
         <p>Cargando información...</p>
       ) : (
         <div className='cont-asig' >
-          <section className='seccion'>
-            <h2>Asignar Estudiante a un Aula (Matriculación)</h2>
-            <form className='form'  onSubmit={handleAsignarAlumno}>
-              <label className='entrada' >
-                Seleccionar Estudiante:{' '}
-                <select
-                  value={asigAlumno.alumno_id}
-                  onChange={(e) => setAsigAlumno({ ...asigAlumno, alumno_id: e.target.value })}
-                >
-                  {alumnos.map((a) => (
-                    <option key={a.alumno_id} value={a.alumno_id}>
-                      {a.nombre} {a.apellido} (Carné: {a.carne})
-                    </option>
-                  ))}
-                </select>
-              </label>
-             
-              <label className='entrada' >
-                Seleccionar Grado y Sección:{' '}
-                <select
-                  value={asigAlumno.grado_seccion_id}
-                  onChange={(e) => setAsigAlumno({ ...asigAlumno, grado_seccion_id: e.target.value })}
-                >
-                  {opcionesAulas}
-                </select>
-              </label>
-              
-              <button className="sesion" type="submit">Asignar Estudiante al Aula</button>
-            </form>
-          </section>
-
-          <section className='seccion' >
-            <h2> Asignar Docente a un Aula y Curso (Cátedra)</h2>
-            <form className='form' onSubmit={handleAsignarMaestro}>
-              <label className='entrada' >
-                Seleccionar Docente:{' '}
-                <select
-                  value={asigMaestro.maestro_id}
-                  onChange={(e) => setAsigMaestro({ ...asigMaestro, maestro_id: e.target.value })}
-                >
-                  {maestros.map((m) => (
-                    <option key={m.maestro_id} value={m.maestro_id}>
-                      {m.nombre} {m.apellido} (Carné: {m.carne_maestro})
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label  className='entrada'>
-                Seleccionar Grado y Sección:{' '}
-                <select
-                  value={asigMaestro.grado_seccion_id}
-                  onChange={(e) => setAsigMaestro({ ...asigMaestro, grado_seccion_id: e.target.value })}
-                >
-                  {opcionesAulas}
-                </select>
-              </label>
-              <label  className='entrada'>
-                Seleccionar Curso a Impartir:{' '}
-                <select
-                  value={asigMaestro.curso_id}
-                  onChange={(e) => setAsigMaestro({ ...asigMaestro, curso_id: e.target.value })}
-                >
-                  {cursos.map((c) => (
-                    <option key={c.curso_id} value={c.curso_id}>
-                      {c.nom_curso}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <button className="sesion" type="submit">Asignar Cátedra al Maestro</button>
-            </form>
-          </section>
+          <FormularioAsignarAlumno
+            alumnos={alumnos}
+            asignacion={asigAlumno}
+            setAsignacion={setAsigAlumno}
+            opcionesAulas={opcionesAulas}
+            onSubmit={handleAsignarAlumno}
+          />
+          <FormularioAsignarMaestro
+            maestros={maestros}
+            cursos={cursos}
+            asignacion={asigMaestro}
+            setAsignacion={setAsigMaestro}
+            opcionesAulas={opcionesAulas}
+            onSubmit={handleAsignarMaestro}
+          />
         </div>
       )}
     </main>

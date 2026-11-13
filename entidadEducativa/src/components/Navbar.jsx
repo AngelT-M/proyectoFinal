@@ -39,8 +39,15 @@ function Navbar() {
         </div>
 
         <div className="links">
-          <Link className="lin" to="/">Inicio</Link>
-
+          {/*visitante  */}
+          <Link className="lin" to="/">INICIO</Link>
+          {!usuario&& (
+            <>
+              <Link className='lin' >CONTACTOS</Link>
+              <Link className='lin' >UBICACION</Link>
+              <Link className='lin' >NOSOTROS</Link>
+            </>
+          )}
           {usuario && (
             <>
               {/* Rol 1: Admin */}
@@ -51,7 +58,7 @@ function Navbar() {
                 </>
               )}
 
-              {/* Roles 1, 2, 3: Admin, Director, Secretaria (Administración de Aulas y Personal) */}
+              {/* Roles 1, 2, 3: Admin, Director, Secretaria */}
               {[1, 2, 3].includes(rol) && (
                 <>
                   <Link className="lin" to="/personal">Personal</Link>
@@ -106,7 +113,7 @@ function Navbar() {
           )}
         </div>
       </nav>
-      {error && <p role="alert" style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+      {error && <p role="alert" >{error}</p>}
     </>
   );
 }

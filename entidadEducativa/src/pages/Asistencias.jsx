@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { asistenciaApi, academicoApi } from '../services/api';
 import { useAuth } from '../auth/useAuth';
+import ConsultaAsistenciaAula from '../components/Asistencias/ConsultaAsistenciaAula';
+import FormularioRegistrarAsistencia from '../components/Asistencias/FormularioRegistrarAsistencia';
+import HistorialAsistencia from '../components/Asistencias/HistorialAsistencia';
 
 function Asistencias() {
   const { usuario } = useAuth();
@@ -236,306 +239,59 @@ function Asistencias() {
       {mensaje && <p role="status" style={{ color: 'green' }}>{mensaje}</p>}
       {error && <p role="alert" style={{ color: 'red' }}>{error}</p>}
 
-      {/* Historial de Asistencia de Alumno */}
-      <section style={{ marginBottom: '2.5rem' }}>
-        <h2>{esAlumno ? 'Mi Historial de Asistencia' : 'Historial de Asistencia por Estudiante'}</h2>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            const alumnoId = esAlumno
-              ? usuario?.perfil?.alumno_id || usuario?.id_usuario
-              : idAlumnoHistorial;
-            cargarHistorial(alumnoId);
-          }}
-        >
-            {[1, 2, 3, 4].includes(rol) && (
-              <label>
-                Filtrar por aula:{' '}
-                <select
-                  value={idAulaHistorial}
-                  disabled={aulas.length === 0 || cargandoAlumnosHistorial}
-                  onChange={(e) => handleSeleccionarAulaHistorial(e.target.value)}
-                >
-                  <option value="">-- Selecciona un aula --</option>
-                  {aulas.map((aula) => (
-                    <option
-                      key={aula.grado_seccion_id}
-                      value={aula.grado_seccion_id}
-                    >
-                      {aula.nom_grado}, Sección {aula.nom_seccion} ({aula.ciclo})
-                    </option>
-                  ))}
-                </select>
-                {' '}
-              </label>
-            )}
-            {!esAlumno && (
-              <label>
-                Seleccionar Estudiante:{' '}
-                <select
-                  value={idAlumnoHistorial}
-                  disabled={!idAulaHistorial || cargandoAlumnosHistorial}
-                  onChange={(e) => {
-                    setIdAlumnoHistorial(e.target.value);
-                    setHistorial([]);
-                    setResumenHistorial(null);
-                    setError('');
-                  }}
-                >
-                  <option value="">-- Selecciona un estudiante --</option>
-                  {alumnosHistorial.map((a) => (
-                    <option key={a.alumno_id} value={a.alumno_id}>
-                      {a.nombre} {a.apellido} (Carné: {a.carne})
-                    </option>
-                  ))}
-                </select>
-              </label>
-            )}
-            {' '}
-            <label>
-              Mes a consultar:{' '}
-              <input
-                type="month"
-                required
-                value={mesHistorial}
-                onChange={(e) => {
-                  setMesHistorial(e.target.value);
-                  setHistorial([]);
-                  setResumenHistorial(null);
-                  setError('');
-                }}
-              />
-            </label>
-            {' '}
-            <button
-              className="sesion"
-              type="submit"
-              disabled={cargandoHistorial || (!esAlumno && !idAlumnoHistorial)}
-            >
-              {cargandoHistorial ? 'Consultando…' : 'Consultar mes'}
-            </button>
-        </form>
 
-        {cargandoHistorial && <p>Cargando historial...</p>}
-        {!esAlumno && [1, 2, 3, 4].includes(rol) && aulas.length === 0 && !error && (
-          <p>{rol === 4 ? 'No tienes aulas asignadas para consultar.' : 'No hay aulas disponibles para consultar.'}</p>
-        )}
-        {cargandoAlumnosHistorial && <p role="status">Cargando estudiantes del aula…</p>}
-        {!esAlumno && idAulaHistorial && !cargandoAlumnosHistorial && alumnosHistorial.length === 0 && !error && (
-          <p>No hay estudiantes asignados a esta aula.</p>
-        )}
-        {!cargandoHistorial && resumenHistorial?.total === 0 && (
-          <p>No hay asistencias registradas para el mes seleccionado.</p>
-        )}
-
-        {resumenHistorial && (
-          <p style={{ marginTop: '1rem' }}>
-            <strong>Resumen:</strong> Total registros: {resumenHistorial.total} |
-            Presentes: <span style={{ color: 'green' }}>{resumenHistorial.presentes}</span> |
-            Tardes: <span style={{ color: 'orange' }}>{resumenHistorial.tardes}</span> |
-            Ausencias: <span style={{ color: 'red' }}>{resumenHistorial.ausentes}</span>
-          </p>
-        )}
-
-        {historial.length > 0 && (
-          <table className='tablaUsuarios'>
-            <thead className='encabezado' >
-              <tr >
-                <th>Fecha</th>
-                <th>Estado de Asistencia</th>
-                <th>Grado y Sección</th>
-                <th>Ciclo</th>
-              </tr>
-            </thead>
-            <tbody className='tablacontenido' >
-              {historial.map((item, idx) => (
-                <tr key={idx}>
-                  <td>{item.fecha}</td>
-                  <td>
-                    <strong
-                      style={{
-                        color:
-                          item.estado === 'PRESENTE'
-                            ? 'green'
-                            : item.estado === 'TARDE'
-                            ? 'orange'
-                            : 'red'
-                      }}
-                    >
-                      {item.estado}
-                    </strong>
-                  </td>
-                  <td>{item.nom_grado ? `${item.nom_grado} - Sección ${item.nom_seccion}` : 'Aula escolar'}</td>
-                  <td>{item.ciclo || '-'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </section>
-
-      {/* Sección para Docentes y Administradores: Consultar Aula y Registrar */}
       {puedeRegistrar && (
         <>
-          <section style={{ marginBottom: '2.5rem' }}>
-            <h2>Consultar Asistencia por Grado, Sección y Fecha</h2>
-            <form onSubmit={handleConsultarAula}>
-              <label>
-                Grado y Sección:{' '}
-                <select
-                  value={idAula}
-                  onChange={(e) => {
-                    setIdAula(e.target.value);
-                    setAsistenciasAula([]);
-                    setNuevaAsistencia((actual) => ({
-                      ...actual,
-                      alumno_id: '',
-                      asignacion_grado_id: ''
-                    }));
-                  }}
-                >
-                  {aulas.map((a) => (
-                    <option key={a.grado_seccion_id} value={a.grado_seccion_id}>
-                      {a.nom_grado} - Sección {a.nom_seccion} ({a.ciclo})
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <br /><br />
-              <label>
-                Fecha a consultar:{' '}
-                <input
-                  type="date"
-                  required
-                  value={fechaConsulta}
-                  onChange={(e) => setFechaConsulta(e.target.value)}
-                />
-              </label>
-              <br /><br />
-              <button className="sesion" type="submit">Ver Lista de Asistencia del Aula</button>
-            </form>
-
-            {cargandoAula && <p>Consultando lista del aula...</p>}
-
-            {asistenciasAula.length > 0 && (
-              <div className='listaUsuarios'>
-                <h3>Lista de Estudiantes ({fechaConsulta})</h3>
-                <table className='tablaUsuarios'>
-                  <thead  className='encabezado'>
-                    <tr >
-                      <th>Carné</th>
-                      <th>Nombre del Estudiante</th>
-                      <th>Fecha</th>
-                      <th>Estado</th>
-                      <th>Acción</th>
-                    </tr>
-                  </thead>
-                  <tbody className='tablacontenido' >
-                    {asistenciasAula.map((asig, idx) => (
-                      <tr key={idx}>
-                        <td>{asig.carne || '-'}</td>
-                        <td>{asig.nombre} {asig.apellido}</td>
-                        <td>{asig.fecha || fechaConsulta}</td>
-                        <td>
-                          <strong>{asig.estado || 'SIN REGISTRO'}</strong>
-                        </td>
-                        <td>
-                          <button
-                            className="btn-us sesion"
-                            type="button"
-                            onClick={() =>
-                              setNuevaAsistencia({
-                                alumno_id: asig.alumno_id,
-                                asignacion_grado_id: asig.asignacion_grado_id,
-                                fecha: fechaConsulta,
-                                estado: 'PRESENTE'
-                              })
-                            }
-                          >
-                            Cargar en Formulario
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </section>
-
-          <section>
-            <h2>Registrar Asistencia</h2>
-            <p>
-              Aula seleccionada:{' '}
-              <strong>
-                {aulaSeleccionada
-                  ? `${aulaSeleccionada.nom_grado} — Sección ${aulaSeleccionada.nom_seccion} (${aulaSeleccionada.ciclo})`
-                  : 'Selecciona un aula y consulta su lista.'}
-              </strong>
-            </p>
-            <p>Elige un estudiante inscrito en esa aula</p>
-            <form onSubmit={handleRegistrar}>
-              <label>
-                Estudiante:{' '}
-                <select
-                  required
-                  value={nuevaAsistencia.alumno_id}
-                  disabled={asistenciasAula.length === 0}
-                  onChange={(e) => {
-                    const seleccion = asistenciasAula.find(
-                      (item) => String(item.alumno_id) === e.target.value
-                    );
-                    if (seleccion) {
-                      setNuevaAsistencia({
-                        ...nuevaAsistencia,
-                        alumno_id: seleccion.alumno_id,
-                        asignacion_grado_id: seleccion.asignacion_grado_id
-                      });
-                    }
-                  }}
-                >
-                  <option value="">-- Selecciona un estudiante del aula --</option>
-                  {asistenciasAula.map((asignacion) => (
-                    <option key={asignacion.asignacion_grado_id} value={asignacion.alumno_id}>
-                      {asignacion.nombre} {asignacion.apellido} (Carné: {asignacion.carne})
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <br /><br />
-              <label>
-                Fecha:{' '}
-                <input
-                  type="date"
-                  required
-                  value={nuevaAsistencia.fecha}
-                  onChange={(e) => setNuevaAsistencia({ ...nuevaAsistencia, fecha: e.target.value })}
-                />
-              </label>
-              <br /><br />
-              <label>
-                Estado de Asistencia:{' '}
-                <select
-                  value={nuevaAsistencia.estado}
-                  onChange={(e) => setNuevaAsistencia({ ...nuevaAsistencia, estado: e.target.value })}
-                >
-                  <option value="PRESENTE">PRESENTE</option>
-                  <option value="TARDE">TARDE</option>
-                  <option value="AUSENTE">AUSENTE</option>
-                </select>
-              </label>
-              <br /><br />
-              <button
-                className="sesion"
-                type="submit"
-                disabled={!nuevaAsistencia.alumno_id || !nuevaAsistencia.asignacion_grado_id}
-              >
-                Guardar Asistencia
-              </button>
-            </form>
-          </section>
+          <ConsultaAsistenciaAula
+            aulas={aulas}
+            idAula={idAula}
+            setIdAula={setIdAula}
+            fechaConsulta={fechaConsulta}
+            setFechaConsulta={setFechaConsulta}
+            asistenciasAula={asistenciasAula}
+            setAsistenciasAula={setAsistenciasAula}
+            setNuevaAsistencia={setNuevaAsistencia}
+            cargandoAula={cargandoAula}
+            onSubmit={handleConsultarAula}
+          />
+          <FormularioRegistrarAsistencia
+            aulaSeleccionada={aulaSeleccionada}
+            asistenciasAula={asistenciasAula}
+            nuevaAsistencia={nuevaAsistencia}
+            setNuevaAsistencia={setNuevaAsistencia}
+            onSubmit={handleRegistrar}
+          />
         </>
       )}
+
+      <HistorialAsistencia
+        esAlumno={esAlumno}
+        rol={rol}
+        aulas={aulas}
+        idAulaHistorial={idAulaHistorial}
+        onSeleccionarAula={handleSeleccionarAulaHistorial}
+        idAlumnoHistorial={idAlumnoHistorial}
+        setIdAlumnoHistorial={setIdAlumnoHistorial}
+        alumnosHistorial={alumnosHistorial}
+        cargandoAlumnosHistorial={cargandoAlumnosHistorial}
+        mesHistorial={mesHistorial}
+        setMesHistorial={setMesHistorial}
+        setHistorial={setHistorial}
+        setResumenHistorial={setResumenHistorial}
+        setError={setError}
+        onSubmit={(e) => {
+          e.preventDefault();
+          const alumnoId = esAlumno
+            ? usuario?.perfil?.alumno_id || usuario?.id_usuario
+            : idAlumnoHistorial;
+          cargarHistorial(alumnoId);
+        }}
+        cargandoHistorial={cargandoHistorial}
+        resumenHistorial={resumenHistorial}
+        historial={historial}
+        error={error}
+      />
+
     </main>
   );
 }

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { personalApi } from '../services/api';
 import { useAuth } from '../auth/useAuth';
+import FormularioPersonal from '../components/Personal/FormularioPersonal';
+import ListadoPersonal from '../components/Personal/ListadoPersonal';
 
 function obtenerRolCargo(cargo) {
   if (cargo === 'ADMIN') return 1;
@@ -111,139 +113,23 @@ function Personal() {
           </div>
         
           {mostrarFormPersonal && (
-            <section>
-            <h2>Registrar Personal Administrativo</h2>
-            <form onSubmit={handleCrear}>
-              <label>
-                Nombre:
-                <input
-                  type="text"
-                  required
-                  value={nuevo.nombre}
-                  onChange={(e) => setNuevo({ ...nuevo, nombre: e.target.value })}
-                />
-              </label>
-              <br />
-              <label>
-                Apellido:
-                <input
-                  type="text"
-                  required
-                  value={nuevo.apellido}
-                  onChange={(e) => setNuevo({ ...nuevo, apellido: e.target.value })}
-                />
-              </label>
-              <br />
-              <label>
-                Cargo:
-                <select
-                  value={nuevo.cargo}
-                  onChange={(e) => setNuevo({
-                    ...nuevo,
-                    cargo: e.target.value,
-                    usuario_id: ''
-                  })}
-                >
-                  <option value="DIRECTOR">DIRECTOR</option>
-                  <option value="SUBDIRECTOR">SUBDIRECTOR</option>
-                  <option value="SECRETARIA">SECRETARIA</option>
-                  <option value="CONTADOR">CONTADOR</option>
-                  <option value="ADMIN">ADMIN</option>
-                </select>
-              </label>
-              <br />
-              <label>
-                Email institucional:
-                <input
-                  type="email"
-                  required
-                  value={nuevo.email}
-                  onChange={(e) => setNuevo({ ...nuevo, email: e.target.value })}
-                />
-              </label>
-              <br />
-              <label>
-                Teléfono:
-                <input
-                  type="text"
-                  value={nuevo.telefono}
-                  onChange={(e) => setNuevo({ ...nuevo, telefono: e.target.value })}
-                />
-              </label>
-              <br />
-              <label>
-                Cuenta de usuario:
-                <select
-                  required
-                  value={nuevo.usuario_id}
-                  onChange={(e) => setNuevo({ ...nuevo, usuario_id: e.target.value })}
-                >
-                  <option value="">
-                    {usuariosParaCargo.length
-                      ? 'Selecciona un usuario disponible'
-                      : 'No hay usuarios disponibles para este cargo'}
-                  </option>
-                  {usuariosParaCargo.map((usuario) => (
-                    <option key={usuario.usuario_id} value={usuario.usuario_id}>
-                      {usuario.nom_usuario} (#{usuario.usuario_id})
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <br />
-              <button type="submit" disabled={cargando || usuariosParaCargo.length === 0}>
-                Guardar Personal
-              </button>
-            </form>
-          </section>
+            <FormularioPersonal
+              nuevo={nuevo}
+              setNuevo={setNuevo}
+              usuariosParaCargo={usuariosParaCargo}
+              cargando={cargando}
+              onSubmit={handleCrear}
+            />
           )}
         </div>
       )}
 
-      <section className='lisUsuarios'>
-        <h2>Listado de Personal</h2>
-        {cargando ? (
-          <p>Cargando lista...</p>
-        ) : (
-          <table className='tablaUsuarios'>
-            <thead className='encabezado' >
-              <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Cargo</th>
-                <th>Email</th>
-                <th>Teléfono</th>
-                {puedeEditar && <th>Acciones</th>}
-              </tr>
-            </thead>
-            <tbody className='tablacontenido' >
-              {personal.map((p) => (
-                <tr key={p.personal_id}>
-                  <td>{p.personal_id}</td>
-                  <td>{p.nombre}</td>
-                  <td>{p.apellido}</td>
-                  <td>{p.cargo}</td>
-                  <td>{p.email}</td>
-                  <td>{p.telefono || '-'}</td>
-                  {puedeEditar && (
-                    <td className='cont-act' >
-                      <button className='btn-us apagado'  type="button" onClick={() => handleEliminar(p.personal_id)}>
-                        Eliminar
-                      </button>
-                    </td>
-                  )}
-                </tr>
-              ))}
-              {personal.length === 0 && (
-                <tr>
-                  <td colSpan={puedeEditar ? 7 : 6}>No hay personal registrado.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        )}
-      </section>
+      <ListadoPersonal
+        personal={personal}
+        cargando={cargando}
+        puedeEditar={puedeEditar}
+        onEliminar={handleEliminar}
+      />
     </main>
   );
 }

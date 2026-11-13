@@ -7,20 +7,22 @@ function Home() {
   const rol = Number(usuario?.rol_id || 0);
 
   return (
-    <main className="contenido" style={{ padding: '2rem' }}>
-      <h1>Sistema de Gestión Educativa - Centro Educativo Berea</h1>
-      <p>Bienvenido a la plataforma web académica y administrativa.</p>
+    <main className="contenido" >
+      
 
       {usuario ? (
-        <section style={{ marginTop: '1.5rem' }}>
+        <section >
+          <h1>Sistema de Gestión Educativa - Centro Educativo Berea</h1>
+          <p>Bienvenido a la plataforma web académica y administrativa.</p>
+
           <h2>Panel de Acceso Rápido</h2>
           <p>
             Has iniciado sesión como: <strong>{usuario.nom_usuario}</strong> ({usuario.rol_nombre})
           </p>
 
-          <div style={{ marginTop: '1rem' }}>
+          <div >
             <h3>Módulos disponibles para tu rol:</h3>
-            <ul style={{ marginLeft: '1.5rem', lineHeight: '1.8' }}>
+            <ul >
               {rol === 1 && (
                 <>
                   <li><Link to="/dashboard">Dashboard General</Link> - Estadísticas globales del colegio</li>
@@ -61,14 +63,84 @@ function Home() {
           </div>
         </section>
       ) : (
-        <section style={{ marginTop: '1.5rem' }}>
-          <h2>Bienvenido Visitante</h2>
+        <section className='home-visitante' >
+          {/*
+          <h2></h2>
           <p>Para acceder a las funciones académicas y de gestión, por favor inicia sesión con tus credenciales institucionales.</p>
-          <div style={{ marginTop: '1rem' }}>
+          <div >
+
             <Link to="/sesion">
               <button className="sesion" type="button">Ir a Iniciar Sesión</button>
             </Link>
           </div>
+          */}
+          <div className='panel-prin' >
+            <div className='eslogan' >
+              <div className='tm' >
+                <h1>Un lugar para Crecer y <h1 className='progre' >Progresar</h1> </h1>
+                <h1>Un mundo pordescubrir.</h1>
+              </div>
+              <div className='frace' >
+                <p>Acompañamos a cada estudiante a descubrir su potencial,con una educación cercana, curiosa y conectada con la vida.</p>
+              </div>
+              
+              <div className='sec-btn' >
+                <button className='sesion' >CONTACTOS</button>
+                <button className='sesion' >NOSOTROS</button>
+              </div> 
+            </div>
+
+            <div className='eslogan-img'>
+                <img className='img-eslogan' src="https://imagenes.elpais.com/resizer/v2/PO3W3FHL7FBZLDZLLPQY4VBMWU.jpg?auth=145bb445e9f80f6eb8da23cf4a19f985f3b865e7d51186dfbfeac19eb51db5d2&width=414" alt="" />
+                <button className='sesion est' >informacion</button>
+            </div>
+            
+          </div>
+
+          <div className='cont-info-card' >
+              <div className='info-card' >
+                <div className='infro-img' > 
+                  <img src="https://isp.edu.pa/wp-content/uploads/2025/06/high-schools.webp" alt="" />
+                </div>
+                <div>
+                  <h2>nota</h2>
+                  <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi dolor obcaecati animi cupiditate </p>
+                </div>
+              </div>
+
+              <div className='info-card' >
+                <div className='infro-img' > 
+                  <img src="https://www.colegiolosandes.edu.gt/sites/default/files/Instalaciones-7_0.jpg" alt="" />
+                </div>
+                <div>
+                  <h2>nota</h2>
+                  <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi dolor obcaecati animi cupiditate </p>
+                </div>
+              </div>
+             
+              <div className='info-card' >
+                <div className='infro-img' > 
+                  <img src="https://images.squarespace-cdn.com/content/v1/61ae3ba53022ff35f79bb557/1676907677992-ZK5V9N08UPPKX9Z96KMY/colegio-interamericano-zona-16-ciudad-de-guatemala-topofilia-studio-fotografia-profesional-de-arquitectura-4.jpg" alt="" />
+                </div>
+                <div>
+                  <h2>nota</h2>
+                  <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi dolor obcaecati animi cupiditate </p>
+                </div>
+              </div>
+             
+              <div className='info-card' >
+                <div className='infro-img' > 
+                  <img src="https://www.guatemala.com/wp-content/uploads/2023/11/Historia-del-Colegio-Sagrado-Corazon-en-la-zona-1-de-la-Ciudad-de-Guatemala-1.jpg" alt="" />
+                </div>
+                <div>
+                  <h2>nota</h2>
+                  <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi dolor obcaecati animi cupiditate </p>
+                </div>
+              </div>
+
+          </div>
+
+
         </section>
       )}
     </main>
