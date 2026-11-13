@@ -15,7 +15,6 @@ export default function ListadoCursos({
         <table className="tablaUsuarios">
           <thead className="encabezado">
             <tr>
-              {!consultaAsignaciones && <th>ID</th>}
               <th>Nombre del Curso</th>
               {consultaAsignaciones ? (
                 <>
@@ -32,7 +31,6 @@ export default function ListadoCursos({
           <tbody className="tablacontenido">
             {cursos.map((curso) => (
               <tr key={consultaAsignaciones ? curso.asignacion_curso_maestro_id : curso.curso_id}>
-                {!consultaAsignaciones && <td>{curso.curso_id}</td>}
                 <td>{curso.nom_curso}</td>
                 {consultaAsignaciones ? (
                   <>

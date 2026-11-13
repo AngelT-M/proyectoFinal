@@ -29,7 +29,6 @@ export default function ListadoEstudiantes({
         <table className="tablaUsuarios">
           <thead className="encabezado">
             <tr>
-              <th>ID</th>
               <th>Carné</th>
               <th>Nombre</th>
               <th>Apellido</th>
@@ -43,7 +42,6 @@ export default function ListadoEstudiantes({
           <tbody className="tablacontenido">
             {alumnos.map((alumno) => (
               <tr key={alumno.alumno_id}>
-                <td>{alumno.alumno_id}</td>
                 <td>{alumno.carne}</td>
                 <td>{alumno.nombre}</td>
                 <td>{alumno.apellido}</td>

@@ -8,7 +8,6 @@ export default function ListadoPersonal({ personal, cargando, puedeEditar, onEli
         <table className="tablaUsuarios">
           <thead className="encabezado">
             <tr>
-              <th>ID</th>
               <th>Nombre</th>
               <th>Apellido</th>
               <th>Cargo</th>
@@ -20,7 +19,6 @@ export default function ListadoPersonal({ personal, cargando, puedeEditar, onEli
           <tbody className="tablacontenido">
             {personal.map((empleado) => (
               <tr key={empleado.personal_id}>
-                <td>{empleado.personal_id}</td>
                 <td>{empleado.nombre}</td>
                 <td>{empleado.apellido}</td>
                 <td>{empleado.cargo}</td>

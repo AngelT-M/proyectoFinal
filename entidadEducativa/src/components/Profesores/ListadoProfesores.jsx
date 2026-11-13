@@ -16,11 +16,10 @@ export default function ListadoProfesores({ maestros, cargando, puedeEditar, onE
           <p>Cuando se registre un docente, sus datos aparecerán aquí.</p>
         </div>
       ) : (
-        <div>
+        <div className="lisUsuarios">
           <table className="tablaUsuarios">
             <thead className="encabezado">
               <tr>
-                <th scope="col">ID</th>
                 <th scope="col">Carné</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Apellido</th>
@@ -33,7 +32,6 @@ export default function ListadoProfesores({ maestros, cargando, puedeEditar, onE
             <tbody className="tablacontenido">
               {maestros.map((maestro) => (
                 <tr key={maestro.maestro_id}>
-                  <td>{maestro.maestro_id}</td>
                   <td>{maestro.carne_maestro}</td>
                   <td>{maestro.nombre}</td>
                   <td>{maestro.apellido}</td>
