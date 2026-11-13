@@ -26,6 +26,7 @@
 
   --color-fondo: #f2f2f2;
   --color-blanco: #ffffff;
+  --color-blanco-opaco: rgba(255, 255, 255,0.8);
   --color-negro: #000000;
 
   --radio : 8px; 
@@ -37,4 +38,128 @@
 
 body{
   background-color: var(--color-fondo);
+}
+
+.Crear-form{
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.form-nuevo{
+  width: 100%;
+  background-color: var(--color-blanco);
+  border-radius: var(--radio);
+  box-shadow: var(--shadow-sec);
+}
+
+.Crear-form > .form-nuevo{
+  width: 35%;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+}
+
+.form-nuevo h2,
+.form-nuevo h3{
+  width: 100%;
+  padding: 0.75rem;
+  box-sizing: border-box;
+  border-radius: var(--radio) var(--radio) 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-ad);
+  color: var(--color-primario);
+  font-size: 2rem;
+  text-align: center;
+}
+
+.form-cont{
+  width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.form-cont label{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.form-cont label > p{
+  color: var(--color-primario);
+  font-weight: 600;
+}
+
+.form-cont input:not([type="checkbox"]),
+.form-cont select,
+.form-cont textarea{
+  width: 100%;
+  max-width: 32rem;
+  padding: 0.6rem;
+  box-sizing: border-box;
+  border: 1px solid var(--color-gris);
+  border-radius: var(--radio);
+}
+
+.form-cont input:focus,
+.form-cont select:focus,
+.form-cont textarea:focus{
+  border: 2px solid var(--color-primario);
+  outline: none;
+}
+
+.form-cont option:checked,
+.form-cont option:default{
+  color: var(--color-blanco);
+  background-color: var(--color-primario);
+}
+
+.form-cont > div{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.form-cont button:not(.sesion):not(.btn-us){
+  margin: 0.2rem;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: var(--radio);
+  background-color: var(--color-cel-apagado);
+  color: var(--color-blanco);
+  cursor: pointer;
+}
+
+.form-cont button:not(.sesion):not(.btn-us):hover{
+  background-color: var(--color-primario);
+}
+
+.form-cont button.apagado{
+  background-color: var(--color-dan-apagado);
+}
+
+.form-cont button.apagado:hover{
+  background-color: var(--color-dan);
+}
+
+@media (max-width: 768px){
+  .Crear-form > .form-nuevo{
+    width: 95%;
+  }
 }

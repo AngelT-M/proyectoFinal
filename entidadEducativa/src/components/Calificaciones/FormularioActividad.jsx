@@ -1,8 +1,9 @@
-export default function FormularioActividad({ clase, bimestres, nuevaAct, setNuevaAct, onSubmit }) {
+export default function FormularioActividad({ clase, bimestres, nuevaAct, setNuevaAct, onSubmit, onCancelar }) {
   return (
-    <fieldset>
-      <legend><strong>Crear Actividad para {clase.nom_curso}</strong></legend>
-      <form onSubmit={onSubmit}>
+    <section className="Crear-form">
+      <div className="form-nuevo">
+      <h2>Crear Actividad para {clase.nom_curso}</h2>
+      <form className="form-cont" onSubmit={onSubmit}>
         <label>
           Bimestre:{' '}
           <select
@@ -56,8 +57,12 @@ export default function FormularioActividad({ clase, bimestres, nuevaAct, setNue
             onChange={(e) => setNuevaAct({ ...nuevaAct, descripcion: e.target.value })}
           />
         </label>
-        <button className="sesion" type="submit">Guardar Actividad</button>
+        <div>
+          <button className="sesion" type="submit">Guardar Actividad</button>
+          <button className="sesion apagado" type="button" onClick={onCancelar}>Cancelar</button>
+        </div>
       </form>
-    </fieldset>
+      </div>
+    </section>
   );
 }

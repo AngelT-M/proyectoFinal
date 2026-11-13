@@ -6,7 +6,7 @@ export default function FormularioRegistrarAsistencia({
   onSubmit
 }) {
   return (
-    <section>
+    <section className="form-nuevo">
       <h2>Registrar Asistencia</h2>
       <p>
         Aula seleccionada:{' '}
@@ -17,7 +17,7 @@ export default function FormularioRegistrarAsistencia({
         </strong>
       </p>
       <p>Elige un estudiante inscrito en esa aula</p>
-      <form onSubmit={onSubmit}>
+      <form className="form-cont" onSubmit={onSubmit}>
         <label>
           Estudiante:{' '}
           <select

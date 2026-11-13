@@ -41,6 +41,7 @@ export default function ActividadesClase({
           nuevaAct={nuevaAct}
           setNuevaAct={setNuevaAct}
           onSubmit={onCrearActividad}
+          onCancelar={() => setMostrarFormActividad(false)}
         />
       )}
 

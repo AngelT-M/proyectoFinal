@@ -7,9 +7,9 @@ export default function ConsultaComprobante({
   onSubmit
 }) {
   return (
-    <section>
+    <section className="form-nuevo">
       <h2>Consultar Comprobante de Pago Oficial</h2>
-      <form onSubmit={onSubmit}>
+      <form className="form-cont" onSubmit={onSubmit}>
         <label>
           Comprobante de pago:
           <select

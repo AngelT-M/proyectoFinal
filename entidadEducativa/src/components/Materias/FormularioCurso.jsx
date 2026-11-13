@@ -1,8 +1,9 @@
-export default function FormularioCurso({ nuevo, setNuevo, onSubmit }) {
+export default function FormularioCurso({ nuevo, setNuevo, onSubmit, onCancelar }) {
   return (
-    <div>
+    <section className="Crear-form">
+      <div className="form-nuevo">
       <h2>Crear Nuevo Curso</h2>
-      <form onSubmit={onSubmit}>
+      <form className="form-cont" onSubmit={onSubmit}>
         <label>
           Nombre del Curso:
           <input
@@ -21,8 +22,12 @@ export default function FormularioCurso({ nuevo, setNuevo, onSubmit }) {
           />
         </label>
         <br />
-        <button type="submit">Guardar Curso</button>
+        <div>
+          <button type="submit">Guardar Curso</button>
+          <button className="sesion apagado" type="button" onClick={onCancelar}>Cancelar</button>
+        </div>
       </form>
-    </div>
+      </div>
+    </section>
   );
 }

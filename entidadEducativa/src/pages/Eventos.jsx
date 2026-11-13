@@ -104,6 +104,7 @@ function Eventos() {
               setNuevo={setNuevo}
               niveles={niveles}
               onSubmit={handleCrear}
+              onCancelar={() => setMostrarFormEventos(false)}
             />
           )}
 

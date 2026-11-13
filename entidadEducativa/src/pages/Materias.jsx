@@ -100,7 +100,12 @@ function Materias() {
           </div>
 
           {mostrarFormCursos && (
-            <FormularioCurso nuevo={nuevo} setNuevo={setNuevo} onSubmit={handleCrear} />
+            <FormularioCurso
+              nuevo={nuevo}
+              setNuevo={setNuevo}
+              onSubmit={handleCrear}
+              onCancelar={() => setMostrarFormCursos(false)}
+            />
           )} 
         </section>
       )}

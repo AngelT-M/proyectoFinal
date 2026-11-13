@@ -1,8 +1,9 @@
 export default function FormularioCambioPassword({ usuarioId, password, setPassword, onSubmit, onCancelar }) {
   return (
-    <section>
-      <h3>Cambiar Contraseña para Usuario #{usuarioId}</h3>
-      <form onSubmit={onSubmit}>
+    <section className="Crear-form">
+      <div className="form-nuevo">
+      <h2>Cambiar Contraseña para Usuario #{usuarioId}</h2>
+      <form className="form-cont" onSubmit={onSubmit}>
         <label>
           Nueva Contraseña:
           <input
@@ -13,9 +14,12 @@ export default function FormularioCambioPassword({ usuarioId, password, setPassw
             onChange={(e) => setPassword(e.target.value)}
           />
         </label>
-        <button type="submit">Guardar Nueva Contraseña</button>
-        <button type="button" onClick={onCancelar}>Cancelar</button>
+        <div>
+          <button type="submit">Guardar Nueva Contraseña</button>
+          <button className="sesion apagado" type="button" onClick={onCancelar}>Cancelar</button>
+        </div>
       </form>
+      </div>
     </section>
   );
 }

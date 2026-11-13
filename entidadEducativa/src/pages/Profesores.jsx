@@ -117,6 +117,7 @@ function Profesores() {
               usuariosDisponibles={usuariosDisponibles}
               cargando={cargando}
               onSubmit={handleCrear}
+              onCancelar={() => setMostrarForProfesores(false)}
             />
           )}
         </section>

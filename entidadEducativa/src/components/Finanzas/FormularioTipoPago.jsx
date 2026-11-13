@@ -11,13 +11,13 @@ export default function FormularioTipoPago({
   onSubmit
 }) {
   return (
-    <section style={{ marginBottom: '2rem' }}>
+    <section className="form-nuevo" style={{ marginBottom: '2rem' }}>
       <h2>Configurar cuota para un grado</h2>
       <p>
         Define un concepto y su monto. La cuota quedará asociada al grado seleccionado
         y estará disponible para generar cargos masivos.
       </p>
-      <form onSubmit={onSubmit}>
+      <form className="form-cont" onSubmit={onSubmit}>
         <label>
           Grado Escolar:{' '}
           <select required value={gradoConfigId} onChange={(e) => setGradoConfigId(e.target.value)}>

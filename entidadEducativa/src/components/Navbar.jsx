@@ -40,12 +40,12 @@ function Navbar() {
 
         <div className="links">
           {/*visitante  */}
-          <Link className="lin" to="/">INICIO</Link>
+          <Link className="lin" to="/">Inicio</Link>
           {!usuario&& (
             <>
-              <Link className='lin' >CONTACTOS</Link>
-              <Link className='lin' >UBICACION</Link>
-              <Link className='lin' >NOSOTROS</Link>
+              <Link className='lin' >Contactos</Link>
+              <Link className='lin' >Ubicacion</Link>
+              <Link className='lin' >Nosotros</Link>
             </>
           )}
           {usuario && (
@@ -53,7 +53,7 @@ function Navbar() {
               {/* Rol 1: Admin */}
               {rol === 1 && (
                 <>
-                  <Link className="lin" to="/dashboard">Dashboard</Link>
+                  <Link className="lin" to="/dashboard">Estado</Link>
                   <Link className="lin" to="/usuarios">Usuarios</Link>
                 </>
               )}
@@ -71,7 +71,7 @@ function Navbar() {
 
               {/* Roles 1, 2, 3, 5: Alumnos */}
               {[1, 2, 3, 5].includes(rol) && (
-                <Link className="lin" to="/alumnos">Alumnos</Link>
+                <Link className="lin" to="/alumnos">Alumno</Link>
               )}
 
               {/* Académico */}

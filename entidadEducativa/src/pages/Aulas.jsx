@@ -129,6 +129,7 @@ function Aulas() {
               gradosPorNivel={gradosPorNivel}
               secciones={secciones}
               onSubmit={handleAbrirAula}
+              onCancelar={() => setMostrarFormAulas(false)}
             />
           )}
         </section>

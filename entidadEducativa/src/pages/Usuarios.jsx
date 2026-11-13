@@ -5,7 +5,7 @@ import FormularioUsuario from '../components/Usuarios/FormularioUsuario';
 import ListadoUsuarios from '../components/Usuarios/ListadoUsuarios';
 import FormularioCambioPassword from '../components/Usuarios/FormularioCambioPassword';
 
-function Usuarios() {
+export default function Usuarios() {
   const [usuarios, setUsuarios] = useState([]);
   const [cargando, setCargando] = useState(false);
   const [mensaje, setMensaje] = useState('');
@@ -143,12 +143,14 @@ function Usuarios() {
           type='button'
           onClick={()=> setMostrarFormUsuario(!mostrarFormUsuario)}
         >
-          {mostrarFormUsuario ? `Cancelar`: `+ Crear usuario`}
+          + Crear usuario
         </button>
       </div>
 
       {mostrarFormUsuario && (
         <FormularioUsuario
+          mostrarFormUsuario={mostrarFormUsuario}
+          setMostrarFormUsuario={setMostrarFormUsuario}
           usuario={nuevoUsuario}
           setUsuario={setNuevoUsuario}
           onSubmit={handleCrearUsuario}
@@ -179,4 +181,3 @@ function Usuarios() {
   );
 }
 
-export default Usuarios;

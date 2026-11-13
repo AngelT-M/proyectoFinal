@@ -120,6 +120,7 @@ function Estudiantes() {
               usuariosDisponibles={usuariosDisponibles}
               cargando={cargando}
               onSubmit={handleCrear}
+              onCancelar={() => setMostrarFormEstudiante(false)}
             />
           )}
         </section>

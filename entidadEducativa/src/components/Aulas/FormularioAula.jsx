@@ -1,8 +1,9 @@
-export default function FormularioAula({ nueva, setNueva, gradosPorNivel, secciones, onSubmit }) {
+export default function FormularioAula({ nueva, setNueva, gradosPorNivel, secciones, onSubmit, onCancelar }) {
   return (
-    <div>
+    <section className="Crear-form">
+      <div className="form-nuevo">
       <h2>Abrir Nueva Aula</h2>
-      <form onSubmit={onSubmit}>
+      <form className="form-cont" onSubmit={onSubmit}>
         <label>
           Grado:{' '}
           <select
@@ -59,8 +60,12 @@ export default function FormularioAula({ nueva, setNueva, gradosPorNivel, seccio
           />
         </label>
 
-        <button className="sesion" type="submit">Abrir Aula</button>
+        <div>
+          <button className="sesion" type="submit">Abrir Aula</button>
+          <button className="sesion apagado" type="button" onClick={onCancelar}>Cancelar</button>
+        </div>
       </form>
-    </div>
+      </div>
+    </section>
   );
 }

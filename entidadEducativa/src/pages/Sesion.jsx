@@ -1,7 +1,6 @@
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/useAuth';
 import IniciarSesion from '../components/Sesion/IniciarSesion';
-import Logotipo from '../components/Logotipo';
 import '../style/sesion.css';
 
 export default function Sesion() {

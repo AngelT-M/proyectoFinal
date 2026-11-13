@@ -1,8 +1,9 @@
 export default function FormularioEdicionCurso({ editandoId, editandoData, setEditandoData, onSubmit, onCancelar }) {
   return (
-    <section>
-      <h3>Editar Curso #{editandoId}</h3>
-      <form onSubmit={onSubmit}>
+    <section className="Crear-form">
+      <div className="form-nuevo">
+      <h2>Editar Curso #{editandoId}</h2>
+      <form className="form-cont" onSubmit={onSubmit}>
         <label>
           Nombre del Curso:
           <input
@@ -21,9 +22,12 @@ export default function FormularioEdicionCurso({ editandoId, editandoData, setEd
           />
         </label>
         <br />
-        <button type="submit">Actualizar Curso</button>
-        <button type="button" onClick={onCancelar}>Cancelar</button>
+        <div>
+          <button type="submit">Actualizar Curso</button>
+          <button className="sesion apagado" type="button" onClick={onCancelar}>Cancelar</button>
+        </div>
       </form>
+      </div>
     </section>
   );
 }

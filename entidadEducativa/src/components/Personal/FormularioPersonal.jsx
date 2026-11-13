@@ -3,12 +3,14 @@ export default function FormularioPersonal({
   setNuevo,
   usuariosParaCargo,
   cargando,
-  onSubmit
+  onSubmit,
+  onCancelar
 }) {
   return (
-    <section>
+    <section className="Crear-form">
+      <div className="form-nuevo">
       <h2>Registrar Personal Administrativo</h2>
-      <form onSubmit={onSubmit}>
+      <form className="form-cont" onSubmit={onSubmit}>
         <label>
           Nombre:
           <input
@@ -82,10 +84,14 @@ export default function FormularioPersonal({
           </select>
         </label>
         <br />
-        <button type="submit" disabled={cargando || usuariosParaCargo.length === 0}>
-          Guardar Personal
-        </button>
+        <div>
+          <button type="submit" disabled={cargando || usuariosParaCargo.length === 0}>
+            Guardar Personal
+          </button>
+          <button className="sesion apagado" type="button" onClick={onCancelar}>Cancelar</button>
+        </div>
       </form>
+      </div>
     </section>
   );
 }

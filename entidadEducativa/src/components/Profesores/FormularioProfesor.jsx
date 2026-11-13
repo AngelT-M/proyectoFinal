@@ -3,10 +3,12 @@ export default function FormularioProfesor({
   setNuevo,
   usuariosDisponibles,
   cargando,
-  onSubmit
+  onSubmit,
+  onCancelar
 }) {
   return (
-    <div>
+    <section className="Crear-form">
+      <div className="form-nuevo">
       <div>
         <div>
           <h2 id="registro-docente">Registrar docente</h2>
@@ -14,7 +16,7 @@ export default function FormularioProfesor({
         </div>
         <span>Nuevo registro</span>
       </div>
-      <form onSubmit={onSubmit}>
+      <form className="form-cont" onSubmit={onSubmit}>
         <div>
           <label>
             Carné de maestro <span>Obligatorio</span>
@@ -113,8 +115,10 @@ export default function FormularioProfesor({
           >
             {cargando ? 'Cargando datos…' : 'Registrar docente'}
           </button>
+          <button className="sesion apagado" type="button" onClick={onCancelar}>Cancelar</button>
         </div>
       </form>
-    </div>
+      </div>
+    </section>
   );
 }

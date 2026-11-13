@@ -20,9 +20,9 @@ export default function HistorialAsistencia({
   error
 }) {
   return (
-    <section style={{ marginBottom: '2.5rem' }}>
+    <section className="form-nuevo" style={{ marginBottom: '2.5rem' }}>
       <h2>{esAlumno ? 'Mi Historial de Asistencia' : 'Historial de Asistencia por Estudiante'}</h2>
-      <form onSubmit={onSubmit}>
+      <form className="form-cont" onSubmit={onSubmit}>
         {[1, 2, 3, 4].includes(rol) && (
           <label>
             Filtrar por aula:{' '}

@@ -3,12 +3,14 @@ export default function FormularioEstudiante({
   setNuevo,
   usuariosDisponibles,
   cargando,
-  onSubmit
+  onSubmit,
+  onCancelar
 }) {
   return (
-    <div>
+    <section className="Crear-form">
+      <div className="form-nuevo">
       <h2>Inscribir / Registrar Nuevo Estudiante</h2>
-      <form onSubmit={onSubmit}>
+      <form className="form-cont" onSubmit={onSubmit}>
         <label>
           Carné:
           <input
@@ -108,10 +110,14 @@ export default function FormularioEstudiante({
           </select>
         </label>
         <br />
-        <button type="submit" disabled={cargando || usuariosDisponibles.length === 0}>
-          Guardar Estudiante
-        </button>
+        <div>
+          <button type="submit" disabled={cargando || usuariosDisponibles.length === 0}>
+            Guardar Estudiante
+          </button>
+          <button className="sesion apagado" type="button" onClick={onCancelar}>Cancelar</button>
+        </div>
       </form>
-    </div>
+      </div>
+    </section>
   );
 }

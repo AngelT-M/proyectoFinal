@@ -8,9 +8,9 @@ export default function FormularioExamen({
   onSubmit
 }) {
   return (
-    <section>
+    <section className="form-nuevo">
       <h2>Enviar Examen para Autorización</h2>
-      <form onSubmit={onSubmit}>
+      <form className="form-cont" onSubmit={onSubmit}>
         <label>
           Clase y aula:
           <select

@@ -11,9 +11,9 @@ export default function ConsultaAsistenciaAula({
   onSubmit
 }) {
   return (
-    <section style={{ marginBottom: '2.5rem' }}>
+    <section className="form-nuevo" style={{ marginBottom: '2.5rem' }}>
       <h2>Consultar Asistencia por Grado, Sección y Fecha</h2>
-      <form onSubmit={onSubmit}>
+      <form className="form-cont" onSubmit={onSubmit}>
         <label>
           Grado y Sección:{' '}
           <select

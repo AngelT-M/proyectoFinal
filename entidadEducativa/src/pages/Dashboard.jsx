@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { dashboardApi } from '../services/api';
+import '../style/usuarios.css';
+import '../style/dashboard.css';
 
 function Dashboard() {
   const [resumen, setResumen] = useState(null);
@@ -24,17 +26,14 @@ function Dashboard() {
   }, []);
 
   return (
-    <main>
-      <h1>Dashboard Administrativo</h1>
-      <p>Vista general del estado de la institución educativa.</p>
-
+    <main className='iniciarS menos' >
       {cargando && <p role="status">Cargando métricas del sistema...</p>}
       {error && <p role="alert" style={{ color: 'red' }}>{error}</p>}
 
       {!cargando && resumen && (
-        <section>
+        <section className=' contF dashboard ' >
           <h2>Resumen Institucional</h2>
-          <ul>
+          <ul className='dashboard-centrar' >
             {Object.entries(resumen).map(([clave, valor]) => {
               if (typeof valor === 'object' && valor !== null) {
                 return (
@@ -58,7 +57,7 @@ function Dashboard() {
             })}
           </ul>
 
-          <button type="button" onClick={cargarResumen}>Actualizar Métricas</button>
+          <button type="button" className='sesion'  onClick={cargarResumen}>Actualizar Métricas</button>
         </section>
       )}
     </main>

@@ -2,6 +2,77 @@
     height: 100vh;
 }
 
+.home-usuarios{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.home-usuarios-cont{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+}
+
+.home-usuarios-card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0.3rem;
+}
+
+.centrar{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.normal{
+    color: var(--color-primario);
+    text-decoration: none;
+}
+.usuario-card{
+    width: 100%;
+    background-color: var(--color-blanco);
+    margin: 2rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: var(--radio);
+    transition: transform 0.3s ease-in-out;
+    box-shadow: -1px 1px 5px var(--color-ad);
+}
+.usuario-card:hover{
+    transform: scale(1.02);
+    box-shadow: -1px 1px 15px var(--color-ad) ;
+}
+.usuario-img{    
+    width: 100%;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 8px 8px 0px 0px;
+}
+.usuario-img img{
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+
+
+
+
+
+
+
 .home-visitante{
     background-color: var(--color-fondo);
 }

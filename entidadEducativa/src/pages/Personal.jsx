@@ -119,6 +119,7 @@ function Personal() {
               usuariosParaCargo={usuariosParaCargo}
               cargando={cargando}
               onSubmit={handleCrear}
+              onCancelar={() => setMostrarFormPersonal(false)}
             />
           )}
         </div>

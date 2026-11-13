@@ -10,10 +10,11 @@ export default function ConsultaCargos({
   setPago
 }) {
   return (
-    <section>
+    <section className="form-nuevo">
       <h2>{esAlumno ? 'Mi Estado de Cuenta y Pagos' : 'Consultar Cargos por Estudiante'}</h2>
       {!esAlumno && (
         <form
+          className="form-cont"
           onSubmit={(e) => {
             e.preventDefault();
             cargarCargos(idAlumnoConsulta);

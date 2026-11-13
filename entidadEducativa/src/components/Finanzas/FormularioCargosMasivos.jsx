@@ -9,9 +9,9 @@ export default function FormularioCargosMasivos({
   onSubmit
 }) {
   return (
-    <section style={{ marginBottom: '2rem' }}>
+    <section className="form-nuevo" style={{ marginBottom: '2rem' }}>
       <h2>Generar Cargos Masivos a Alumnos por Grado</h2>
-      <form onSubmit={onSubmit}>
+      <form className="form-cont" onSubmit={onSubmit}>
         <label>
           Tipo de Cuota / Pago:{' '}
           <select

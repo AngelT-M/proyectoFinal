@@ -1,8 +1,9 @@
-export default function FormularioEvento({ nuevo, setNuevo, niveles, onSubmit }) {
+export default function FormularioEvento({ nuevo, setNuevo, niveles, onSubmit, onCancelar }) {
   return (
-    <div>
+    <section className="Crear-form">
+      <div className="form-nuevo">
       <h2>Agendar Nuevo Evento Escolar</h2>
-      <form onSubmit={onSubmit}>
+      <form className="form-cont" onSubmit={onSubmit}>
         <label>
           Título del Evento:
           <input
@@ -71,8 +72,12 @@ export default function FormularioEvento({ nuevo, setNuevo, niveles, onSubmit })
           />
         </label>
         <br />
-        <button type="submit">Guardar Evento en Calendario</button>
+        <div>
+          <button type="submit">Guardar Evento en Calendario</button>
+          <button className="sesion apagado" type="button" onClick={onCancelar}>Cancelar</button>
+        </div>
       </form>
-    </div>
+      </div>
+    </section>
   );
 }

@@ -20,7 +20,7 @@ export default function ListadoUsuarios({
           <table className="tablaUsuarios">
             <thead className="encabezado">
               <tr>
-                <th>ID</th>
+                
                 <th>Usuario</th>
                 <th>Estado</th>
                 <th>Acciones</th>
@@ -29,7 +29,7 @@ export default function ListadoUsuarios({
             <tbody className="tablacontenido">
               {usuariosPorRol[rolId].map((usuario) => (
                 <tr key={usuario.usuario_id}>
-                  <td>{usuario.usuario_id}</td>
+                  
                   <td>{usuario.nom_usuario}</td>
                   <td>{usuario.estado}</td>
                   <td className="cont-act">

@@ -1,8 +1,8 @@
 export default function FormularioPago({ pago, setPago, cargos, onSubmit }) {
   return (
-    <section style={{ marginBottom: '2rem' }}>
+    <section className="form-nuevo" style={{ marginBottom: '2rem' }}>
       <h2>Caja: Registrar Cobro de Pago </h2>
-      <form onSubmit={onSubmit}>
+      <form className="form-cont" onSubmit={onSubmit}>
         <p>
           {pago.concepto ? (
             <span>Concepto seleccionado: <strong>{pago.concepto}</strong></span>

@@ -19,10 +19,11 @@ export default function BoletaCalificaciones({
   cursosBoleta
 }) {
   return (
-    <section>
+    <section className="form-nuevo">
       <h2>Boleta de Calificaciones del Estudiante</h2>
       {!esAlumno && (
         <form
+          className="form-cont"
           onSubmit={(e) => {
             e.preventDefault();
             cargarBoleta(idAlumnoConsulta);
