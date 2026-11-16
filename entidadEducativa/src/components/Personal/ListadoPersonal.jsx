@@ -1,11 +1,11 @@
 export default function ListadoPersonal({ personal, cargando, puedeEditar, onEliminar }) {
   return (
-    <section className="lisUsuarios">
+    <section className="lisUsuarios tabla-panel">
       <h2>Listado de Personal</h2>
       {cargando ? (
         <p>Cargando lista...</p>
       ) : (
-        <table className="tablaUsuarios">
+        <table className="tablaUsuarios ">
           <thead className="encabezado">
             <tr>
               <th>Nombre</th>

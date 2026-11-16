@@ -3,10 +3,12 @@ export default function FormularioRegistrarAsistencia({
   asistenciasAula,
   nuevaAsistencia,
   setNuevaAsistencia,
-  onSubmit
+  onSubmit,
+  onCancelar,
+  id
 }) {
   return (
-    <section className="form-nuevo">
+    <section className="form-nuevo" id={id}>
       <h2>Registrar Asistencia</h2>
       <p>
         Aula seleccionada:{' '}
@@ -68,13 +70,18 @@ export default function FormularioRegistrarAsistencia({
           </select>
         </label>
         <br /><br />
-        <button
-          className="sesion"
-          type="submit"
-          disabled={!nuevaAsistencia.alumno_id || !nuevaAsistencia.asignacion_grado_id}
-        >
-          Guardar Asistencia
-        </button>
+        <div>
+          <button
+            className="sesion"
+            type="submit"
+            disabled={!nuevaAsistencia.alumno_id || !nuevaAsistencia.asignacion_grado_id}
+          >
+            Guardar Asistencia
+          </button>
+          <button className="sesion apagado" type="button" onClick={onCancelar}>
+            Cancelar
+          </button>
+        </div>
       </form>
     </section>
   );

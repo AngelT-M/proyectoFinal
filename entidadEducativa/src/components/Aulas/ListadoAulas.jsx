@@ -8,7 +8,7 @@ export default function ListadoAulas({ aulas, cargando, ciclosOrdenados, aulasPo
         <p>No hay aulas registradas para este ciclo.</p>
       ) : (
         ciclosOrdenados.map((ciclo) => (
-          <section className="lisUsuarios" key={ciclo}>
+          <section className="lisUsuarios tabla-panel" key={ciclo}>
             <h3>Ciclo escolar {ciclo}</h3>
             <table className="tablaUsuarios">
               <thead className="encabezado">

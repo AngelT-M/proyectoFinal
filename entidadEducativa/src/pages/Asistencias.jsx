@@ -13,6 +13,7 @@ function Asistencias() {
 
   const [mensaje, setMensaje] = useState('');
   const [error, setError] = useState('');
+  const [mostrarRegistro, setMostrarRegistro] = useState(false);
 
   // Estados Historial Alumno
   const [idAlumnoHistorial, setIdAlumnoHistorial] = useState('');
@@ -250,16 +251,40 @@ function Asistencias() {
             asistenciasAula={asistenciasAula}
             setAsistenciasAula={setAsistenciasAula}
             setNuevaAsistencia={setNuevaAsistencia}
+            onSeleccionarParaRegistro={(asignacion) => {
+              setNuevaAsistencia({
+                alumno_id: asignacion.alumno_id,
+                asignacion_grado_id: asignacion.asignacion_grado_id,
+                fecha: fechaConsulta,
+                estado: 'PRESENTE'
+              });
+              setMostrarRegistro(true);
+            }}
             cargandoAula={cargandoAula}
             onSubmit={handleConsultarAula}
           />
-          <FormularioRegistrarAsistencia
-            aulaSeleccionada={aulaSeleccionada}
-            asistenciasAula={asistenciasAula}
-            nuevaAsistencia={nuevaAsistencia}
-            setNuevaAsistencia={setNuevaAsistencia}
-            onSubmit={handleRegistrar}
-          />
+          <div className="formulario-toggle">
+            <button
+              className="sesion"
+              type="button"
+              aria-expanded={mostrarRegistro}
+              aria-controls="formulario-registro-asistencia"
+              onClick={() => setMostrarRegistro((mostrar) => !mostrar)}
+            >
+              {mostrarRegistro ? 'Cerrar formulario de asistencia' : '+ Registrar asistencia'}
+            </button>
+          </div>
+          {mostrarRegistro && (
+            <FormularioRegistrarAsistencia
+              id="formulario-registro-asistencia"
+              aulaSeleccionada={aulaSeleccionada}
+              asistenciasAula={asistenciasAula}
+              nuevaAsistencia={nuevaAsistencia}
+              setNuevaAsistencia={setNuevaAsistencia}
+              onSubmit={handleRegistrar}
+              onCancelar={() => setMostrarRegistro(false)}
+            />
+          )}
         </>
       )}
 

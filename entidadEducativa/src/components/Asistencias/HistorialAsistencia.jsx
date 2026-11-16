@@ -109,7 +109,13 @@ export default function HistorialAsistencia({
       )}
 
       {historial.length > 0 && (
-        <div className="tabla-panel">
+        <div
+          className="tabla-panel"
+          role="region"
+          aria-label="Historial de asistencia"
+          tabIndex={0}
+        >
+          <p className="tabla-scroll-hint">Desliza horizontalmente para ver todas las columnas.</p>
           <table className="tablaUsuarios">
             <thead className="encabezado">
               <tr>

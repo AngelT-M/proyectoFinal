@@ -191,10 +191,16 @@ table {
 }
 
 .tabla-panel {
+  width: 100%;
+  max-width: 100%;
   min-width: 0;
-  margin: 1rem;
+  margin: 1rem 0;
   padding: 0.75rem;
   overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
   border: 1px solid var(--gris-secod);
   border-radius: var(--radio);
   background-color: var(--color-fondo);
@@ -202,23 +208,23 @@ table {
 }
 
 .tabla-panel > .tablaUsuarios {
+  width: max-content;
   min-width: 100%;
+  max-width: none;
   margin: 0;
+  overflow: visible;
+  table-layout: auto;
   border: 1px solid var(--gris-secod);
   border-radius: var(--radio);
   box-shadow: 0 2px 6px rgba(16, 33, 106, 0.08);
 }
 
-.vista-asistencias .tabla-panel > .tablaUsuarios {
-  min-width: 46rem;
-}
-
-.vista-finanzas .tabla-panel > .tablaUsuarios {
-  min-width: 66rem;
-}
-
 .tabla-panel > h3 {
   margin-bottom: 0.75rem;
+}
+
+.tabla-scroll-hint {
+  display: none;
 }
 
 th,
@@ -231,6 +237,19 @@ td {
 th {
   color: var(--color-primario);
   font-weight: 700;
+}
+
+.tabla-panel th,
+.tabla-panel td {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.formulario-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-block: 1rem;
 }
 
 tbody tr:nth-child(even) {
@@ -260,22 +279,21 @@ tbody tr:hover {
   }
 
   .tabla-panel {
-    margin: 0.75rem;
+    margin-block: 0.75rem;
     padding: 0.5rem;
   }
 
-  .vista-asistencias .tabla-panel > .tablaUsuarios {
+  .tabla-panel > .tablaUsuarios {
     display: table;
-    min-width: 46rem;
     overflow: visible;
     white-space: normal;
   }
 
-  .vista-finanzas .tabla-panel > .tablaUsuarios {
-    display: table;
-    min-width: 66rem;
-    overflow: visible;
-    white-space: normal;
+  .tabla-scroll-hint {
+    display: block;
+    margin: 0.25rem 0 0.75rem;
+    color: var(--color-secundario);
+    font-size: 0.875rem;
   }
 }
 

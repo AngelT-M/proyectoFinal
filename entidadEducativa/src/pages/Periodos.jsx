@@ -97,8 +97,8 @@ function Periodos() {
           </button>
         </section>
       ) : (
-        <div className='lisUsuarios'  >
-          <table className='tablaUsuarios' >
+        <div className='lisUsuarios tabla-panel'  >
+          <table className='tablaUsuarios ' >
             <thead className='encabezado'>
               <tr>
                 <th>Periodo</th>

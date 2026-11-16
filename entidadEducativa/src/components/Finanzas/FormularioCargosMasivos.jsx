@@ -6,10 +6,12 @@ export default function FormularioCargosMasivos({
   cargandoTiposPago,
   errorTiposPago,
   onCambiarGrado,
-  onSubmit
+  onSubmit,
+  onCancelar,
+  id
 }) {
   return (
-    <section className="form-nuevo" style={{ marginBottom: '2rem' }}>
+    <section className="form-nuevo" style={{ marginBottom: '2rem' }} id={id}>
       <h2>Generar Cargos Masivos a Alumnos por Grado</h2>
       <form className="form-cont" onSubmit={onSubmit}>
         <label>
@@ -67,13 +69,18 @@ export default function FormularioCargosMasivos({
           <p>No hay cuotas registradas para este grado. Selecciona otro grado o configura una cuota para este grado.</p>
         )}
         <br /><br />
-        <button
-          className="sesion"
-          type="submit"
-          disabled={cargandoTiposPago || tiposPago.length === 0 || !nuevoCargoMasivo.pago_id}
-        >
-          Generar Cargos para los Alumnos de este Grado
-        </button>
+        <div>
+          <button
+            className="sesion"
+            type="submit"
+            disabled={cargandoTiposPago || tiposPago.length === 0 || !nuevoCargoMasivo.pago_id}
+          >
+            Generar Cargos para los Alumnos de este Grado
+          </button>
+          <button className="sesion apagado" type="button" onClick={onCancelar}>
+            Cancelar
+          </button>
+        </div>
       </form>
     </section>
   );

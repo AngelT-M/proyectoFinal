@@ -1,6 +1,6 @@
 export default function ListadoEventos({ eventos, cargando }) {
   return (
-    <section className="lisUsuarios">
+    <section className="lisUsuarios tabla-panel">
       <h2>Próximos Eventos y Fechas Clave</h2>
       {cargando ? (
         <p>Cargando eventos...</p>

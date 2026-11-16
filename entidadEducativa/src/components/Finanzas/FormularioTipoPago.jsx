@@ -8,10 +8,12 @@ export default function FormularioTipoPago({
   tipoPagoError,
   guardandoTipoPago,
   nuevoCargoMasivo,
-  onSubmit
+  onSubmit,
+  onCancelar,
+  id
 }) {
   return (
-    <section className="form-nuevo" style={{ marginBottom: '2rem' }}>
+    <section className="form-nuevo" style={{ marginBottom: '2rem' }} id={id}>
       <h2>Configurar cuota para un grado</h2>
       <p>
         Define un concepto y su monto. La cuota quedará asociada al grado seleccionado
@@ -67,13 +69,18 @@ export default function FormularioTipoPago({
         <br /><br />
         {tipoPagoMensaje && <p role="status" style={{ color: 'green' }}>{tipoPagoMensaje}</p>}
         {tipoPagoError && <p role="alert" style={{ color: 'red' }}>{tipoPagoError}</p>}
-        <button
-          className="sesion"
-          type="submit"
-          disabled={guardandoTipoPago || !nuevoCargoMasivo.grado_id}
-        >
-          {guardandoTipoPago ? 'Guardando cuota...' : 'Crear cuota'}
-        </button>
+        <div>
+          <button
+            className="sesion"
+            type="submit"
+            disabled={guardandoTipoPago || !nuevoCargoMasivo.grado_id}
+          >
+            {guardandoTipoPago ? 'Guardando cuota...' : 'Crear cuota'}
+          </button>
+          <button className="sesion apagado" type="button" onClick={onCancelar}>
+            Cancelar
+          </button>
+        </div>
       </form>
     </section>
   );

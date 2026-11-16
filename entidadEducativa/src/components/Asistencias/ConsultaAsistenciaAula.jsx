@@ -7,6 +7,7 @@ export default function ConsultaAsistenciaAula({
   asistenciasAula,
   setAsistenciasAula,
   setNuevaAsistencia,
+  onSeleccionarParaRegistro,
   cargandoAula,
   onSubmit
 }) {
@@ -52,7 +53,13 @@ export default function ConsultaAsistenciaAula({
       {cargandoAula && <p>Consultando lista del aula...</p>}
 
       {asistenciasAula.length > 0 && (
-        <div className="listaUsuarios tabla-panel">
+        <div
+          className="listaUsuarios tabla-panel"
+          role="region"
+          aria-label="Lista de estudiantes y asistencias"
+          tabIndex={0}
+        >
+          <p className="tabla-scroll-hint">Desliza horizontalmente para ver todas las columnas.</p>
           <h3>Lista de Estudiantes ({fechaConsulta})</h3>
           <table className="tablaUsuarios">
             <thead className="encabezado">
@@ -75,14 +82,9 @@ export default function ConsultaAsistenciaAula({
                     <button
                       className="btn-us sesion"
                       type="button"
-                      onClick={() => setNuevaAsistencia({
-                        alumno_id: asignacion.alumno_id,
-                        asignacion_grado_id: asignacion.asignacion_grado_id,
-                        fecha: fechaConsulta,
-                        estado: 'PRESENTE'
-                      })}
+                      onClick={() => onSeleccionarParaRegistro(asignacion)}
                     >
-                      Cargar en Formulario
+                      Registrar a este estudiante
                     </button>
                   </td>
                 </tr>

@@ -50,7 +50,7 @@ export default function ActividadesClase({
       ) : actividades.length === 0 ? (
         <p><em>No hay actividades registradas en esta clase. Crea la primera con el botón superior.</em></p>
       ) : (
-        <div style={{ marginBottom: '1.5rem' }}>
+        <div >
           <label>
             <strong>Seleccionar Actividad a Calificar: </strong>
             <select

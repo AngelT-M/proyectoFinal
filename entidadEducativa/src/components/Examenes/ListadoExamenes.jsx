@@ -36,7 +36,7 @@ export default function ListadoExamenes({
       ) : examenesFiltrados.length === 0 ? (
         <p>No hay exámenes para el ciclo y bimestre seleccionados.</p>
       ) : (
-        <div className="lisUsuarios">
+        <div className="lisUsuarios tabla-panel">
           <table className="tablaUsuarios">
             <thead className="encabezado">
               <tr>

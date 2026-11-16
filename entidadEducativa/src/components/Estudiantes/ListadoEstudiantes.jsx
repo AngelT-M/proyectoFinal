@@ -6,7 +6,7 @@ export default function ListadoEstudiantes({
   onEliminar
 }) {
   return (
-    <section className="lisUsuarios">
+    <section className="lisUsuarios tabla-panel">
       <h2>{rol === 5 ? 'Tus Datos Registrados' : 'Listado de Estudiantes'}</h2>
       {cargando ? (
         <p>Cargando información...</p>

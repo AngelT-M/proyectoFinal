@@ -7,7 +7,7 @@ export default function ListadoCalificacionesActividad({
   onGuardarNota
 }) {
   return (
-    <div className="lisUsuarios">
+    <div className="lisUsuarios tabla-panel">
       <h3>
         Listado de Alumnos Asignados para Calificar: "{actividad.nom_actividad}"
         {' '}<span>({actividad.bimestre} — Máximo {actividad.punteo_maximo} pts)</span>
@@ -17,7 +17,7 @@ export default function ListadoCalificacionesActividad({
       ) : alumnos.length === 0 ? (
         <p><em>No hay alumnos asignados a esta aula/sección actualmente.</em></p>
       ) : (
-        <table className="tablaUsuarios">
+        <table className="tablaUsuarios ">
           <thead className="encabezado">
             <tr>
               <th>Carné</th>

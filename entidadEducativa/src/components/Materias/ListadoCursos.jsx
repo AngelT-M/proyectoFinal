@@ -7,7 +7,7 @@ export default function ListadoCursos({
   onEditar
 }) {
   return (
-    <section className="lisUsuarios">
+    <section className="lisUsuarios tabla-panel">
       <h2>{consultaAsignaciones ? 'Mis cursos asignados' : 'Catálogo de Cursos'}</h2>
       {cargando ? (
         <p>Cargando cursos...</p>

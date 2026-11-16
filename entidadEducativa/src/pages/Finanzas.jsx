@@ -33,6 +33,8 @@ function Finanzas() {
   const [guardandoTipoPago, setGuardandoTipoPago] = useState(false);
   const [tipoPagoMensaje, setTipoPagoMensaje] = useState('');
   const [tipoPagoError, setTipoPagoError] = useState('');
+  const [mostrarFormTipoPago, setMostrarFormTipoPago] = useState(false);
+  const [mostrarFormCargosMasivos, setMostrarFormCargosMasivos] = useState(false);
   const [nuevoTipoPago, setNuevoTipoPago] = useState({
     descripcion: '',
     cantidad_pagos: '1',
@@ -250,28 +252,56 @@ function Finanzas() {
       {/* Sección 3: Generar Cargos Masivos por Grado (Roles 1, 2, 3) */}
       {esGestionador && (
         <>
-          <FormularioTipoPago
-            grados={grados}
-            gradoConfigId={gradoConfigId}
-            setGradoConfigId={setGradoConfigId}
-            nuevoTipoPago={nuevoTipoPago}
-            setNuevoTipoPago={setNuevoTipoPago}
-            tipoPagoMensaje={tipoPagoMensaje}
-            tipoPagoError={tipoPagoError}
-            guardandoTipoPago={guardandoTipoPago}
-            nuevoCargoMasivo={nuevoCargoMasivo}
-            onSubmit={handleCrearTipoPago}
-          />
-          <FormularioCargosMasivos
-            nuevoCargoMasivo={nuevoCargoMasivo}
-            setNuevoCargoMasivo={setNuevoCargoMasivo}
-            tiposPago={tiposPago}
-            grados={grados}
-            cargandoTiposPago={cargandoTiposPago}
-            errorTiposPago={errorTiposPago}
-            onCambiarGrado={handleCambiarGradoCargos}
-            onSubmit={handleGenerarCargos}
-          />
+          <div className="formulario-toggle">
+            <button
+              className="sesion"
+              type="button"
+              aria-expanded={mostrarFormTipoPago}
+              aria-controls="formulario-tipo-pago"
+              onClick={() => setMostrarFormTipoPago((mostrar) => !mostrar)}
+            >
+              {mostrarFormTipoPago ? 'Cerrar configuración de cuota' : '+ Configurar cuota'}
+            </button>
+            <button
+              className="sesion"
+              type="button"
+              aria-expanded={mostrarFormCargosMasivos}
+              aria-controls="formulario-cargos-masivos"
+              onClick={() => setMostrarFormCargosMasivos((mostrar) => !mostrar)}
+            >
+              {mostrarFormCargosMasivos ? 'Cerrar generación de cargos' : '+ Generar cargos masivos'}
+            </button>
+          </div>
+          {mostrarFormTipoPago && (
+            <FormularioTipoPago
+              id="formulario-tipo-pago"
+              grados={grados}
+              gradoConfigId={gradoConfigId}
+              setGradoConfigId={setGradoConfigId}
+              nuevoTipoPago={nuevoTipoPago}
+              setNuevoTipoPago={setNuevoTipoPago}
+              tipoPagoMensaje={tipoPagoMensaje}
+              tipoPagoError={tipoPagoError}
+              guardandoTipoPago={guardandoTipoPago}
+              nuevoCargoMasivo={nuevoCargoMasivo}
+              onSubmit={handleCrearTipoPago}
+              onCancelar={() => setMostrarFormTipoPago(false)}
+            />
+          )}
+          {mostrarFormCargosMasivos && (
+            <FormularioCargosMasivos
+              id="formulario-cargos-masivos"
+              nuevoCargoMasivo={nuevoCargoMasivo}
+              setNuevoCargoMasivo={setNuevoCargoMasivo}
+              tiposPago={tiposPago}
+              grados={grados}
+              cargandoTiposPago={cargandoTiposPago}
+              errorTiposPago={errorTiposPago}
+              onCambiarGrado={handleCambiarGradoCargos}
+              onSubmit={handleGenerarCargos}
+              onCancelar={() => setMostrarFormCargosMasivos(false)}
+            />
+          )}
           <ConsultaComprobante
             idPagoComprobante={idPagoComprobante}
             onSeleccionarComprobante={(id) => {

@@ -1,6 +1,6 @@
 export default function ListadoProfesores({ maestros, cargando, puedeEditar, onEliminar }) {
   return (
-    <section className="lisUsuarios" aria-labelledby="listado-docentes">
+    <section className="lisUsuarios " aria-labelledby="listado-docentes">
       <div>
         <span>
           {cargando
@@ -16,7 +16,7 @@ export default function ListadoProfesores({ maestros, cargando, puedeEditar, onE
           <p>Cuando se registre un docente, sus datos aparecerán aquí.</p>
         </div>
       ) : (
-        <div className="lisUsuarios">
+        <div className="lisUsuarios tabla-panel">
           <table className="tablaUsuarios">
             <thead className="encabezado">
               <tr>

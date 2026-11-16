@@ -15,7 +15,7 @@ export default function ListadoUsuarios({
       ) : rolesOrdenados.length === 0 ? (
         <p>No hay usuarios registrados.</p>
       ) : rolesOrdenados.map((rolId) => (
-        <section className="cienpor" key={rolId} aria-labelledby={`usuarios-rol-${rolId}`}>
+        <section className="cienpor tabla-panel" key={rolId} aria-labelledby={`usuarios-rol-${rolId}`}>
           <h3 id={`usuarios-rol-${rolId}`}>{getRolNombre(rolId)}</h3>
           <table className="tablaUsuarios">
             <thead className="encabezado">
