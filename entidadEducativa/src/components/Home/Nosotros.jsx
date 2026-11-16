@@ -8,8 +8,8 @@ export default function Nosotros(){
             <div className='panel-prin' >
                 <div className='eslogan' >
                     <div className='tm' >
-                        <h1>Un lugar para Crecer y <h1 className='progre' >Progresar</h1> </h1>
-                        <h1>Un mundo por descubrir.</h1>
+                        <h1>Un lugar para Crecer y <span className='progre'>Progresar</span></h1>
+                        <h2>Un mundo por descubrir.</h2>
                     </div>
                     <div className='frace' >
                         <p>Acompañamos a cada estudiante a descubrir su potencial,con una educación cercana, curiosa y conectada con la vida.</p>

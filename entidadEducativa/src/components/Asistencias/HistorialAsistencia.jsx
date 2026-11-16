@@ -109,38 +109,40 @@ export default function HistorialAsistencia({
       )}
 
       {historial.length > 0 && (
-        <table className="tablaUsuarios">
-          <thead className="encabezado">
-            <tr>
-              <th>Fecha</th>
-              <th>Estado de Asistencia</th>
-              <th>Grado y Sección</th>
-              <th>Ciclo</th>
-            </tr>
-          </thead>
-          <tbody className="tablacontenido">
-            {historial.map((item, idx) => (
-              <tr key={idx}>
-                <td>{item.fecha}</td>
-                <td>
-                  <strong
-                    style={{
-                      color: item.estado === 'PRESENTE'
-                        ? 'green'
-                        : item.estado === 'TARDE'
-                          ? 'orange'
-                          : 'red'
-                    }}
-                  >
-                    {item.estado}
-                  </strong>
-                </td>
-                <td>{item.nom_grado ? `${item.nom_grado} - Sección ${item.nom_seccion}` : 'Aula escolar'}</td>
-                <td>{item.ciclo || '-'}</td>
+        <div className="tabla-panel">
+          <table className="tablaUsuarios">
+            <thead className="encabezado">
+              <tr>
+                <th>Fecha</th>
+                <th>Estado de Asistencia</th>
+                <th>Grado y Sección</th>
+                <th>Ciclo</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="tablacontenido">
+              {historial.map((item, idx) => (
+                <tr key={idx}>
+                  <td>{item.fecha}</td>
+                  <td>
+                    <strong
+                      style={{
+                        color: item.estado === 'PRESENTE'
+                          ? 'green'
+                          : item.estado === 'TARDE'
+                            ? 'orange'
+                            : 'red'
+                      }}
+                    >
+                      {item.estado}
+                    </strong>
+                  </td>
+                  <td>{item.nom_grado ? `${item.nom_grado} - Sección ${item.nom_seccion}` : 'Aula escolar'}</td>
+                  <td>{item.ciclo || '-'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </section>
   );

@@ -52,7 +52,7 @@ export default function ConsultaAsistenciaAula({
       {cargandoAula && <p>Consultando lista del aula...</p>}
 
       {asistenciasAula.length > 0 && (
-        <div className="listaUsuarios">
+        <div className="listaUsuarios tabla-panel">
           <h3>Lista de Estudiantes ({fechaConsulta})</h3>
           <table className="tablaUsuarios">
             <thead className="encabezado">

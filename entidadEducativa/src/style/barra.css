@@ -1,6 +1,6 @@
 .barra{
     display: grid;
-    grid-template-columns: 1fr;    
+    grid-template-columns: 1fr;
 }
 .logotipo{
     display: flex;
@@ -8,21 +8,23 @@
     justify-content: center;
     background-color: var(--color-blanco);
     color: var(--color-primario);
-
-    padding: 0.5rem;
+    padding: 0.55rem 1rem;
+    letter-spacing: 0.09em;
+    text-align: center;
 }
 
 
 .nav{
     display: grid ;
-    grid-template-columns: 1fr 4fr 1fr;
-    gap: 0.5rem;
-    background-color: var(--color-blanco);  
-    border-bottom: 1px solid var(--color-secundario) ; 
-    
-    position: -webkit-sticky; 
+    grid-template-columns: minmax(10rem, 1fr) minmax(0, 4fr) minmax(12rem, 1fr);
+    gap: 0.25rem 0.75rem;
+    align-items: center;
+    background-color: var(--color-blanco);
+    border-bottom: 1px solid var(--gris-secod);
+    box-shadow: 0 4px 14px rgba(16, 33, 106, 0.06);
+    position: -webkit-sticky;
     position: sticky;
-    top: 0; 
+    top: 0;
     z-index: 9999;
 }
 
@@ -34,14 +36,18 @@
 .logo{
     display: flex;
     flex-direction: column;
-    margin: 0.5rem;
+    margin: 0.55rem 0.75rem;
 }
 .cont{
     color: var(--color-primario);
     text-decoration: none;
 }
+.cont h2 {
+    font-size: 1.15rem;
+}
 .logo p{
     font-size: 0.8rem;
+    letter-spacing: 0.08em;
 }
 
 .links{
@@ -49,50 +55,141 @@
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: 0.8rem;
+    gap: 0.25rem 0.55rem;
     padding: 0.5rem;
 }
 .lin{
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
+    margin: 0;
     color: var(--color-primario);
     text-decoration: none;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    font-weight: 550;
+    padding: 0.4rem 0.55rem;
+    border-radius: 6px;
+    transition: color 160ms ease, background-color 160ms ease;
 }
-.lin:hover{
-    text-decoration: underline;
+.lin:hover,
+.lin:focus-visible {
+    background-color: rgba(214, 222, 238, 0.45);
+    text-decoration: none;
 }
-
 
 .iniciar{
-    margin: 0.5rem;
+    margin: 0.5rem 0.75rem;
     display: flex;
-    flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: end;
-    gap: 0.4rem;
+    gap: 0.5rem;
 }
 
 .usuario{
-    margin: 0.5rem;
+    min-width: 0;
     background-color: var(--color-ad);
-    color: var(--color-azul);
-    padding: 0.4rem 0.6rem;
+    color: var(--color-primario);
+    padding: 0.4rem 0.65rem;
     border-radius: var(--radio);
-    font-weight: 500;
+    font-size: 0.85rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
 }
 
 .sesion{
     background-color: var(--color-primario);
-    color: var(--gris-secod);
-    padding: 0.5rem 0.8rem;
+    color: var(--color-blanco);
+    padding: 0.6rem 0.9rem;
     border-radius: var(--radio);
     border: none;
     cursor: pointer;
     font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(16, 33, 106, 0.12);
 }
 
 .sesion:hover{
     color: var(--color-blanco);
+    background-color: var(--color-azul);
+    box-shadow: 0 4px 12px rgba(16, 33, 106, 0.18);
+}
+
+.sesion:active {
+    background-color: var(--color-primario);
+}
+
+@media (max-width: 1100px) {
+    .nav {
+        grid-template-columns: minmax(9rem, 1fr) minmax(0, 3fr);
+    }
+
+    .links {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        padding: 0.25rem 0.75rem 0.65rem;
+    }
+
+    .iniciar {
+        grid-column: 2;
+        grid-row: 1;
+    }
+}
+
+@media (max-width: 640px) {
+    .logotipo {
+        padding: 0.45rem 0.75rem;
+    }
+
+    .logotipo h1 {
+        font-size: 1.15rem;
+    }
+
+    .nav {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0;
+    }
+
+    .logo {
+        margin: 0.55rem 0.75rem;
+    }
+
+    .cont h2 {
+        font-size: 1rem;
+    }
+
+    .logo p {
+        font-size: 0.68rem;
+    }
+
+    .iniciar {
+        grid-column: 2;
+        grid-row: 1;
+        margin: 0.4rem 0.65rem;
+    }
+
+    .iniciar .usuario {
+        max-width: 11rem;
+        font-size: 0.75rem;
+    }
+
+    .iniciar .sesion {
+        padding: 0.55rem 0.65rem;
+        font-size: 0.8rem;
+    }
+
+    .links {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        grid-row: 2;
+        padding: 0.4rem 0.65rem 0.65rem;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+
+    .lin {
+        flex: 0 0 auto;
+        font-size: 0.85rem;
+    }
 }
 

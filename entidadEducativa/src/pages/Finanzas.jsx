@@ -218,7 +218,7 @@ function Finanzas() {
   };
 
   return (
-    <main style={{ padding: '2rem' }}>
+    <main className="vista-finanzas" style={{ padding: '2rem' }}>
       <h1>Control de Finanzas y Pagos</h1>
 
       {mensaje && <p role="status" style={{ color: 'green' }}>{mensaje}</p>}

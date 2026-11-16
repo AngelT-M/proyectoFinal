@@ -232,7 +232,7 @@ function Asistencias() {
   };
 
   return (
-    <main style={{ padding: '2rem' }}>
+    <main className="vista-asistencias" style={{ padding: '2rem' }}>
       <h1>Control y Registro de Asistencias</h1>
 
       {mensaje && <p role="status" style={{ color: 'green' }}>{mensaje}</p>}

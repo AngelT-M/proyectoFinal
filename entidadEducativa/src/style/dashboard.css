@@ -1,16 +1,61 @@
 .menos{
-    height: 78vh;
+    min-height: 65vh;
+    height: auto;
 }
 
 .dashboard{
-    justify-content: start;
-    padding: 2rem;
+    width: min(100%, 58rem);
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 1.25rem;
+    padding: clamp(1.25rem, 4vw, 2.5rem);
+    border: 1px solid rgba(214, 222, 238, 0.85);
+    box-shadow: var(--shadow);
+}
+
+.dashboard h2 {
+    padding-bottom: 0.85rem;
+    border-bottom: 2px solid var(--color-ad);
 }
 .dashboard-centrar{
-    margin: 1rem;
+    margin: 0;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 0.85rem;
+    list-style: none;
+}
+
+.dashboard-centrar > li {
+    min-width: 0;
+    padding: 1rem;
+    border: 1px solid var(--gris-secod);
+    border-left: 3px solid var(--color-ad);
+    border-radius: var(--radio);
+    background-color: var(--color-fondo);
+    overflow-wrap: anywhere;
+    transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+}
+
+.dashboard-centrar > li:hover {
+    position: relative;
+    z-index: 1;
+    transform: scale(1.02);
+    box-shadow: -1px 1px 12px var(--color-ad);
+}
+
+.dashboard-centrar > li > ul {
+    margin: 0.6rem 0 0 1rem;
+    padding-left: 0.5rem;
+}
+
+.dashboard-centrar > li > ul li + li {
+    margin-top: 0.3rem;
+}
+
+@media (max-width: 560px) {
+    .dashboard-centrar {
+        grid-template-columns: minmax(0, 1fr);
+    }
 } 

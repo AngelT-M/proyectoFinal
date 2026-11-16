@@ -1,27 +1,58 @@
 .contenido{
-    height: 100vh;
+    min-height: calc(100vh - 9rem);
+    height: auto;
+}
+
+main.contenido {
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 .home-usuarios{
-    width: 100%;
+    width: min(calc(100% - 2rem), var(--ancho-contenido));
+    margin-inline: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    gap: 0.6rem;
+    padding: clamp(1rem, 3vw, 2.5rem) 0;
+    text-align: center;
+}
+
+.home-usuarios > h1 {
+    max-width: 52rem;
+}
+
+.home-usuarios > p {
+    color: var(--color-secundario);
+}
+
+.home-usuarios > div {
+    width: 100%;
+    max-width: var(--ancho-contenido);
+    margin-top: 1.2rem;
+}
+
+.home-usuarios > div > div:first-child {
+    margin-bottom: 1rem;
 }
 
 .home-usuarios-cont{
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.5rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
 }
 
 .home-usuarios-card{
+    min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin: 0.3rem;
+    border-radius: var(--radio);
+    text-decoration: none;
 }
 
 .centrar{
@@ -38,25 +69,29 @@
 .usuario-card{
     width: 100%;
     background-color: var(--color-blanco);
-    margin: 2rem;
-    margin-top: 0.2rem;
-    margin-bottom: 0.2rem;
+    min-height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     border-radius: var(--radio);
-    transition: transform 0.3s ease-in-out;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     box-shadow: -1px 1px 5px var(--color-ad);
+    border: 1px solid rgba(214, 222, 238, 0.8);
 }
 .usuario-card:hover{
     transform: scale(1.02);
-    box-shadow: -1px 1px 15px var(--color-ad) ;
+    box-shadow: -1px 1px 15px var(--color-ad);
+}
+
+.home-usuarios-card:focus-visible {
+    outline-offset: 4px;
 }
 .usuario-img{    
     width: 100%;
-    height: 100px;
+    height: auto;
+    aspect-ratio: 16 / 9;
     overflow: hidden;
-    border-radius: 8px 8px 0px 0px;
 }
 .usuario-img img{
     display: block;
@@ -66,11 +101,14 @@
     object-position: center;
 }
 
+.usuario-card .centrar {
+    flex: 1;
+    padding: 0.9rem 0.75rem;
+}
 
-
-
-
-
+.usuario-card .centrar h2 {
+    font-size: 1.05rem;
+}
 
 
 .home-visitante{
@@ -80,107 +118,128 @@
 .panel-prin{
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
     align-items: center;
-    justify-content: center;
-
-    
+    gap: clamp(1.5rem, 4vw, 4rem);
+    max-width: var(--ancho-contenido);
+    margin-inline: auto;
+    padding: clamp(2rem, 6vw, 5rem) clamp(1rem, 4vw, 3rem);
 }
 
 .eslogan{
-    margin: 5rem;
-    width: 90%;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: start;
+    align-items: flex-start;
     justify-content: center;
+    gap: 1rem;
 }
 .tm{
-    width: 65%;
+    width: 100%;
 }
 
 .eslogan h1{
-    font-size: 3rem;  
+    margin-bottom: 0.25rem;
+    font-size: clamp(2rem, 4vw, 3.5rem);
     color: var(--color-primario);
 }
+
+.eslogan h2 {
+    font-size: clamp(1.3rem, 2.4vw, 1.8rem);
+    color: var(--color-secundario);
+}
 .progre{
-    display: inline-block;          
-    border-bottom: 5px solid #3498db;
-    border-radius: 1px; 
-    line-height: 1;               
-    padding-bottom: 1;
+    display: inline-block;
+    border-bottom: 4px solid var(--color-ad);
+    line-height: 1.1;
+    padding-bottom: 0.08em;
 }
 
 .frace{
-    width: 80%;
+    width: min(100%, 34rem);
     display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0.5rem;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: var(--color-secundario);
+    font-size: 1.05rem;
 }
 
 .sec-btn{
-    display: grid;
-    grid-template-columns: 1fr 1fr ;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
 }
 .sec-btn button{
-    margin-top: 1rem;
-    margin-right: 1rem;
+    min-width: 8.5rem;
 }
 
 .eslogan-img{
     position: relative;
-    width: 98%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     transition: transform 0.3s ease-in-out;
-    margin-bottom: 2rem;
-    margin-top: 2rem;
 }
 .eslogan-img:hover{
     transform: scale(1.02);
 }
 
 .est{
-    
     position: absolute;
-    bottom: 95%;      
-    left: 85%;       
+    top: 1rem;
+    right: 1rem;
     z-index: 10;
+    background-color: var(--color-ad);
+    color: var(--color-primario);
 }
 
 .img-eslogan{
-    width: 90%;
+    width: 100%;
+    max-height: 28rem;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
     border-radius: var(--radio);
-    box-shadow: -15px 15px  var(--color-ad);   
+    box-shadow: -15px 15px var(--color-ad);
 }
 
 .cont-info-card{
+    width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1rem, 3vw, 2rem);
+    padding: clamp(1.25rem, 4vw, 3rem) max(1.25rem, calc((100% - var(--ancho-contenido)) / 2 + 1.25rem));
     background-color: var(--color-blanco);
 }
 
 .info-card{
-    margin: 2rem;
+    min-width: 0;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     align-items: start;
     border-radius: var(--radio);
+    border: 1px solid rgba(214, 222, 238, 0.75);
+    background-color: var(--color-blanco);
+    box-shadow: 0 4px 14px rgba(16, 33, 106, 0.05);
+}
+
+.info-card h2 {
+    margin: 1rem 0 0.5rem;
 }
 .infro-img{
     width: 100%;
-    height: 200px;
+    height: auto;
+    aspect-ratio: 16 / 9;
     overflow: hidden;
     border-radius: var(--radio);
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
+
 .infro-img:hover{
     transform: scale(1.02);
-    box-shadow: -5px 5px var(--color-terciario) ;
+    box-shadow: -5px 5px var(--color-terciario);
 }
 
 .infro-img img{
@@ -198,29 +257,109 @@
     align-items: center;
     justify-content: center;
     background-color: var(--color-blanco);
+    padding: clamp(1rem, 4vw, 3rem);
 }
 .mapa{
-    margin: 3rem;
-    width: 80%;
+    margin: 0;
+    width: min(100%, 72rem);
+    height: clamp(20rem, 48vw, 32rem);
     border-radius: var(--radio);
-    box-shadow: -10px 10px  var(--color-primario); 
-    transition: transform 0.4s ease-in-out;  
+    box-shadow: -10px 10px var(--color-primario);
+    transition: transform 0.4s ease-in-out;
 }
+
 .mapa:hover{
-    transform: scale(1.02); 
+    transform: scale(1.02);
 }
 
+@media (max-width: 1100px) {
+    .home-usuarios-cont{
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
 
-@media (width < 950px) {
+@media (max-width: 800px) {
+    .panel-prin {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+        gap: 2rem;
+        padding-block: 2.5rem;
+    }
+
+    .eslogan h1 {
+        font-size: clamp(1.85rem, 5vw, 2.7rem);
+    }
+
+    .eslogan h2 {
+        font-size: clamp(1.2rem, 3.8vw, 1.55rem);
+    }
+
     .cont-info-card{
-    grid-template-columns: 1fr ;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .infro-img img{
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
+    .home-usuarios-cont{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
+
+@media (max-width: 560px) {
+    .panel-prin {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1.5rem;
+        padding: 2rem 1rem 2.5rem;
+    }
+
+    .eslogan {
+        align-items: center;
+        text-align: center;
+    }
+
+    .frace {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .sec-btn {
+        justify-content: center;
+    }
+
+    .eslogan-img {
+        width: calc(100% - 0.75rem);
+        margin-right: 0.5rem;
+    }
+
+    .cont-info-card {
+        grid-template-columns: minmax(0, 1fr);
+        padding: 1rem;
+    }
+
+    .home-usuarios-cont {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.75rem;
+    }
+
+    .home-usuarios-card {
+        width: min(100%, 28rem);
+        justify-self: center;
+    }
+
+    .usuario-card {
+        flex-direction: row;
+        min-height: 6rem;
+    }
+
+    .usuario-img {
+        width: 38%;
+        flex: 0 0 38%;
+        aspect-ratio: 1.4 / 1;
+    }
+
+    .usuario-card .centrar {
+        padding: 0.65rem;
+    }
+
+    .usuario-card .centrar h2 {
+        font-size: 0.98rem;
+    }
+}
+

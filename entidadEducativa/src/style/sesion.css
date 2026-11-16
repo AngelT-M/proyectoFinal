@@ -1,14 +1,15 @@
 .fondoImg{
-    height: 100vh;
-    background-image: url(https://img.magnific.com/vector-premium/elementos-diseno-presentacion-plantillas-negocios-facil-ilustracion-vectorial-editable-diseno-eps-10-folleto-monohrome-triangulo-3d-efecto-enrejado-cristal-sobre-fondo-gris-degradado-blanco_299644-10080.jpg?semt=ais_hybrid&w=740&q=80) ;
+    min-height: 100vh;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    background-image: url(https://img.magnific.com/vector-premium/elementos-diseno-presentacion-plantillas-negocios-facil-ilustracion-vectorial-editable-diseno-eps-10-folleto-monohrome-triangulo-3d-efecto-enrejado-cristal-sobre-fondo-gris-degradado-blanco_299644-10080.jpg?semt=ais_hybrid&w=740&q=80);
 }
 
 
 .iniciarS{
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -23,7 +24,7 @@
     width: min(25rem, calc(100% - 2rem));
     background-color: var(--color-blanco);
     border-radius: var(--radio);
-    box-shadow: var(--shadow-sec);
+    box-shadow: 8px 8px 16px rgba(128, 128, 128, 0.5);
 }
 
 
@@ -43,12 +44,17 @@
 
 .tituloF{
     width: 100%;
-    border-radius: 8px 8px 0px 0px;
+    border-radius: 8px 8px 0 0;
     color: var(--color-gris);
     background-color: var(--color-primario);
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.tituloF h1 {
+    color: var(--color-gris);
+    font-size: 2rem;
 }
 
 
@@ -67,10 +73,14 @@
     justify-content: center;
 }
 .formulario label{
-    font-size: 1.5rem;
-}
-.formulario input{
     width: 100%;
+    color: var(--color-negro);
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+.formulario input:not([type="checkbox"]):not([type="radio"]){
+    width: 100%;
+    min-height: 0;
     padding: 0.5rem;
     border: 1px solid var(--color-gris);
     border-radius: var(--radio);
@@ -78,7 +88,7 @@
 }
 .formulario input:focus{
     border: 3px solid var(--color-primario);
-    outline: none ;
+    outline: none;
 }
 
 .formulario button{
@@ -86,11 +96,41 @@
     width: 105%;
     border-radius: var(--radio);
     background-color: var(--color-ad-ap);
+    color: var(--color-negro);
     border: none;
     padding: 0.6rem;
     margin-bottom: 0.5rem;
+    cursor: pointer;
 }
 .formulario button:hover{
     background-color: var(--color-ad);
+}
+
+@media (max-width: 480px) {
+    .iniciarS {
+        padding: 1rem 0.75rem;
+    }
+
+    .contF {
+        width: 100%;
+        margin: 1rem 0;
+    }
+
+    .formu {
+        width: 100%;
+        padding: 0.25rem;
+    }
+
+    .formulario {
+        padding: 0.5rem;
+    }
+
+    .formulario label {
+        font-size: 1.15rem;
+    }
+
+    .formulario button {
+        width: 100%;
+    }
 }
 
